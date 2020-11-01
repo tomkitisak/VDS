@@ -1,0 +1,410 @@
+﻿@model List<Hospital>
+@inject vds.Services.App.ICommon _app;
+@using vds.ViewModels;
+@using Newtonsoft.Json;
+@{
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string modelName = "โรงพยาบาล";
+    ViewData["Title"] = "โรงพยาบาล";
+
+    HospitalSummary summary = _app.GetHospitalSummary();
+    ChartDoughnut donutChart = _app.GetHospitalDoughnut();
+
+
+}
+<link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div id="accordion" class="accordion">
+        <div class="card">
+            <div id="headingOne">
+                <div class="card-header">
+                    <a href="javascript:void(0)" class="accordion-toggle" data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne">
+                        ข้อมูลสรุป
+                    </a>
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">โรงพยาบาลโครงการแยกตามภาค</h4>
+                                    <div class="chart-container doughnut">
+                                        <canvas id="doughnutChart" height="250" width="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between pb-4">
+                                        <h4 class="card-title mb-1">สรุปข้อมูลตามภาค</h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคกลาง</p>
+                                                            <h4 class="font-weight-bold">@summary.central</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-primary font-weight-bold">@summary.centralPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคตะวันออก</p>
+                                                            <h4 class="font-weight-bold">@summary.east</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-info font-weight-bold">@summary.eastPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคเหนือ</p>
+                                                            <h4 class="font-weight-bold">@summary.north</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-danger font-weight-bold">@summary.northPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคตะวันออกเฉียงเหนือ</p>
+                                                            <h4 class="font-weight-bold">@summary.northeast</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-primary font-weight-bold">@summary.northeastPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคตะวันตก</p>
+                                                            <h4 class="font-weight-bold">@summary.west</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-info font-weight-bold">@summary.westPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">ภาคใต้</p>
+                                                            <h4 class="font-weight-bold">@summary.south</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-danger font-weight-bold">@summary.southPct%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="dropdown d-inline">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ข้อมูลระบบ
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                     style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <h6 class="dropdown-header">เพิ่มเติม/ปรับปรุง</h6>
+                    <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
+                    <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
+                    <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <article class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">ข้อมูล - @ViewData["Title"]</h4>
+                        <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" role="group" aria-label="First group">
+                                <a href="/@controller/Form" class="btn btn-primary">
+                                    <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th width="5%"></th>
+                                    <th width="5%"></th>
+                                    <th width="5%"></th>
+                                    <th width="25%">ชื่อโรงพยาบาล</th>
+                                    <th width="20%">ตำบล/แขวง</th>
+                                    <th width="20%">อำเภอ/เขต</th>
+                                    <th width="10%">จังหวัด</th>
+                                    <th width="10%">รหัสไปรษณีย์</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/@controller/Form/@item.HospitalId" data-toggle="tooltip" title="แก้ไขข้อมูล"><i class="icon-note md-18"></i> </a>
+                                        </td>
+                                        <td>
+                                            <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@item.HospitalName','@item.HospitalId');" class="icon-trash md-18"></i> </a>
+
+                                        </td>
+                                        <td>
+                                            <a href="/@controller/Map/@item.HospitalId" data-toggle="tooltip" title="ดูแผนที่"><i class="icon-map md-18"></i></a>
+                                        </td>
+                                        <td>
+                                            @item.HospitalName
+                                        </td>
+
+                                        <td>
+                                            @item.SubDistrict
+                                        </td>
+                                        <td>
+                                            @item.District
+                                        </td>
+                                        <td>
+                                            @item.Province
+                                        </td>
+                                        <td>
+                                            @item.ZipCode
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+    </div>
+    @*hidden field for storing current employeeId*@
+    <input type="hidden" id="hiddenId" />
+    <!-- ui-dialog -->
+    <div id="dialog" title="ลบข้อมูล">
+        <p id="txtDialog"></p>
+    </div>
+
+</div>
+<!-- Content End -->
+
+
+@section Styles{
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+}
+
+@section Scripts{
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var mainTable;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+        //Doughnut Chart
+        $(function () {
+            var doughnutChart = {
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(donutChart.Labels)),
+                    datasets: [{
+                        label: 'Doughnut chart',
+                        data: @Html.Raw(JsonConvert.SerializeObject(donutChart.Data)),
+                        backgroundColor: @Html.Raw(JsonConvert.SerializeObject(donutChart.Colors)),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "top"
+                    },
+                    cutoutPercentage: 50
+                }
+            }
+            chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
+        });
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
+
+    </script>
+
+    <script>
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 'auto',
+            height: 'auto',
+            fluid: true,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            },
+            buttons: [
+                {
+                    text: "Ok",
+                    click: function () {
+
+                        $(this).dialog("close");
+                        window.location.href = "/hospital/SubmitDeleteHospital/?id=" + document.getElementById("hiddenId").value;
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+            ]
+        }, "option", "position", { my: "center", at: "center", of: window }).prev(".ui-dialog-titlebar").css("background", "#269bff").css("color", "#ffffff");
+
+
+
+        // Link to open the dialog
+        $("#dialog-link").click(function (event) {
+            $("#dialog").dialog("open");
+            event.preventDefault();
+        });
+
+        // Hover states on the static widgets
+        $("#dialog-link, #icons li").hover(
+            function () {
+                $(this).addClass("ui-state-hover");
+            },
+            function () {
+                $(this).removeClass("ui-state-hover");
+            }
+        );
+
+
+        function deleteData(name, id) {
+
+            $("#hiddenId").val(id);
+            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + name + " ใช่หรือไม่ ?";
+            $("#dialog").dialog("open");
+            event.preventDefault();
+
+        }
+    </script>
+
+
+}
+
+
+
+

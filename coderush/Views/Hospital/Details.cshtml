@@ -1,0 +1,81 @@
+﻿@model vds.Models.Hospital
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Hospital</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HospitalName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HospitalName)
+        </dd>
+ 
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SubDistrict)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SubDistrict)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.District)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.District)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Province)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Province)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ZipCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ZipCode)
+        </dd>
+ 
+   
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedBy.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedAtUtc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAtUtc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedBy.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedAtUtc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedAtUtc)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.HospitalId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

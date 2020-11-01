@@ -1,0 +1,466 @@
+﻿@model Patient
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "ผู้ป่วย";
+    ViewData["Title"] = modelName + " Form";
+
+    string userTypeId = ViewBag.userTypeId;
+    bool IsNew = ViewBag.IsNew;
+
+}
+
+<!-- Content Start -->
+<div class="content-wrapper">
+
+    <!-- Heading Start -->
+    <section class="heading">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-3" role="group" aria-label="First group">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+
+                </div>
+                <label for="chbEdit">แก้ไข</label>
+            </div>
+        </div>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+
+
+
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">เพิ่ม / ปรับปรุงข้อมูล-@modelName</h4>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลโรงพยาบาล</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="HospitalId"></label>
+
+                                    <div class="input-group">
+                                        @if (userTypeId == "1")
+                                        {
+                                            <input asp-for="HospitalId" class="form-control" type="hidden" />
+                                            <select asp-for="HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
+
+                                        }
+                                        else
+                                        {
+                                            <select asp-for="HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
+                                        }
+
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="HospitalId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลบุคคล</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="PatientId" />
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="PrefixTypeId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="PrefixTypeId" class="select2 form-control x" asp-items="ViewBag.PrefixType"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="PrefixTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="FirstName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="FirstName" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="LastName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="LastName" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Gender"></label>
+                                    <div class="input-group">
+                                        <select asp-for="Gender" class="select2 form-control x" asp-items="ViewBag.Gender"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="DateOfBirth"></label>
+                                    <div class="input-group">
+
+                                        <input onchange="calcAge();" type="text" id="DateOfBirth" name="DateOfBirth" asp-for="DateOfBirth" class="datepicker form-control x" data-val="true" data-val-required="The DateOfBirth field is required.">
+
+                                        @*<ejs-datepicker id="DateOfBirth" format="dd-MM-yyyy" ejs-for="DateOfBirth"></ejs-datepicker>*@
+
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>อายุปัจจุบัน(ปี)</label>
+                                    <div class="input-group">
+                                        <input type="text" id="Age" name="Age" class="form-control" disabled>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Phone"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Phone" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Address1"></label>
+                            <div class="input-group">
+                                <input asp-for="Address1" class="form-control x" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Address1" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="SubDistrict"></label>
+                                    <div class="input-group">
+                                        <input id="subdistrict" asp-for="SubDistrict" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="SubDistrict" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="District"></label>
+                                    <div class="input-group">
+                                        <input id="district" asp-for="District" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="District" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Province"></label>
+                                    <div class="input-group">
+                                        <input id="province" asp-for="Province" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Province" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="ZipCode"></label>
+                                    <div class="input-group">
+                                        <input id="zipcode" asp-for="ZipCode" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลอาการผู้ป่วย</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="DiseaseTypeId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="DiseaseTypeId" class="select2 form-control x" asp-items="ViewBag.DiseaseType"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="DiseaseTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label asp-for="Problem"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Problem" class="form-control x" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Problem" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button type="submit" class="btn btn-primary x">บันทึก</button>
+                        <input type="hidden" asp-for="@userTypeId" />
+
+                    </div>
+
+                </article>
+            </form>
+        </div>
+
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+
+
+}
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict'), // input ของตำบล
+            $amphoe: $('#district'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
+        });
+
+
+        //// Get the <span> element that closes the modal
+        //var dob = document.getElementById("DateOfBirth");
+        //// When the user clicks on <span> (x), close the modal
+        //dob.onchange = function () {
+        //    age(dob.nodeValue)
+
+        //}
+
+
+        function age(dob) {
+
+            var today = new Date(),
+                result = {
+                    years: 0,
+                    months: 0,
+                    days: 0,
+                    toString: function () {
+                        return (this.years ? this.years + ' ปี ' : '')
+                            + (this.months ? this.months + ' เดือน ' : '')
+                            + (this.days ? this.days + ' วัน' : '');
+                    }
+                };
+            result.months =
+                ((today.getFullYear() * 12) + (today.getMonth() + 1))
+                - ((dob.getFullYear() * 12) + (dob.getMonth() + 1));
+            if (0 > (result.days = today.getDate() - dob.getDate())) {
+                var y = today.getFullYear(), m = today.getMonth();
+                m = (--m < 0) ? 11 : m;
+                result.days +=
+                    [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m]
+                    + (((1 == m) && ((y % 4) == 0) && (((y % 100) > 0) || ((y % 400) == 0)))
+                        ? 1 : 0);
+                --result.months;
+            }
+            result.years = (result.months - (result.months % 12)) / 12;
+            result.months = (result.months % 12);
+            document.getElementById("xx").innerHTML = result;
+
+        }
+
+        var agetxt = document.getElementById("Age");
+        calcAge();
+
+
+        function calcAge() {
+           
+            var date = $("#DateOfBirth").datepicker("getDate");
+          
+            var today = new Date();
+            var birthDate = new Date(date);
+            var age = today.getFullYear() - birthDate.getFullYear();
+            var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age = age - 1;
+            }
+
+            agetxt.value = age;
+        }
+
+
+
+
+    </script>
+
+    <script>
+
+ 
+ 
+        if (('@IsNew') == "True") {
+
+            $('.x').prop('disabled', false);
+            $('#chbEdit').prop('disabled', true);
+        }
+        else {
+
+            $('.x').prop('disabled', true);
+            $('#chbEdit').prop('disabled', false);
+        }
+
+
+        function ChangeMode(e) {
+
+            if (e.checked) {
+
+                $('.x').prop('disabled', false);
+
+            }
+            else {
+
+                $('.x').prop('disabled', true);
+            }
+        }
+
+    </script>
+
+
+
+}  

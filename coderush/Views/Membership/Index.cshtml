@@ -1,0 +1,144 @@
+﻿
+@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "ผู้ใช้งานระบบ";
+
+    string _UserTypeId = ViewBag.UserTypeId;
+
+
+
+
+}
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-settings-variant"></i> @ViewData["Title"]</h2>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+            <article class="card mb-4">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">ผู้ใช้งาน</h4>
+                        @if (_UserTypeId == "0")
+                        {
+                            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" role="group" aria-label="First group">
+                                    <a href="/Membership/Register" class="btn btn-primary">
+                                        <i class="mdi mdi-plus-circle"></i> เพิ่มผู้ใช้
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="table-responsive">
+                        <div class="dataTables_wrapper">
+                            <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th width="10%"></th>
+                                        <th width="25%">อีเมล์</th>
+                                        <th width="25%">หมายเลขโทรศัพท์</th>
+                                        <th width="10%">สถานะ</th>
+                                        <th width="20%">Super Admin?</th>
+                                        <th width="10%">ประเภท</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="dropdown d-inline">
+                                                    <button class="btn btn-primary icon-btn dropdown-toggle" type="button" id="ddl@(item.Id)"
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="mdi mdi-settings"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="ddl@(item.Id)">
+                                                        <h6 class="dropdown-header">Actions:</h6>
+                                                        <a class="dropdown-item" href="/Membership/ChangeProfile/@item.Id">แก้ไขข้อมูลส่วนตัว</a>
+                                                        <a class="dropdown-item" href="/Membership/ChangePassword/@item.Id">เปลี่ยนรหัสผ่าน</a>
+
+                                                        @if (_UserTypeId == "0")
+                                                        {
+                                                            <a class="dropdown-item" href="/Membership/ChangeRole/@item.Id">Change Role</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@item.Email</td>
+                                            <td>@item.PhoneNumber</td>
+                                            <td>
+                                                <label style="height:30px;font-size:small;" class="badge badge-@(item.EmailConfirmed ? "success" : "danger")">@(item.EmailConfirmed ? "Active" : "Pending")</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="custom-checkbox variation3 mb-0">
+                                                        <input class="form-check-input" type="checkbox" @(item.isSuperAdmin ? "checked" : "") onclick="return false;">
+                                                        <i class="input-helper"></i>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>@item.UserTypeId</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+}
+
+@section Scripts{
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var mainTable;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 20,
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+        });
+    </script>
+}
+
+

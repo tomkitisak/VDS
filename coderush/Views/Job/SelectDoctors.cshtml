@@ -1,0 +1,256 @@
+﻿@model IList<DoctorSelectedViewModel>
+@inject vds.Services.App.ICommon _app;
+@using vds.ViewModels;
+@using Newtonsoft.Json;
+@{
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string strmodelName = "งานร้องขอ";
+    string modelName = "Job";
+    string jobId = ViewBag.jobId;
+    string userTypeId = ViewBag.userTypeId;
+    string fromaction = ViewBag.fromaction;
+
+
+    int countrecord = Model.Count;
+    ViewData["Title"] = "แพทย์";
+
+    EmployeeSummary summary = _app.GetEmployeeSummary();
+    ChartDoughnut donutChart = _app.GetDoctorDoughnut();
+
+   
+
+}
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งาน | เพิ่มแพทย์</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="@controller" asp-action="SubmitSelectDoctor" method="post">
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ปรับปรุงข้อมูล-@strmodelName -> เพิ่มแพทย์</h4>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-lg-baseline mb-3">
+
+                            <h4 class="card-title mb-0">@("ข้อมูล"+ViewData["Title"])</h4>
+
+                            @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-3" role="group" aria-label="First group">
+                                        <a href="/@controller/Form" class="btn btn-primary">
+                                            <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                        </a>
+                                    </div>
+                                </div>*@
+
+
+                        </div>
+                        <div class="table-responsive">
+                            <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th width="10%">
+                                            <input type="checkbox" name="allcheck" id="selectAll" style="margin-right:5px" />เลือก
+                                        </th>
+                                        <th width="10%"></th>
+                                        <th width="25%">ชื่อ-สกุล</th>
+                                        <th width="15%">แพทย์เชี่ยวชาญ</th>
+                                        <th width="15%">เบอร์ไทร</th>
+                                        <th width="15%">ไลน์ไอดี</th>
+                                        <th width="10%">จังหวัด</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if (Model != null)
+                                    {
+                                        for (var i = 0; i < Model.Count; i++)
+                                        {
+                                            <tr>
+
+
+                                                <td>
+                                                    <input type="hidden" asp-for="@Model[i].DoctorSelect.Value" />
+                                                    <input asp-for="@Model[i].DoctorSelect.Selected" />
+                                                    <input type="hidden" asp-for="@Model[i].DoctorId" />
+                                                    <input type="hidden" asp-for="@jobId" />
+                                                </td>
+                                                <td>
+                                                    <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(@Model[i].ImageData)))
+                                                         class="rounded-circle"
+                                                         height="40" width="40"
+                                                         asp-append-version="true" />
+                                                </td>
+                                                <td>
+                                                    @(Model[i].PrefixType.Name + Model[i].FirstName + "  " + Model[i].LastName)
+
+                                                </td>
+                                                <td>
+                                                    @Model[i].DoctorType.DoctorTypeName
+                                                </td>
+
+                                                <td>
+                                                    @Model[i].Phone
+                                                </td>
+                                                <td>
+                                                    @Model[i].LineId
+                                                </td>
+                                                <td>
+                                                    @Model[i].Email
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <input type="submit" id="btnSave" name="btnSave" class="btn btn-primary" value="บันทึก" />
+                        <input type="hidden" asp-for="@userTypeId" />
+                        
+                    </div>
+                </article>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+}
+
+@section Scripts{
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var mainTable;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+        $(function () {
+
+            if (@countrecord <= 0) {
+
+                $("#btnSave").prop("disabled", true);
+            }
+
+        })
+
+
+        $(function () {
+            $("#selectAll").click(function() {
+                $("input[type=checkbox]").prop('checked', $(this).prop('checked'))
+            });
+
+            $("input[type=checkbox]").click(function () {
+                if (!$(this).prop('checked')) {
+                    $("#selectAll").prop("checked", false);
+                }
+            });
+        })
+
+
+        //Doughnut Chart
+        $(function () {
+            var doughnutChart = {
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(donutChart.Labels)),
+                    datasets: [{
+                        label: 'Doughnut chart',
+                        data: @Html.Raw(JsonConvert.SerializeObject(donutChart.Data)),
+                        backgroundColor: @Html.Raw(JsonConvert.SerializeObject(donutChart.Colors)),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "top"
+                    },
+                    cutoutPercentage: 50
+                }
+            }
+            chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
+        });
+
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#district'), // input ของตำบล
+            $amphoe: $('#amphoe'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
+        });
+
+
+
+        function onRefresh() {
+            if ($('#Period').val() !== '') {
+                location.href = '/doctorgroup/selectdoctor?FName=' + $('#Period').val();
+            } else {
+                toastr.error('Please select period first!');
+            }
+
+        }
+
+
+
+    </script>
+}
+
+
+
+

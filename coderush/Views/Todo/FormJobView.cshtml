@@ -1,0 +1,775 @@
+﻿@model JobView
+@using Syncfusion.EJ2
+
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "งานร้องขอ";
+    ViewData["Title"] = modelName + " Form";
+
+    string strJobId = ViewBag.jobId;
+    string strCapture ="ตารางนัด-รายละเอียดงาน";
+
+    var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+
+
+    bool IsChecked1 = Model.Job.JobStatus.Status >= 2 ? true : false;
+    bool chbDisabled = true;
+
+    bool IsChecked2 = Model.Job.JobStatus.Status == 3 ? true : false;
+    bool chbDisabled2 = true;
+
+    ViewBag.confirmbutton = new
+    {
+        content = "Yes",
+        isPrimary = true
+    };
+    ViewBag.confirmbutton1 = new
+    {
+        content = "No",
+    };
+
+
+    int totalPatients = 0;
+    int totalDoctors = 0;
+
+
+
+
+    if (Model.Job.JobStatus != null)
+    {
+        totalPatients = Model.PatientList.Count;
+        totalDoctors = Model.DoctorList.Count;
+        if ((totalPatients > 0) && (totalDoctors > 0))
+        {
+            chbDisabled2 = true;
+        }
+
+    }
+
+
+
+    int CalAge(DateTime dob)
+    {
+        int age = 0;
+
+        DateTime now = Convert.ToDateTime(DateTime.Now.ToString(new System.Globalization.CultureInfo("en-GB")));
+
+        age = now.Year - dob.Year;
+        if (now.DayOfYear < dob.DayOfYear)
+        {
+            age = age - 1;
+        }
+        return age;
+    }
+
+
+
+
+    }
+
+
+@{
+    string cssClass  = ViewBag.Status < 1  ? "hidden" : "";
+    string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
+}
+
+
+<script>
+
+    var confirmObj;
+    var buttons = document.querySelectorAll('.dlgbtn');
+
+    function onLoadconfirm() {
+        confirmObj = this;
+        document.getElementById('confirmBtn').onclick = function () {
+            confirmObj.show();
+        };
+    }
+
+    function confirmBtnClick() {
+        confirmObj.hide();
+    }
+
+    function dialogClose() {
+        buttons[0].classList.remove('e-btn-hide');
+        buttons[1].classList.remove('e-btn-hide');
+        buttons[2].classList.remove('e-btn-hide');
+    }
+    function dialogOpen() {
+        buttons[0].classList.add('e-btn-hide');
+        buttons[1].classList.add('e-btn-hide');
+        buttons[2].classList.add('e-btn-hide');
+    }
+</script>
+
+
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @strCapture</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+
+    <div class="row">
+        <div class="col-12">
+
+            <form asp-controller="@controller"  method="post">
+ 
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลโรงพยาบาล</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.Hospital.HospitalName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Job.Hospital.HospitalName" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.Hospital.HospitalName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลงาน</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="@Model.Job.JobId" />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.Name"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Job.Name" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.Description"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Job.Description" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.Description" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.TransDate"></label>
+                                    <div class="input-group">
+                                        <ejs-datepicker id="transDate" format="dd-MM-yyyy" ejs-for="@Model.Job.TransDate" value="DateTime.Today" readonly></ejs-datepicker>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.TransDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row" @cssClass>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.JobStatusId"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Job.JobStatus.Description" class="form-control" readonly />
+                                        <input asp-for="@Model.Job.JobStatusId" class="form-control" hidden />
+
+                                        @*<select asp-for="@Model.Job.JobStatusId" class="select2 form-control" asp-items="ViewBag.JobStatus" hidden></select>*@
+
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.JobStatusId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </article>
+
+
+                <article class="card mb-4" @cssClass>
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">โพสต์งาน</h4>
+                    </div>
+                    <div class="card-body">
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.TotalPatients"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@totalPatients" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.PostDate"></label>
+                                    <div class="input-group">
+                                        <ejs-datepicker id="postdate" format="dd-MM-yyyy" ejs-for="@Model.Job.PostDate"  readonly></ejs-datepicker>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
+                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+
+                                        <input disabled="@chbDisabled" onclick="checkFluency()" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked1" name="IsChecked1" value="true">
+                                        <input name="IsChecked1" type="hidden" value="false">
+                                        <label>ส่งงานโพสต์</label><br>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </article>
+
+
+
+                <article class="card mb-4" @cssClass>
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">บันทึกนัด</h4>
+                    </div>
+                    <div class="card-body">
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.TotalPatients"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@totalPatients" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.TotalDoctors"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@totalDoctors" class="form-control" readonly />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.TotalDoctors" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.AppStartDate"></label>
+                                    <div class="input-group">
+                                        <ejs-datetimepicker id="workdate" ejs-for="@Model.Job.AppStartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดเริ่มต้น" readonly></ejs-datetimepicker>
+                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.AppEndDate"></label>
+                                    <div class="input-group">
+                                        <ejs-datetimepicker id="workend" ejs-for="@Model.Job.AppEndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดสิ้นสุด" readonly></ejs-datetimepicker>
+                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.AppEndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.Job.Remark1"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Job.Remark1" class="form-control" readonly/>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Job.Remark1" class="text-danger"></span>
+                                    <input type="hidden" asp-for="@Model.Job.Remark2" class="form-control" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
+                        <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+
+                                        <input disabled="@chbDisabled2" onclick="checkFluency()" asp-for="@IsChecked2" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked2" name="IsChecked2" value="true">
+                                        <input name="IsChecked2" type="hidden" value="false">
+                                        <label>ยืนยันนัด</label><br>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </article>
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        @*<button id="btnSave" type="submit" class="btn btn-primary" disabled>บันทึก</button>*@
+                      
+                    </div>
+                </article>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div class="row" @cssClass>
+        <div class="col-12">
+
+            <form asp-controller="@controller" asp-action="SelectPatients" method="get">
+
+
+                <article class="card mb-4">
+
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลผู้ป่วย</h4>
+                    </div>
+
+                    <div class="card-body">
+
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon" aria-hidden="true">
+                                    <span class="glyphicon glyphicon-ok text-success"></span>
+                                </span>
+
+                            </div>
+
+                            @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" role="group" aria-label="First group">
+
+                                    <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
+                                    <input type="hidden" asp-for="@strJobId" />
+                                    <input type="hidden" asp-for="@strCapture" />
+                                </div>
+                            </div>*@
+                        </div>
+
+
+                        <div class="table-responsive">
+                            <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+
+                                    <tr class="bg-primary text-white">
+                                        <th width="10%">ดู</th>
+                                        
+                                        <th width="30%">ชื่อ-สกุล</th>
+                                        <th width="5%">เพศ</th>
+                                        <th width="10%">อายุ (ปี)</th>
+                                        <th width="15%">โรค</th>
+                                        <th width="30%">ปัญหา</th>
+
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+
+                                    @if (@Model.PatientList != null)
+                                    {
+                                        @foreach (var item in @Model.PatientList)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="/@controller/PatientDetail/@item.PatientId"><i class="icon-doc md-18"></i></a>
+                                                </td>
+                                               
+
+                                                <td>
+                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                                </td>
+
+                                                <td>
+                                                    @item.Gender
+                                                </td>
+                                                <td>
+                                                    @CalAge(item.DateOfBirth)
+                                                </td>
+                                                <td>
+                                                    @item.DiseaseType.Name
+                                                </td>
+                                                <td>
+                                                    @item.Problem
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="row" @cssClass id="target1" hi>
+
+        <div class="col-12">
+            <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target1" header="Delete Multiple Items" showCloseIcon="true">
+                <e-content-template>
+                    <div>Are you sure you want to permanently delete these items?</div>
+                </e-content-template>
+                <e-dialog-buttons>
+                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton" click="confirmBtnClick"></e-dialog-dialogbutton>
+                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClick"></e-dialog-dialogbutton>
+                </e-dialog-buttons>
+            </ejs-dialog>
+
+            <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลแพทย์</h4>
+                    </div>
+
+                    <div class="card-body">
+
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon" aria-hidden="true">
+                                    <span class="glyphicon glyphicon-ok text-success"></span>
+                                </span>
+
+                            </div>
+
+                           
+                        </div>
+
+
+                        <div class="table-responsive">
+                            <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th width="5%"></th>
+                                       
+                                        <th width="10%">ภาพ</th>
+                                        <th width="25%">ชื่อแพทย์</th>
+                                        <th width="20%">โทรศัพท์</th>
+                                        <th width="20%">Line</th>
+                                        <th width="20%">Email</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (@Model.DoctorList != null)
+                                    {
+                                        @foreach (var item in @Model.DoctorList)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="/@controller/DoctorDetail/@item.DoctorId"><i class="icon-doc md-18"></i></a>
+                                                </td>
+ 
+                                                <td>
+                                                    <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
+                                                         class="thumb rounded-circle"
+                                                         height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
+                                                         asp-append-version="true" onclick="myClick(this)" />
+
+                                                </td>
+
+                                                <td>
+                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                                </td>
+
+                                                <td>
+                                                    @item.Phone
+                                                </td>
+                                                <td>
+                                                    @item.LineId
+                                                </td>
+                                                <td>
+                                                    @item.Email
+                                                </td>
+
+                                            </tr>
+
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </article>
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+
+    <!-- ================== MODAL IMAGE  ================== -->
+    <link rel="stylesheet" href="~/css/modal_image.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+    <style>
+
+        #addbtn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .e-btn-hide {
+            display: none;
+        }
+
+        .Table {
+            border-collapse: separate;
+            border-spacing: 10px;
+            width: 85%;
+            margin: 0px -5px 0px;
+        }
+
+        .dlgbtn {
+            margin-right: 10px;
+        }
+    </style>
+}
+
+
+
+
+@section Scripts {
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+ 
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+
+        //if ($('#sendMail').val() == 'True') {
+        //    $('#sendMailLabel').addClass('checked');
+        //} else {
+        //    $('#sendMailLabel').removeClass('checked');
+        //}
+        //$('#sendMailLabel').on('change', function () {
+        //    if ($('#sendMailLabel').hasClass('checked')) {
+        //        $('#sendMail').val('True');
+        //    } else {
+        //        $('#sendMail').val('False');
+        //    }
+        //});
+
+
+
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict'), // input ของตำบล
+            $amphoe: $('#district'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
+        });
+
+
+        $(document).ready(function () {
+
+            var mainTable;
+            var mainTable1;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
+            });
+
+            mainTable1 = $('#grid1').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
+            });
+
+            //$('#mainSearch').keyup(function () {
+            //    mainTable.search($(this).val()).draw();
+            //})
+
+        });
+
+
+        @*$(function () {
+
+            if (@CanSave <= 0) {
+
+                $("#btnSave").prop("disabled", true);
+            }
+            
+        })*@
+
+
+
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        function myClick(e) {
+
+            modal.style.display = "block";
+            modalImg.src = e.src;
+            captionText.innerHTML = e.alt;
+
+        }
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+
+        function checkFluency() {
+            var checkbox = document.getElementById('IsChecked2');
+          
+            if (checkbox.checked == true) {
+                $("#btnSave").prop("disabled", false);
+               
+            }
+            else {
+                $("#btnSave").prop("disabled", true);
+               
+            }
+        }
+
+
+
+    </script>
+}
+
+
+
+

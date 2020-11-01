@@ -1,0 +1,428 @@
+﻿
+@model HospitalView1
+
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "โรงพยาบาล";
+    ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
+
+
+}
+
+
+
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">เพิ่ม / ปรับปรุงข้อมูล-@modelName</h4>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลทั่วไป</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Hospital.HospitalId" />
+
+
+                        <div class="form-group">
+                            <label asp-for="Hospital.HospitalName"></label>
+                            <div class="input-group">
+                                <input id="hospitalname" asp-for="Hospital.HospitalName" class="form-control" autocomplete="off" onchange="ConcatAddress();" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Hospital.HospitalName" class="text-danger"></span>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label asp-for="Hospital.Address1"></label>
+                            <div class="input-group">
+                                <input id="hospitaladdress1" asp-for="Hospital.Address1" class="form-control" autocomplete="off" onchange="ConcatAddress();" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Hospital.Address1" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.SubDistrict"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.SubDistrict" id="subdistrict" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.SubDistrict" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.District"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.District" id="district" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.District" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Province"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.Province" id="province" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Province" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.ZipCode"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.ZipCode" id="zipcode" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Size"></label>
+                                    <div class="input-group">
+
+                                        <ejs-numerictextbox id="hpsize" format="n0" decimals="0" ejs-for="Hospital.Size" Type="text"></ejs-numerictextbox>
+
+                                        <input type="number" asp-for="Hospital.Size" class="form-control text-right" autocomplete="off" hidden />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Size" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Service"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.Service" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Service" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.OperatingRoom"></label>
+                                    <div class="input-group">
+                                        <ejs-numerictextbox id="hproom" format="n0" decimals="0" ejs-for="Hospital.OperatingRoom" Type="text"></ejs-numerictextbox>
+                                        <input type="number" asp-for="Hospital.OperatingRoom" autocomplete="off" class="form-control text-right" hidden />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.OperatingRoom" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label></label>
+                                    <div class="input-group">
+                                        <input id="myBtn" type="button" class="btn btn-primary" value="แสดงแผนที่ที่ตั้งโรงพยาบาล" onclick="myMap()" />
+                                        <input id="address" hidden type="text" value="โรงพยาบาลดำเนินสะดวก ต.ดำเนินสาะดวก อ.ดำเนินสะดวก จ.ราชบุรี 70000" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Lat"></label>
+                                    <div class="input-group">
+                                        <input id="lat" type="text" asp-for="Hospital.Lat" class="form-control text-right" autocomplete="off" disabled />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Lat" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Long"></label>
+                                    <div class="input-group">
+                                        <input id="long" type="text" asp-for="Hospital.Long" class="form-control text-right" autocomplete="off" disabled />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Long" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div id="myDiv" style="width:auto;height:400px;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </article>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+    <style>
+        .block {
+            display: block;
+            width: 100%;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .block:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+
+
+        custom-button {
+            padding: 10px;
+            color: white;
+            background-color: #009578;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #custom-button:hover {
+            background-color: #00b28f;
+        }
+
+        #custom-text {
+            margin-left: 10px;
+            font-family: sans-serif;
+            color: #aaa;
+        }
+
+        #logoImage {
+            width: 50%;
+            height: auto;
+            border: 1px solid #555;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcEgUdgLmE5g-karJidmmZsYBkmo4NMCk"></script>
+
+    <script>
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict'), // input ของตำบล
+            $amphoe: $('#district'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode') // input ของรหัสไปรษณีย์
+
+        });
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict1'), // input ของตำบล
+            $amphoe: $('#district1'), // input ของอำเภอ
+            $province: $('#province1'), // input ของจังหวัด
+            $zipcode: $('#zipcode1') // input ของรหัสไปรษณีย์
+
+        });
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict2'), // input ของตำบล
+            $amphoe: $('#district2'), // input ของอำเภอ
+            $province: $('#province2'), // input ของจังหวัด
+            $zipcode: $('#zipcode2') // input ของรหัสไปรษณีย์
+
+        });
+
+        $(document).ready(function () {
+
+
+            $('#hospitalname').on('input', function (e) {
+
+                $("#address").text($(this).val());
+
+                document.getElementById("address").value = $(this).val();
+
+            });
+            myMap();
+        });
+
+
+        function myMap() {
+
+            ConcatAddress();
+
+            //Set the Latitude and Longitude of the Map
+            var myAddress = new google.maps.LatLng(24.466807, 54.384297);
+
+            var info = document.getElementById("address").value;
+
+
+            //Create Options or set different Characteristics of Google Map
+            var mapOptions = {
+                center: myAddress,
+                zoom: 15,
+                minZoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            //Display the Google map in the div control with the defined Options
+            var map = new google.maps.Map(document.getElementById("myDiv"), mapOptions);
+
+            var geocoder = new google.maps.Geocoder();
+
+
+
+            geocodeAddress(geocoder, map);
+
+        }
+
+        function geocodeAddress(geocoder, resultsMap) {
+
+            var address = document.getElementById('address').value;
+
+            var contentString = '<div id="content">' + address +
+
+                '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+
+
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    resultsMap.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: resultsMap,
+                        position: results[0].geometry.location
+
+                    });
+
+
+                    infowindow.open(resultsMap, marker);
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('long').value = results[0].geometry.location.lng();
+
+
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+
+        function ConcatAddress() {
+
+
+            var hospitalname = document.getElementById('hospitalname') ? document.getElementById('hospitalname').value.concat(" ") : "";
+            var address1 = document.getElementById('address1') ? document.getElementById('address1').value.concat(" ") : "";
+            var subdistrict = document.getElementById('subdistrict') ? document.getElementById('subdistrict').value.concat(" ") : "";
+            var district = document.getElementById('district') ? document.getElementById('district').value.concat(" ") : "";
+            var province = document.getElementById('province') ? document.getElementById('province').value.concat(" ") : "";
+            var zipcode = document.getElementById('zipcode') ? document.getElementById('zipcode').value.concat(" ") : "";
+
+            document.getElementById('address').value = hospitalname.concat(address1, subdistrict, district, province, zipcode);
+
+        }
+
+
+
+
+    </script>
+
+
+
+    <script>
+        const realFileBtn = document.getElementById("real-file");
+        const customBtn = document.getElementById("custom-button");
+        const customTxt = document.getElementById("custom-text");
+        const myimage = document.getElementById("logoImage");
+
+        customBtn.addEventListener("click", function () {
+            realFileBtn.click();
+        });
+
+        realFileBtn.addEventListener("change", function () {
+            if (realFileBtn.value) {
+                customTxt.innerHTML = realFileBtn.value.match(
+                    /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                )[1];
+
+                myimage.src = window.URL.createObjectURL(this.files[0]);
+            } else {
+                customTxt.innerHTML = "-ชื่อไฟล์รูปภาพ-";
+                myimage.src = "/assets/images/noimage.png";
+            }
+        });
+
+
+
+    </script>
+
+}
+
+

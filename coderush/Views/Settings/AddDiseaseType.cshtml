@@ -1,0 +1,446 @@
+﻿@model DiseaseTypeView
+
+@{
+
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "กำหนดค่าระบบ";
+    ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
+
+    string doctorgroupid = ViewBag.doctorgroupid;
+
+
+
+}
+
+<link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-book-open"></i>@modelName</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+
+            <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ปรับปรุงข้อมูล-โรค</h4>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">โรค</h4>
+                    </div>
+
+                    <div class="card-body">
+                        <input type="hidden" asp-for="@Model.DiseaseType.DiseaseTypeId" />
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.DiseaseType.Name"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.DiseaseType.Name" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.DiseaseType.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.DiseaseType.Description"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.DiseaseType.Description" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.DiseaseType.Description" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.DiseaseType.Order"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.DiseaseType.Order" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.DiseaseType.Order" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@ViewBag.SenderController/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </article>
+
+            </form>
+
+            <div class="row">
+                <div class="col-12">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+
+
+                            <div class="table-responsive">
+                                <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+
+                                    <thead>
+                                        <tr class="bg-primary text-white">
+                                            <th width="10%">แก้ไข</th>
+                                            <th width="10%">ลบ</th>
+                                            <th width="25%">ชื่อโรค</th>
+                                            <th width="30%">รายละเอียด</th>
+                                            <th width="15%">ลำดับการแสดงผล</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (@Model.DiseaseTypeList != null)
+                                        {
+                                            @foreach (var item in @Model.DiseaseTypeList)
+                                            {
+                                                <tr>
+
+                                                    <td>
+
+                                                        <a href="@Url.Action("AddDiseaseType","settings", new {id = item.DiseaseTypeId })" title="คลิกเพื่อแก้ไขข้อมูลโรค"><i class="icon-note md-18"></i> </a>
+                                                        @*<a href="/@controller/AddPrefixType/?prefixTypeId=@item.PrefixTypeId" title="คลิกเพื่อแก้ไขคำนำหน้าชื่อ"><i class="icon-note md-18"></i> </a>*@
+                                                    </td>
+
+                                                    <td>
+                                                        <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@item.Name','@item.Description','@item.DiseaseTypeId');" class="icon-trash md-18"></i> </a>
+
+                                                    </td>
+                                                    <td>
+                                                        @item.Name
+                                                    </td>
+                                                    <td>
+                                                        @item.Description
+                                                    </td>
+                                                    <td>
+                                                        @item.Order
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+
+
+
+                                @*hidden field for storing current employeeId*@
+                                <input type="hidden" id="hiddenId" />
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </article>
+
+                </div>
+
+
+                @*<h2 class="demoHeaders">Dialog</h2>
+                    <p>
+                        <button id="dialog-link" class="ui-button ui-corner-all ui-widget">
+                            <span class="ui-icon ui-icon-newwin"></span>Open Dialog
+                        </button>
+                    </p>*@
+
+
+
+                <!-- ui-dialog -->
+                <div id="dialog" title="ลบข้อมูล">
+                    <p id="txtDialog"></p>
+                </div>
+
+            </div>
+        </div>
+
+        @*@foreach (var item in Model.Cars)
+            {
+                var tm = "#myModal" + item.Id;
+                var mid = "myModal" + item.Id;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@tm">
+                            Delete
+                        </button>
+
+                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure want to delete this item?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a asp-page-handler="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            }*@
+
+    </div>
+</div>
+    <!-- Content End -->
+
+    @section Styles{
+
+        <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+        <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+        <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+        <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+
+        <style>
+
+            custom-button {
+                padding: 10px;
+                color: white;
+                background-color: #009578;
+                border: 1px solid #000;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            #custom-button:hover {
+                background-color: #00b28f;
+            }
+
+            #custom-text {
+                margin-left: 10px;
+                font-family: sans-serif;
+                color: #aaa;
+            }
+
+            #logoImage {
+                width: 50%;
+                height: auto;
+                border: 1px solid #555;
+                margin-top: 0px;
+                margin-bottom: 10px;
+            }
+
+            .demoHeaders {
+                margin-top: 2em;
+            }
+
+            #dialog-link {
+                padding: .4em 1em .4em 20px;
+                text-decoration: none;
+                position: relative;
+            }
+
+                #dialog-link span.ui-icon {
+                    margin: 0 5px 0 0;
+                    position: absolute;
+                    left: .2em;
+                    top: 50%;
+                    margin-top: -8px;
+                }
+
+            #icons {
+                margin: 0;
+                padding: 0;
+            }
+
+                #icons li {
+                    margin: 2px;
+                    position: relative;
+                    padding: 4px 0;
+                    cursor: pointer;
+                    float: left;
+                    list-style: none;
+                }
+
+                #icons span.ui-icon {
+                    float: left;
+                    margin: 0 4px;
+                }
+
+            .fakewindowcontain .ui-widget-overlay {
+                position: absolute;
+            }
+
+            select {
+                width: 200px;
+            }
+
+
+            .ui-dialog-titlebar {
+                background-color: #0080FF;
+                background-image: none;
+                color: #ffffff;
+            }
+        </style>
+
+
+    }
+
+    @section Scripts {
+
+        <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+
+        <script src="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+
+        <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+        <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+        <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+        <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+
+
+        <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <partial name="_ValidationScriptsPartial" />
+
+        <script>
+
+            $(document).ready(function () {
+
+                var mainTable;
+
+                mainTable = $('#grid').DataTable({
+                    lengthChange: false,
+                    info: false,
+                    searching: true,
+                    dom: 'lrtip',
+                    scrollX: false,
+                    pageLength: 20,
+                    language: {
+                        "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                    }
+                });
+
+                $('#mainSearch').keyup(function () {
+                    mainTable.search($(this).val()).draw();
+                });
+            });
+
+
+        </script>
+
+        <script>
+
+            $("#dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                width: 'auto',
+                height: 'auto',
+                fluid: true,
+                show: {
+                    effect: "blind",
+                    duration: 500
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 500
+                },
+                buttons: [
+                    {
+                        text: "Ok",
+                        click: function () {
+
+                            $(this).dialog("close");
+                            window.location.href = "/docotr/SubmitDeleteDiseaseType/?id=" + document.getElementById("hiddenId").value;
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                ]
+            }, "option", "position", { my: "center", at: "center", of: window }).prev(".ui-dialog-titlebar").css("background", "#269bff").css("color", "#ffffff");
+
+
+
+            // Link to open the dialog
+            $("#dialog-link").click(function (event) {
+                $("#dialog").dialog("open");
+                event.preventDefault();
+            });
+
+            // Hover states on the static widgets
+            $("#dialog-link, #icons li").hover(
+                function () {
+                    $(this).addClass("ui-state-hover");
+                },
+                function () {
+                    $(this).removeClass("ui-state-hover");
+                }
+            );
+
+
+            function deleteData(short, full, id) {
+
+                $("#hiddenId").val(id);
+                document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + short + "/" + full + " ใช่หรือไม่ ?";
+                $("#dialog").dialog("open");
+                event.preventDefault();
+
+            }
+
+                                                         
+
+        </script>
+    }
+
+

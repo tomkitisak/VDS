@@ -1,0 +1,77 @@
+﻿@model vds.Models.Hospital
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Hospital</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="HospitalName" class="control-label"></label>
+                <input asp-for="HospitalName" class="form-control" />
+                <span asp-validation-for="HospitalName" class="text-danger"></span>
+            </div>
+          
+            
+            <div class="form-group">
+                <label asp-for="Address1" class="control-label"></label>
+                <input asp-for="Address1" class="form-control" />
+                <span asp-validation-for="Address1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubDistrict" class="control-label"></label>
+                <input asp-for="SubDistrict" class="form-control" />
+                <span asp-validation-for="SubDistrict" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="District" class="control-label"></label>
+                <input asp-for="District" class="form-control" />
+                <span asp-validation-for="District" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Province" class="control-label"></label>
+                <input asp-for="Province" class="form-control" />
+                <span asp-validation-for="Province" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ZipCode" class="control-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+ 
+      
+            <div class="form-group">
+                <label asp-for="CreatedById" class="control-label"></label>
+                <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAtUtc" class="control-label"></label>
+                <input asp-for="CreatedAtUtc" class="form-control" />
+                <span asp-validation-for="CreatedAtUtc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedById" class="control-label"></label>
+                <select asp-for="UpdatedById" class ="form-control" asp-items="ViewBag.UpdatedById"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedAtUtc" class="control-label"></label>
+                <input asp-for="UpdatedAtUtc" class="form-control" />
+                <span asp-validation-for="UpdatedAtUtc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

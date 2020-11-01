@@ -1,0 +1,303 @@
+﻿@model List<Job>
+@inject vds.Services.App.ICommon _app;
+@using vds.ViewModels;
+@using Newtonsoft.Json;
+@using Syncfusion.EJ2
+
+@{
+    ViewData["Title"] = "ตารางนัดหมาย";
+    string period = this.Context.Request.Query["period"].ToString();
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+
+
+    if (String.IsNullOrEmpty(period))
+    {
+        period = DateTime.Now.ToString("MM-yyyy", new System.Globalization.CultureInfo("en-GB"));
+    }
+
+    TodoSummary todoSummary = _app.GetTodoSummaryByPeriod(period);
+    ChartDoughnut todoChart = _app.GetTodoDoughnutByPeriod(period);
+
+    var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+
+    //TEST TEAM
+}
+
+<script>
+
+    var alertObj, confirmObj, promptObj;
+    var buttons = document.querySelectorAll('.dlgbtn');
+
+    function onLoadconfirm() {
+        confirmObj = this;
+        document.getElementById('confirmBtn').onclick = function () {
+            confirmObj.show();
+        };
+    }
+
+
+    function confirmBtnClick() {
+        confirmObj.hide();
+    }
+
+    function dialogClose() {
+        buttons[0].classList.remove('e-btn-hide');
+        buttons[1].classList.remove('e-btn-hide');
+        buttons[2].classList.remove('e-btn-hide');
+    }
+    function dialogOpen() {
+        buttons[0].classList.add('e-btn-hide');
+        buttons[1].classList.add('e-btn-hide');
+        buttons[2].classList.add('e-btn-hide');
+    }
+</script>
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-calendar-multiple-check"></i> @ViewData["Title"] @(!String.IsNullOrEmpty(period) ? "สำหรับ " + period : "")</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div id="accordion" class="accordion">
+        <div class="card">
+            <div id="headingOne">
+                <div class="card-header">
+                    <a href="javascript:void(0)" class="accordion-toggle" data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne">
+                        ข้อมูลสรุป
+                    </a>
+                </div>
+                <div>
+                    <div class="col-lg-12 control-section">
+                        <div class="schedule-wrapper">
+                            <ejs-schedule id="schedule" allowDragAndDrop="false" readonly currentView="Month" height="650px" selectedDate="DateTime.Today">
+                                <e-schedule-eventsettings  dataSource="@ViewBag.appointments" ></e-schedule-eventsettings>
+                            </ejs-schedule>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <article class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">รายการนัดหมาย</h4>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <article class="card mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="card-title mb-0">รายการงาน</h4>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table id="grid2" class="table table-striped" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr class="bg-primary text-white">
+                                                    <th width="5%">ดู</th>
+                                                    <th width="25%">ชื่องาน</th>
+                                                    <th width="20%">รายละเอียด</th>
+                                                    <th width="20%">โรงพยาบาล</th>
+                                                    <th width="10%">ผู้ป่วย(คน)</th>
+                                                    <th width="10%">แพทย์(คน)</th>
+                                                    <th width="10%">วันที่นัด</th>
+                                                    <th width="10%">สถานะ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                    {
+                                                        var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy",   System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+
+                                              
+                 
+                                                <tr>
+                                                    <td>
+                                                        <a href="/@controller/FormJobView/?id=@item.JobId" title="รายละเอียด" ><i class="icon-doc md-18"></i> </a>
+
+                                                    </td>
+                                                    @*<td>
+                                            <button type="button" class="btn btn-primary" id="custom-button">Chat</button>
+                                        </td>*@
+
+                                                    <td>
+                                                        @item.Name
+                                                    </td>
+
+                                                    <td>
+                                                        @item.Description
+                                                    </td>
+                                                    <td>
+                                                        @item.Hospital.HospitalName
+                                                    </td>
+                                                    <td>@item.TotalPatients</td>
+                                                    <td>@item.TotalDoctors</td>
+                                                    <td>
+                                                        @mydate
+                                                    </td>
+                                                    <td>
+                                                        @item.JobStatus.Description
+                                                    </td>
+
+                                                </tr>
+                                        }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </article>
+
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </article>
+        </div>
+
+
+        <div class=" col-lg-12 control-section" id="target">
+
+            @*<ejs-button id="confirmBtn" class="dlgbtn" type="button" content="Confirm"></ejs-button>*@
+
+            <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target" header="Delete Multiple Items" showCloseIcon="true">
+                <e-content-template>
+                    <div>Are you sure you want to permanently delete these items?</div>
+                </e-content-template>
+                <e-dialog-buttons>
+                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton" click="confirmBtnClick"></e-dialog-dialogbutton>
+                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClick"></e-dialog-dialogbutton>
+                </e-dialog-buttons>
+            </ejs-dialog>
+
+          
+        </div>
+
+ 
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+    <style>
+
+
+        .e-btn-hide {
+            display: none;
+        }
+
+
+
+        .dlgbtn {
+            margin-right: 10px;
+        }
+    </style>
+
+
+}
+
+
+@section Scripts{
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var mainTable;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+        //Doughnut Chart
+        $(function () {
+            var doughnutChart = {
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(todoChart.Labels)),
+                    datasets: [{
+                        label: 'Doughnut chart',
+                        data: @Html.Raw(JsonConvert.SerializeObject(todoChart.Data)),
+                        backgroundColor: @Html.Raw(JsonConvert.SerializeObject(todoChart.Colors)),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "top"
+                    },
+                    cutoutPercentage: 50
+                }
+            }
+            chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
+        });
+
+        function onRefresh() {
+            if ($('#Period').val() !== '') {
+                location.href = '/Todo/Index?period=' + $('#Period').val();
+            } else {
+                toastr.error('Please select period first!');
+            }
+
+        }
+
+
+        //function onChange(args) {
+        //    var scheduleObj = document.getElementById('schedule').ej2_instances[0];
+        //    scheduleObj.selectedDate = args.value;
+        //    scheduleObj.dataBind();
+        //}
+
+
+
+    </script>
+
+}
+
+ 
+ 

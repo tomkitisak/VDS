@@ -1,0 +1,916 @@
+﻿
+@model HospitalView1
+
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "โรงพยาบาล";
+    ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
+
+    bool IsNew = ViewBag.IsNew; ;
+}
+
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-3" role="group" aria-label="First group">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+
+                </div>
+                <label>แก้ไข</label>
+            </div>
+        </div>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลรายละเอียด-@modelName</h4>
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ข้อมูลทั่วไป</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Hospital.HospitalId" />
+
+
+                        <div class="form-group">
+                            <label asp-for="Hospital.HospitalName"></label>
+                            <div class="input-group">
+                                <input id="hospitalname" asp-for="Hospital.HospitalName" class="form-control x" autocomplete="off" onchange="ConcatAddress();" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Hospital.HospitalName" class="text-danger"></span>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label asp-for="Hospital.Address1"></label>
+                            <div class="input-group">
+                                <input id="hospitaladdress1" asp-for="Hospital.Address1" class="form-control x" autocomplete="off" onchange="ConcatAddress();" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Hospital.Address1" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.SubDistrict"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.SubDistrict" id="subdistrict" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.SubDistrict" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.District"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.District" id="district" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.District" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Province"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.Province" id="province" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Province" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.ZipCode"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.ZipCode" id="zipcode" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Size"></label>
+                                    <div class="input-group">
+
+                                        <ejs-numerictextbox id="hpsize" format="n0" decimals="0" ejs-for="Hospital.Size" Type="text" cssClass="x"></ejs-numerictextbox>
+
+                                        <input type="number" asp-for="Hospital.Size" class="form-control text-right" autocomplete="off" hidden />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Size" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Service"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Hospital.Service" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Service" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.OperatingRoom"></label>
+                                    <div class="input-group">
+                                        <ejs-numerictextbox id="hproom" format="n0" decimals="0" ejs-for="Hospital.OperatingRoom" Type="text" cssClass="x"></ejs-numerictextbox>
+                                        <input type="number" asp-for="Hospital.OperatingRoom" autocomplete="off" class="form-control text-right" hidden />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.OperatingRoom" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label></label>
+                                    <div class="input-group">
+                                        <input id="myBtn" type="button" class="btn btn-primary x" value="แสดงแผนที่ที่ตั้งโรงพยาบาล" onclick="myMap()" />
+                                        <input id="address" hidden type="text" value="โรงพยาบาลดำเนินสะดวก ต.ดำเนินสาะดวก อ.ดำเนินสะดวก จ.ราชบุรี 70000" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Lat"></label>
+                                    <div class="input-group">
+                                        <input id="lat" type="text" asp-for="Hospital.Lat" class="form-control text-right x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Lat" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Hospital.Long"></label>
+                                    <div class="input-group">
+                                        <input id="long" type="text" asp-for="Hospital.Long" class="form-control text-right x" autocomplete="off" disabled />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Hospital.Long" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div id="myDiv" style="width:auto;height:400px;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ผู้อำนวยการ</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Director.DirectorId" />
+                        <div class="row">
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.PrefixTypeId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="Director.PrefixTypeId" class="select2 form-control x" asp-items="ViewBag.PrefixType"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.PrefixTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.FirstName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Director.FirstName" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.LastName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Director.LastName" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.Email"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Director.Email" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.Phone"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Director.Phone" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.LineId"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Director.LineId" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.LineId" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label asp-for="Director.Address1"></label>
+                            <div class="input-group">
+                                <input asp-for="Director.Address1" class="form-control x" autocomplete="off" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Director.Address1" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.SubDistrict"></label>
+                                    <div class="input-group">
+                                        <input id="subdistrict1" asp-for="Director.SubDistrict" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.SubDistrict" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.District"></label>
+                                    <div class="input-group">
+                                        <input id="district1" asp-for="Director.District" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.District" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.Province"></label>
+                                    <div class="input-group">
+                                        <input id="province1" asp-for="Director.Province" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.Province" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Director.ZipCode"></label>
+                                    <div class="input-group">
+                                        <input id="zipcode1" asp-for="Director.ZipCode" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Director.ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </article>
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">ผู้ประสานงานหลัก</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <input type="hidden" asp-for="Coordinator.CoordinatorId" />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label></label>
+                                <div class="form-group">
+
+                                    <img id="logoImage" src="@ViewBag.ImageDataUrl" class="thumb" alt="Profile Image" asp-append-version="true" title="คลิกเพื่อขยายภาพ" onclick="myClick(this)" />
+
+                                    <div>
+                                        <input type="file" id="real-file" name="file" hidden="hidden" />
+                                        <button type="button" class="btn btn-primary x" style="width:50%" id="custom-button">เลือกไฟล์รูปภาพ</button>
+                                        <span id="custom-text" hidden>-ชื่อไฟล์รูปภาพ-</span>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.PrefixTypeId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="Coordinator.PrefixTypeId" class="select2 form-control x" asp-items="ViewBag.PrefixType"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.PrefixTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.FirstName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Coordinator.FirstName" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.LastName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Coordinator.LastName" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row">
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.Email"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Coordinator.Email" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.Phone"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Coordinator.Phone" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.LineId"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Coordinator.LineId" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.LineId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Coordinator.Address1"></label>
+                            <div class="input-group">
+                                <input asp-for="Coordinator.Address1" class="form-control x" autocomplete="off" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            </div>
+                            <span asp-validation-for="Coordinator.Address1" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.SubDistrict"></label>
+                                    <div class="input-group">
+                                        <input id="subdistrict2" asp-for="Coordinator.SubDistrict" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.SubDistrict" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.District"></label>
+                                    <div class="input-group">
+                                        <input id="district2" asp-for="Coordinator.District" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.District" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.Province"></label>
+                                    <div class="input-group">
+                                        <input id="province2" asp-for="Coordinator.Province" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.Province" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.ZipCode"></label>
+                                    <div class="input-group">
+                                        <input id="zipcode2" asp-for="Coordinator.ZipCode" class="form-control x" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.DesignationId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="Coordinator.DesignationId" class="select2 form-control x" asp-items="ViewBag.Designation"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.DesignationId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Coordinator.DepartmentId"></label>
+                                    <div class="input-group">
+                                        <select asp-for="Coordinator.DepartmentId" class="select2 form-control x" asp-items="ViewBag.Department"></select>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Coordinator.DepartmentId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </article>
+
+
+                @*<article class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">System User Account Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="SystemUserId"></label>
+                                <div class="input-group">
+                                    <select asp-for="SystemUserId" class="select2 form-control" asp-items="ViewBag.SystemUser"></select>
+                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                </div>
+                                <span asp-validation-for="SystemUserId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </article>*@
+
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button id="btnSave" type="submit" class="btn btn-primary x">บันทึก</button>
+                    </div>
+                </article>
+            </form>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span id="spanid" class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+    <!-- ================== MODAL IMAGE  ================== -->
+    <link rel="stylesheet" href="~/css/modal_image.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+
+    <style>
+
+        .block {
+            display: block;
+            width: 100%;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .block:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+
+
+        custom-button {
+            padding: 10px;
+            color: white;
+            background-color: #009578;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #custom-button:hover {
+            background-color: #00b28f;
+        }
+
+        #custom-text {
+            margin-left: 10px;
+            font-family: sans-serif;
+            color: #aaa;
+        }
+
+        #logoImage {
+            width: 50%;
+            height: auto;
+            border: 1px solid #555;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcEgUdgLmE5g-karJidmmZsYBkmo4NMCk"></script>
+
+    <script>
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict'), // input ของตำบล
+            $amphoe: $('#district'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode') // input ของรหัสไปรษณีย์
+
+        });
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict1'), // input ของตำบล
+            $amphoe: $('#district1'), // input ของอำเภอ
+            $province: $('#province1'), // input ของจังหวัด
+            $zipcode: $('#zipcode1') // input ของรหัสไปรษณีย์
+
+        });
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#subdistrict2'), // input ของตำบล
+            $amphoe: $('#district2'), // input ของอำเภอ
+            $province: $('#province2'), // input ของจังหวัด
+            $zipcode: $('#zipcode2') // input ของรหัสไปรษณีย์
+
+        });
+
+        $(document).ready(function () {
+
+
+            $('#hospitalname').on('input', function (e) {
+
+                $("#address").text($(this).val());
+
+                document.getElementById("address").value = $(this).val();
+
+            });
+            myMap();
+        });
+
+
+        function myMap() {
+
+            ConcatAddress();
+
+            //Set the Latitude and Longitude of the Map
+            var myAddress = new google.maps.LatLng(24.466807, 54.384297);
+
+            var info = document.getElementById("address").value;
+
+
+            //Create Options or set different Characteristics of Google Map
+            var mapOptions = {
+                center: myAddress,
+                zoom: 15,
+                minZoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            //Display the Google map in the div control with the defined Options
+            var map = new google.maps.Map(document.getElementById("myDiv"), mapOptions);
+
+            var geocoder = new google.maps.Geocoder();
+
+
+
+            geocodeAddress(geocoder, map);
+
+        }
+
+        function geocodeAddress(geocoder, resultsMap) {
+
+            var address = document.getElementById('address').value;
+
+            var contentString = '<div id="content">' + address +
+
+                '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+
+
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    resultsMap.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: resultsMap,
+                        position: results[0].geometry.location
+
+                    });
+
+
+                    infowindow.open(resultsMap, marker);
+                    document.getElementById('lat').value = results[0].geometry.location.lat();
+                    document.getElementById('long').value = results[0].geometry.location.lng();
+
+
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+
+        function ConcatAddress() {
+
+
+            var hospitalname = document.getElementById('hospitalname') ? document.getElementById('hospitalname').value.concat(" ") : "";
+            var address1 = document.getElementById('address1') ? document.getElementById('address1').value.concat(" ") : "";
+            var subdistrict = document.getElementById('subdistrict') ? document.getElementById('subdistrict').value.concat(" ") : "";
+            var district = document.getElementById('district') ? document.getElementById('district').value.concat(" ") : "";
+            var province = document.getElementById('province') ? document.getElementById('province').value.concat(" ") : "";
+            var zipcode = document.getElementById('zipcode') ? document.getElementById('zipcode').value.concat(" ") : "";
+
+            document.getElementById('address').value = hospitalname.concat(address1, subdistrict, district, province, zipcode);
+
+        }
+
+
+
+
+    </script>
+
+
+
+    <script>
+        const realFileBtn = document.getElementById("real-file");
+        const customBtn = document.getElementById("custom-button");
+        const customTxt = document.getElementById("custom-text");
+        const myimage = document.getElementById("logoImage");
+
+        customBtn.addEventListener("click", function () {
+            realFileBtn.click();
+        });
+
+        realFileBtn.addEventListener("change", function () {
+            if (realFileBtn.value) {
+                customTxt.innerHTML = realFileBtn.value.match(
+                    /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                )[1];
+
+                myimage.src = window.URL.createObjectURL(this.files[0]);
+            } else {
+                customTxt.innerHTML = "-ชื่อไฟล์รูปภาพ-";
+                myimage.src = "/assets/images/noimage.png";
+            }
+        });
+
+
+        if ('@IsNew'.value == true) {
+            $('.x').prop('disabled', false);
+            $('#chbEdit').prop('disabled', true);
+        }
+        else {
+            $('.x').prop('disabled', true);
+            $('#chbEdit').prop('disabled', false);
+        }
+
+
+        function ChangeMode(e) {
+
+            if (e.checked) {
+
+                $('.x').prop('disabled', false);
+
+            }
+            else {
+
+                $('.x').prop('disabled', true);
+            }
+       }
+
+
+
+    </script>
+
+    <script>
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        function myClick(e) {
+
+            modal.style.display = "block";
+            modalImg.src = e.src;
+            captionText.innerHTML = e.alt;
+
+        }
+        // Get the <span> element that closes the modal
+        //   var span = document.getElementsByClassName("close");
+        var span = document.getElementById("spanid");
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+    </script>
+
+}
+
+

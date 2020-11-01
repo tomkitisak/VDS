@@ -1,0 +1,221 @@
+﻿@model ChangeRoles
+@{
+    ViewData["Title"] = "Change Role";
+
+
+}
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-settings-variant"></i>ผู้ใช้งานระบบ | @ViewData["Title"]</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+            <form asp-controller="Membership" asp-action="SubmitChangeRole" method="post">
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Change member roles</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="UserName">ผู้ใช้</label>
+                            <input asp-for="UserName" class="form-control" disabled />
+                        </div>
+                        <div class="table-responsive">
+                            <table id="example" class="table" cellspacing="0"  width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="60%">Role Name</th>
+                                        <th width="40%">Is Role Registered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success badge-set" >ตารางนัด</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsTodoRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success badge-set" >งาน</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsJobRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success badge-set" >แพทย์</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsDoctorRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success badge-set">กลุ่มแพทย์</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsDoctorGroupRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success badge-set">โรงพยาบาล</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsHospitalRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success   badge-set">ผู้ประสานงาน รพ.</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsEmployeeRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success   badge-set">ผู้ป่วย</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsPatientRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success   badge-set">ผู้ใช้งานระบบ</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsMembershipRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success   badge-set">Role</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsRoleRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+
+                                    <tr>
+                                        <td>
+                                            <label class="badge badge-success   badge-set">Settings</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="custom-checkbox variation3 mb-0">
+                                                    <input asp-for="IsSettingsRegistered" class="form-check-input" />
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/Membership/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </article>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+<style>
+    .badge-set {
+        display: block;
+        height: 30px;
+        width: 200px;
+        font-size: small;
+        vertical-align:middle;
+    }
+
+  /*
+
+    label {
+        display: block;
+        padding-left: 15px;
+        text-indent: -15px;
+    }*/
+
+
+</style>
+
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

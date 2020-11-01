@@ -1,0 +1,438 @@
+﻿@model List<Doctor>
+@inject vds.Services.App.ICommon _app;
+@using vds.ViewModels;
+@using Newtonsoft.Json;
+@{
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string strmodelName = "แพทย์";
+    string modelName = "Doctor";
+    ViewData["Title"] = "แพทย์";
+
+    EmployeeSummary summary = _app.GetEmployeeSummary();
+    ChartDoughnut donutChart = _app.GetDoctorDoughnut();
+
+
+
+}
+
+<link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @strmodelName</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div id="accordion" class="accordion">
+        <div class="card">
+            <div id="headingOne">
+                <div class="card-header">
+                    <a href="javascript:void(0)" class="accordion-toggle" data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne">
+                        ข้อมูลสรุป
+                    </a>
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">แพทย์ตามสาขาที่เชี่ยวชาญ</h4>
+                                    <div class="chart-container doughnut">
+                                        <canvas id="doughnutChart" height="250" width="250"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between pb-4">
+                                        <h4 class="card-title mb-1">ข้อมูลสรุปแพทย์</h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">-</p>
+                                                            <h4 class="font-weight-bold">@summary.Male</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-primary font-weight-bold">@summary.MalePercentage%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">-</p>
+                                                            <h4 class="font-weight-bold">@summary.Female</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-info font-weight-bold">@summary.FemalePercentage%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">-</p>
+                                                            <h4 class="font-weight-bold">@summary.MosLess</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-danger font-weight-bold">@summary.MosLessPercentage%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="card mb-lg-5">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="inner flex-grow">
+                                                            <p class="mb-0">-</p>
+                                                            <h4 class="font-weight-bold">@summary.MosMore</h4>
+                                                        </div>
+                                                        <div class="inner d-flex align-items-center">
+                                                            <h1 class="text-success font-weight-bold">@summary.MosMorePercentage%</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="dropdown d-inline">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ข้อมูลระบบ
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                     style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <h6 class="dropdown-header"><b>เพิ่มข้อมูลใหม่</b></h6>
+                    <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
+                    <a class="dropdown-item" href="~/settings/AddDoctorType">สาขาความเชี่ยวชาญ</a>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <article class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">ข้อมูล - @ViewData["Title"]</h4>
+                        <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" role="group" aria-label="First group">
+                                <a href="/@controller/Form" class="btn btn-primary">
+                                    <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="grid" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th width="5%">ปรับปรุง</th>
+                                    <th width="5%">ลบ</th>
+                                    <th width="10%"></th>
+                                    <th width="25%">ชื่อ-สกุล</th>
+                                    <th width="15%">แพทย์เชี่ยวชาญ</th>
+                                    <th width="15%">เบอร์ไทร</th>
+                                    <th width="15%">ไลน์ไอดี</th>
+                                    <th width="10%">จังหวัด</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/@controller/Form/@item.DoctorId" title="ปรับปรุงข้อมูล"><i class="icon-note md-18"></i></a>
+                                        </td>
+                                        <td>
+
+                                            <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
+
+
+                                        </td>
+                                        <td>
+
+
+                                            <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
+                                                 class="thumb rounded-circle" title="คลิกเพื่อขยายภาพ"
+                                                 height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
+                                                 asp-append-version="true" onclick="myClick(this)" />
+
+                                        </td>
+                                        <td>
+                                            @*@(item.PrefixType.Name +  item.FirstName + "  " + item.LastName)*@
+                                            @item.FullName
+                                        </td>
+                                        <td>
+                                            @item.DoctorType.DoctorTypeName
+                                        </td>
+
+                                        <td>
+                                            @item.Phone
+                                        </td>
+                                        <td>
+                                            @item.LineId
+                                        </td>
+                                        <td>
+                                            @item.Province
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                @*hidden field for storing current employeeId*@
+                <input type="hidden" id="hiddenId" />
+
+            </article>
+        </div>
+ 
+        <!-- ui-dialog -->
+        <div id="dialog" title="ลบข้อมูล">
+            <p id="txtDialog"></p>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+
+</div>
+
+
+<!-- Content End -->
+
+@section Styles{
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+    <!-- ================== MODAL IMAGE  ================== -->
+    <link rel="stylesheet" href="~/css/modal_image.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+
+}
+
+@section Scripts{
+
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            var mainTable;
+
+            mainTable = $('#grid').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 5,
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+        //Doughnut Chart
+        $(function () {
+            var doughnutChart = {
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(donutChart.Labels)),
+                    datasets: [{
+                        label: 'Doughnut chart',
+                        data: @Html.Raw(JsonConvert.SerializeObject(donutChart.Data)),
+                        backgroundColor: @Html.Raw(JsonConvert.SerializeObject(donutChart.Colors)),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "top"
+                    },
+                    cutoutPercentage: 50
+                }
+            }
+            chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
+        });
+
+
+        $.Thailand({
+            database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
+            $district: $('#district'), // input ของตำบล
+            $amphoe: $('#amphoe'), // input ของอำเภอ
+            $province: $('#province'), // input ของจังหวัด
+            $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
+        });
+
+
+    </script>
+
+    <script>
+
+
+        // Get the modal Image  =======================================================
+
+        var modal = document.getElementById("myModal");
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        function myClick(e) {
+
+            modal.style.display = "block";
+            modalImg.src = e.src;
+            captionText.innerHTML = e.alt;
+
+        }
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        //  End Get the modal Image ==================================================
+
+
+
+
+    </script>
+
+
+    <script>
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 'auto',
+            height: 'auto',
+            fluid: true,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            },
+            buttons: [
+                {
+                    text: "Ok",
+                    click: function () {
+
+                        $(this).dialog("close");
+                        window.location.href = "/doctor/SubmitDeleteDoctor/?id=" + document.getElementById("hiddenId").value;
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+            ]
+        }, "option", "position", { my: "center", at: "center", of: window }).prev(".ui-dialog-titlebar").css("background", "#269bff").css("color", "#ffffff");
+
+
+
+        // Link to open the dialog
+        $("#dialog-link").click(function (event) {
+            $("#dialog").dialog("open");
+            event.preventDefault();
+        });
+
+        // Hover states on the static widgets
+        $("#dialog-link, #icons li").hover(
+            function () {
+                $(this).addClass("ui-state-hover");
+            },
+            function () {
+                $(this).removeClass("ui-state-hover");
+            }
+        );
+
+
+        function deleteData(short, full, id) {
+
+            $("#hiddenId").val(id);
+            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + short + "/" + full + " ใช่หรือไม่ ?";
+            $("#dialog").dialog("open");
+            event.preventDefault();
+
+        }
+    </script>
+
+
+}
+
+
+
+
+

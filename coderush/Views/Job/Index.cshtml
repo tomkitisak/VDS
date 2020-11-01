@@ -1,0 +1,761 @@
+﻿@model List<Job>
+@using Syncfusion.EJ2;
+@inject vds.Services.App.ICommon _app;
+@using vds.ViewModels;
+@using Newtonsoft.Json;
+
+
+@{
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string modelName = "งานร้องขอ";
+    ViewData["Title"] = "งานร้องขอ";
+
+
+    string uType = TempData["userTypeId"].ToString();
+    string hId = TempData["hospitalId"].ToString();
+
+    if (TempData["fromTab"] == null)
+    {
+        TempData["fromTab"] = 1;
+    }
+    string fromTab = TempData["fromTab"].ToString();
+
+
+
+
+    HospitalSummary summary = _app.GetHospitalSummary();
+    ChartDoughnut donutChart = _app.GetHospitalDoughnut();
+
+    var jobstatus1 = Model.Where(x => x.JobStatus.Status == 1);
+    var jobstatus2 = Model.Where(x => x.JobStatus.Status == 2);
+    var jobstatus3 = Model.Where(x => x.JobStatus.Status == 3);
+    var jobstatus4 = Model.Where(x => x.JobStatus.Status == 4);
+
+    var alertanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+    var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+    var promptanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+
+
+}
+
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งานร้องขอ</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-justified" style="width:100%">
+                <li class="nav-item">
+                    <a id="atab1" class="nav-link" data-toggle="tab"  href="#tab1">งานใหม่</a>
+                </li>
+                <li class="nav-item">
+                    <a id="atab2" class="nav-link" data-toggle="tab" href="#tab2">งานโพสต์</a>
+                </li>
+                <li class="nav-item">
+                    <a id="atab3" class="nav-link" data-toggle="tab" href="#tab3">งานนัดหมาย</a>
+                </li>
+                <li class="nav-item">
+                    <a id="atab4" class="nav-link" data-toggle="tab" href="#tab4">งานดำเเนินการแล้วเสร็จ</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content mt-3">
+
+
+
+        <div class="tab-pane " id="tab1" role="tabpanel">
+
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ข้อมูลระบบ
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <h6 class="dropdown-header">เพิ่มเติม/ปรับปรุง</h6>
+                            <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
+                            <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="card-title mb-0">งานใหม่</h4>
+                                <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-3" role="group" aria-label="First group">
+                                        <a href="/@controller/Form" class="btn btn-primary">
+                                            <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="bg-primary text-white">
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
+                                            <th width="10%">ชื่องาน</th>
+                                            <th width="20%">รายละเอียด</th>
+                                            <th width="15%">โรงพยาบาล</th>
+                                            <th width="15%">ผู้ป่วย(คน)</th>
+                                            <th width="15%">แพทย์(คน)</th>
+                                            <th width="15%">วันที่เปิด</th>
+                                            <th width="5%">สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        @foreach (var item in @jobstatus1)
+                                        {
+
+                                            var mydate = item.TransDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                                        <tr>
+                                            <td>
+ 
+
+                                                <a href="/@controller/FormJobNew?id=@item.JobId"   title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
+                                              
+
+                                            </td>
+                                            <td>
+                                                <a href="/@controller/FormJobNewEdit?id=@item.JobId"  title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
+
+                                            </td>
+                                            <td>
+                                                @item.Name
+                                            </td>
+
+                                            <td class="content-wrapper">
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                @item.Hospital.HospitalName
+                                            </td>
+                                            <td>
+                                                @item.TotalPatients
+                                            </td>
+
+                                            <td>
+                                                @item.TotalDoctors
+                                            </td>
+                                            <td>
+                                                @mydate
+                                            </td>
+                                            <td>
+                                                @item.JobStatus.Description
+                                            </td>
+
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane" id="tab2" role="tabpanel">
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ข้อมูลระบบ
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <h6 class="dropdown-header">เพิ่มเติม/ปรับปรุง</h6>
+                            <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
+                            <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="card-title mb-0">งานโพสต์</h4>
+                                @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group mr-3" role="group" aria-label="First group">
+                                            <a href="/@controller/Form" class="btn btn-primary">
+                                                <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                            </a>
+                                        </div>
+                                    </div>*@
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="grid2" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="bg-primary text-white">
+                                            <th width="3%"></th>
+                                            <th width="3%"></th>
+                                            <th width="20%">ชื่องาน</th>
+                                            <th width="20%">รายละเอียด</th>
+                                            <th width="15%">โรงพยาบาล</th>
+                                            <th width="10%">ผู้ป่วย(คน)</th>
+                                            <th width="10%">แพทย์(คน)</th>
+                                            <th width="10%">วันโพสต์</th>
+                                            <th width="5%">สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in jobstatus2)
+                                        {
+                                            var mydate = item.PostDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                                        <tr>
+                                            <td>
+                                                <a href="/@controller/FormJobAddDoctor?id=@item.JobId"   title="รายละเอียดงาน"><i class="icon-arrow-up-circle md-18"></i> </a>
+                                            </td>
+
+                                            <td>
+                                                <a href="/@controller/FormJobAddDoctorAppointment?id=@item.JobId"   title="ลงนัดหมาย"><i class="icon-note md-18"></i> </a>
+
+                                            </td>
+                                            <td>
+                                                @item.Name
+                                            </td>
+
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                @item.Hospital.HospitalName
+                                            </td>
+                                            <td>@item.TotalPatients</td>
+                                            <td>@item.TotalDoctors</td>
+                                            <td>
+                                                @mydate
+                                            </td>
+                                            <td>
+                                                @item.JobStatus.Description
+                                            </td>
+
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </article>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+        <div class="tab-pane" id="tab3" role="tabpanel">
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ข้อมูลระบบ
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <h6 class="dropdown-header">เพิ่มเติม/ปรับปรุง</h6>
+                            <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
+                            <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="card-title mb-0">รายการงานนัดหมาย</h4>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="grid3" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="bg-primary text-white">
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
+                                            <th width="20%">ชื่องาน</th>
+                                            <th width="20%">รายละเอียด</th>
+                                            <th width="15%">โรงพยาบาล</th>
+                                            <th width="10%">ผู้ป่วย(คน)</th>
+                                            <th width="10%">แพทย์(คน)</th>
+                                            <th width="10%">วันที่นัด</th>
+                                            <th width="5%">สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in jobstatus3)
+                                        {
+                                            var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                                        <tr>
+                                            <td>
+                                                <a href="/@controller/FormJobAppointmentView/?id=@item.JobId"   title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
+
+                                            </td>
+                                            <td>
+                                                <a href="/@controller/FormJobDoneEntry/?id=@item.JobId"   title="บันทึกผลปฏิบัติงาน"><i class="icon-note md-18"></i> </a>
+
+                                            </td>
+
+
+                                            <td>
+                                                @item.Name
+                                            </td>
+
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                @item.Hospital.HospitalName
+                                            </td>
+                                            <td>@item.TotalPatients</td>
+                                            <td>@item.TotalDoctors</td>
+                                            <td>
+                                                @mydate
+                                            </td>
+                                            <td>
+                                                @item.JobStatus.Description
+                                            </td>
+
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </article>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+        <div class="tab-pane" id="tab4" role="tabpanel">
+
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ข้อมูลระบบ
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <h6 class="dropdown-header">เพิ่มเติม/ปรับปรุง</h6>
+                            <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
+                            <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="card-title mb-0">งานดำเนินการแล้วเสร็จ</h4>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="grid3" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="bg-primary text-white">
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
+                                            <th width="24%">ชื่องาน</th>
+                                            <th width="18%">รายละเอียด</th>
+                                            <th width="18%">โรงพยาบาล</th>
+                                            <th width="10%">ผู้ป่วย(คน)</th>
+                                            <th width="10%">แพทย์(คน)</th>
+                                            <th width="10%">วันที่</th>
+                                            <th width="5%">สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in jobstatus4)
+                                        {
+                                            var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                                        <tr>
+                                            <td>
+                                                <a href="/@controller/FormJobDoneView/?id=@item.JobId"   title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
+
+                                            </td>
+                                            <td>
+                                                <a href="/@controller/FormJobDoneEdit/?id=@item.JobId"   title="คลิกเพื่อแก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
+
+                                            </td>
+
+                                            <td>
+                                                @item.Name
+                                            </td>
+
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                @item.Hospital.HospitalName
+                                            </td>
+                                            <td>@item.TotalPatients</td>
+                                            <td>@item.TotalDoctors</td>
+                                            <td>
+                                                @item.EndDate.ToString("dd-MM-yyyy")
+                                            </td>
+                                            <td>
+                                                @item.JobStatus.Description
+                                            </td>
+
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </article>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Content End -->
+
+
+@section Styles{
+
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
+    <style>
+
+
+        .e-btn-hide {
+            display: none;
+        }
+
+        .Table {
+            border-collapse: separate;
+            border-spacing: 10px;
+            width: 85%;
+            margin: 0px -5px 0px;
+        }
+
+        .dlgbtn {
+            margin-right: 10px;
+        }
+
+        /* custom code start */
+        #target {
+            height: 100%;
+            min-height: 350px;
+        }
+
+        @@media screen and (min-width: 150px) and (max-width: 480px) {
+            .control-section {
+                margin-bottom: 30px;
+            }
+
+            .control-wrapper {
+                margin-bottom: 0px;
+            }
+        }
+        /* custom code end */
+
+
+
+        /* not active */
+        .nav-pills .nav-link:not(.active) {
+            background-color: #fff;
+            color: black;
+        }
+
+        /* active*/
+        .nav-pills .nav-link {
+            background-color: rgba(0, 255, 0, 0.5);
+            color: white;
+        }
+    </style>
+
+
+}
+
+@section Scripts{
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            var mainTable1;
+            var mainTable2;
+            var mainTable3;
+            mainTable1 = $('#grid1').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 20,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
+            });
+
+            mainTable2 = $('#grid2').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 20,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
+            });
+
+            mainTable3 = $('#grid3').DataTable({
+                lengthChange: false,
+                info: false,
+                searching: true,
+                dom: 'lrtip',
+                scrollX: false,
+                pageLength: 20,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+
+        //Doughnut Chart
+        $(function () {
+            var doughnutChart = {
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(donutChart.Labels)),
+                    datasets: [{
+                        label: 'Doughnut chart',
+                        data: @Html.Raw(JsonConvert.SerializeObject(donutChart.Data)),
+                        backgroundColor: @Html.Raw(JsonConvert.SerializeObject(donutChart.Colors)),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "top"
+                    },
+                    cutoutPercentage: 50
+                }
+            }
+            chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
+        });
+
+
+
+
+        var alertObj, confirmObj, promptObj;
+
+
+        var buttons = document.querySelectorAll('.dlgbtn');
+
+
+        function onLoadalert() {
+            alertObj = this;
+            document.getElementById('alertBtn').onclick = function () {
+                alertObj.show();
+            };
+        }
+
+        function onLoadconfirm() {
+            confirmObj = this;
+            document.getElementById('confirmBtn').onclick = function () {
+                confirmObj.show();
+            };
+        }
+
+        function onLoadprompt() {
+            promptObj = this;
+            document.getElementById('promptBtn').onclick = function () {
+                promptObj.show();
+            };
+            document.getElementById('password').addEventListener('focus', function () {
+                this.parentElement.classList.add('e-input-focus');
+            });
+            document.getElementById('password').addEventListener('blur', function () {
+                this.parentElement.classList.remove('e-input-focus');
+            });
+        }
+
+        function alertBtnClick() {
+            alertObj.hide();
+        }
+
+        function confirmBtnClick() {
+            confirmObj.hide();
+        }
+        function promptBtnClick() {
+            promptObj.hide();
+        }
+        function dialogClose() {
+            buttons[0].classList.remove('e-btn-hide');
+            buttons[1].classList.remove('e-btn-hide');
+            buttons[2].classList.remove('e-btn-hide');
+        }
+        function dialogOpen() {
+            buttons[0].classList.add('e-btn-hide');
+            buttons[1].classList.add('e-btn-hide');
+            buttons[2].classList.add('e-btn-hide');
+        }
+
+    </script>
+
+    <script>
+
+
+        if (@fromTab== "1") {
+
+            myTab1();
+        }
+
+        else if (@fromTab== "2") {
+
+            myTab2();
+        }
+
+        else if (@fromTab== "3") {
+
+            myTab3();
+        }
+
+        else if (@fromTab== "4") {
+
+            myTab4();
+        }
+
+
+
+
+        function myTab1() {
+
+            var element = document.getElementById("atab1");
+            var element1 = document.getElementById("tab1");
+            element.classList.add("active");
+            element1.classList.add("show");
+            element1.classList.add("active");
+        }
+
+        function myTab2() {
+
+            var element = document.getElementById("atab2");
+            var element1 = document.getElementById("tab2");
+            element.classList.add("active");
+            element1.classList.add("show");
+            element1.classList.add("active");
+        }
+        function myTab3() {
+
+            var element = document.getElementById("atab3");
+            var element1 = document.getElementById("tab3");
+            element.classList.add("active");
+            element1.classList.add("show");
+            element1.classList.add("active");
+        }
+        function myTab4() {
+
+            var element = document.getElementById("atab4");
+            var element1 = document.getElementById("tab4");
+            element.classList.add("active");
+            element1.classList.add("show");
+            element1.classList.add("active");
+        }
+
+
+    </script>
+}
+
+
+
+
