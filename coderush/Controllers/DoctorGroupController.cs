@@ -534,5 +534,31 @@ namespace vds.Controllers
             }
         }
 
+
+        public IActionResult SubmitDeleteDoctorGrooup(string id)
+        {
+            try
+            {
+                var del = _context.DoctorGroup.Where(x => x.DoctorGroupId.Equals(id)).FirstOrDefault();
+                if (del == null)
+                {
+                    return NotFound();
+                }
+
+                _context.DoctorGroup.Remove(del);
+                _context.SaveChanges();
+
+                TempData[StaticString.StatusMessage] = "ลบข้อมูลกลุ่มแพทย์เรียบร้อยแล้ว!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+
+                TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
     }
 }

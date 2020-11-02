@@ -13,6 +13,9 @@
     ChartDoughnut donutChart = _app.GetDoctorGroupDoughnut();
 }
 
+
+<link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
+
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
@@ -173,7 +176,8 @@
                                             <a href="/@controller/Form/@item.DoctorGroupId"><i class="icon-note md-18"></i></a>
                                         </td>
                                         <td>
-                                            <a href="/@controller/Delete/@item.DoctorGroupId"><i class="icon-trash md-18"></i></a>
+                                            <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@item.DoctorGroupName','@item.DoctorGroupId');" class="icon-trash md-18"></i> </a>
+
                                         </td>
 
                                         <td>
@@ -212,6 +216,14 @@
     </div>
 </div>
 
+
+@*hidden field for storing current employeeId*@
+<input type="hidden" id="hiddenId" />
+<!-- ui-dialog -->
+<div id="dialog" title="ลบข้อมูล">
+    <p id="txtDialog"></p>
+</div>
+
 <div id="myModal" class="modal">
     <span class="close">&times;</span>
     <img class="modal-content" id="img01">
@@ -235,6 +247,8 @@
 
 @section Scripts{
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
     <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
     <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
     <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
@@ -258,7 +272,7 @@
                 searching: true,
                 dom: 'lrtip',
                 scrollX: false,
-                pageLength: 5,
+                pageLength: 20,
             });
 
             $('#mainSearch').keyup(function () {
@@ -325,7 +339,7 @@
         span.onclick = function () {
             modal.style.display = "none";
         }
-                    //  End Get the modal Image ==================================================
+        //  End Get the modal Image ==================================================
 
 
 
@@ -333,6 +347,70 @@
     </script>
 
 
+    <script>
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 'auto',
+            height: 'auto',
+            fluid: true,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            },
+            buttons: [
+                {
+                    text: "Ok",
+                    click: function () {
+
+                        $(this).dialog("close");
+                        window.location.href = "/doctorgroup/SubmitDeleteDoctorgroup/?id=" + document.getElementById("hiddenId").value;
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+            ]
+        }, "option", "position", { my: "center", at: "center", of: window }).prev(".ui-dialog-titlebar").css("background", "#269bff").css("color", "#ffffff");
+
+
+
+        // Link to open the dialog
+        $("#dialog-link").click(function (event) {
+            $("#dialog").dialog("open");
+            event.preventDefault();
+        });
+
+        // Hover states on the static widgets
+        $("#dialog-link, #icons li").hover(
+            function () {
+                $(this).addClass("ui-state-hover");
+            },
+            function () {
+                $(this).removeClass("ui-state-hover");
+            }
+        );
+
+
+        function deleteData(short, id) {
+
+            $("#hiddenId").val(id);
+            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + short  + " ใช่หรือไม่ ?";
+            $("#dialog").dialog("open");
+            event.preventDefault();
+
+        }
+    </script>
 }
 
 
