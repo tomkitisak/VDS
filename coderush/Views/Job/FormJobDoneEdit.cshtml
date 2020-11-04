@@ -98,7 +98,7 @@
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
                     <label class="switch">
-                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" checked >
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" checked>
                         <span class="slider round"></span>
                     </label>
 
@@ -384,7 +384,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.StartDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="StartDate" ejs-for="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลา"  ></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="StartDate" ejs-for="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลา"></ejs-datetimepicker>
                                         @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
                                     </div>
                                     <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
@@ -397,7 +397,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.EndDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="EndDate" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลาสิ้นสุด"  ></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="EndDate" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลาสิ้นสุด"></ejs-datetimepicker>
                                         @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
                                     </div>
                                     <span asp-validation-for="@Model.Job.EndDate" class="text-danger"></span>
@@ -412,7 +412,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.Remark2"></label>
                                     <div class="input-group">
-                                        <input asp-for="@Model.Job.Remark2" class="form-control x"   />
+                                        <input asp-for="@Model.Job.Remark2" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.Remark2" class="text-danger"></span>
@@ -431,7 +431,7 @@
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
                                             <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
-                                        <input  onclick="checkFluency()" asp-for="@Model.Job.IsDone" type="checkbox" class="x" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
+                                        <input onclick="checkFluency()" asp-for="@Model.Job.IsDone" type="checkbox" class="x" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
                                         <input name="IsChecked3" type="hidden" value="false">
                                         <label>ยืนยันการปิดงาน</label><br>
 
@@ -671,11 +671,11 @@
 
 
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
+
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
     </div>
 
 </div>
@@ -857,30 +857,18 @@
                 }
             });
 
-            //$('#mainSearch').keyup(function () {
-            //    mainTable.search($(this).val()).draw();
-            //})
+          
 
         });
 
+ 
+        // Get the modal Image  =======================================================
 
-        @*$(function () {
-
-            if (@CanSave <= 0) {
-
-                $("#btnSave").prop("disabled", true);
-            }
-
-        })*@
-
-
-
-
-        // Get the modal
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
+
         function myClick(e) {
 
             modal.style.display = "block";
@@ -888,12 +876,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+            //  End Get the modal Image ==================================================
 
 
         function checkFluency() {

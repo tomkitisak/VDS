@@ -559,6 +559,56 @@ namespace vds.Controllers
             }
         }
 
+        //display hospital create edit form
+        [HttpGet]
+        public IActionResult DoctorDetail(string id)
+        {
+            //create new
+            if (id == null)
+            {
+                //dropdownlist 
+                FillDropdownListForhospitalForm();
+
+                Doctor newObj = new Doctor();
+                ViewBag.ImageDataUrl = "/assets/images/noimage.png";
+                return View(newObj);
+
+            }
+
+            //edit object
+            Doctor editObj = new Doctor();
+            editObj = _context.Doctor.Where(x => x.DoctorId.Equals(id)).FirstOrDefault();
+
+            if (editObj == null)
+            {
+                return NotFound();
+            }
+
+            string imageBase64Data;
+            string imageDataURL;
+            if (editObj.ImageData == null)
+            {
+                imageDataURL = "/assets/images/noimage.png";
+            }
+            else
+            {
+
+                imageBase64Data = Convert.ToBase64String(editObj.ImageData);
+                imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+            }
+
+
+            ViewBag.ImageDataUrl = imageDataURL;
+
+
+            //dropdownlist 
+            FillDropdownListForhospitalForm();
+
+           
+            return PartialView("_DoctorDetailPartial", editObj);
+        }
+
+
 
     }
 }

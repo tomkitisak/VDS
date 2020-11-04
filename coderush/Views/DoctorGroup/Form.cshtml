@@ -13,9 +13,13 @@
 
 }
 
-
+<div id="div_modal"></div>
 <!-- Content Start -->
 <div class="content-wrapper">
+
+
+
+
     <!-- Heading Start -->
     <section class="heading">
         <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
@@ -286,7 +290,7 @@
             </form>
 
 
-            <form asp-controller="@controller" asp-action="SelectDoctor" method="get" >
+            <form asp-controller="@controller" asp-action="SelectDoctor" method="get">
 
                 <article class="card mb-4">
                     <div class="card-body">
@@ -294,8 +298,8 @@
                             <h4 class="card-title mb-0">รายชื่อแพทย์ในกลุ่ม</h4>
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-3" role="group" aria-label="First group">
-                                   
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มข้อมูลแพทย์"/>
+
+                                    <input type="submit" class="btn btn-primary" value="เพิ่มข้อมูลแพทย์" />
                                     <input type="hidden" asp-for="@doctorgroupid" />
                                 </div>
                             </div>
@@ -320,15 +324,14 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    
-                                                    <a href="/@controller/DoctorDetail/@item.DoctorId"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.DoctorId')"><i class="icon-doc md-18"></i></a>
 
                                                 </td>
                                                 <td>
                                                     <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
-                                                         class="rounded-circle"
-                                                         height="40" width="40"
-                                                         asp-append-version="true" />
+                                                         class="thumb rounded-circle" title="คลิกเพื่อขยายภาพ"
+                                                         height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
+                                                         asp-append-version="true" onclick="myClick(this)" />
                                                 </td>
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
@@ -356,22 +359,34 @@
                         </div>
                     </div>
                 </article>
-
-
-
             </form>
-
-
 
         </div>
     </div>
+
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
+    </div>
+
+
 </div>
 <!-- Content End -->
 
 @section Styles{
 
-
+    <!-- ================== MODAL IMAGE  ================== -->
+    <link rel="stylesheet" href="~/css/modal_image.css" />
+    <!-- ================== BEGIN PAGE LEVEL END ================== -->
     <style>
+
+        .modal {
+            position: fixed;
+            width: 100%;
+        }
+
+
 
         custom-button {
             padding: 10px;
@@ -454,6 +469,50 @@
             }
 
         }
+
+
+    </script>
+
+    <script>
+
+        function runpartial(id) {
+
+            var url = "/doctorgroup/doctordetail/?id=" + id;  
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+    </script>
+
+    <script>
+
+
+        // Get the modal Image  =======================================================
+
+        var modal = document.getElementById("myModal");
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption-img");
+
+        function myClick(e) {
+
+            modal.style.display = "block";
+            modalImg.src = e.src;
+            captionText.innerHTML = e.alt;
+
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementById("myClose");
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+            //  End Get the modal Image ==================================================
+
+
 
 
     </script>

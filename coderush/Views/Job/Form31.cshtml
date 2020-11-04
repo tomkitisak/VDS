@@ -117,8 +117,8 @@
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.HospitalId"></label>
-                                    <div class="input-group" >
-                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled ></select>
+                                    <div class="input-group">
+                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
                                         <input type="hidden" asp-for="@Model.Job.HospitalId" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
@@ -242,12 +242,12 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-                                   
-                                        <input disabled="@chbDisabled" onclick="checkFluency()" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked1" name="IsChecked1" value="true">
-                                        <input name="IsChecked1" type="hidden" value="false">
-                                        <label>ส่งงานโพสต์</label><br>
 
-                                    
+                                    <input disabled="@chbDisabled" onclick="checkFluency()" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked1" name="IsChecked1" value="true">
+                                    <input name="IsChecked1" type="hidden" value="false">
+                                    <label>ส่งงานโพสต์</label><br>
+
+
                                 </div>
                             </div>
                         </div>
@@ -303,13 +303,13 @@
                                     <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
                                 </div>
                             </div>
-                             
+
                         </div>
 
 
 
                         <div class="row">
-                           
+
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.AppEndDate"></label>
@@ -344,7 +344,7 @@
                                 <div class="form-group">
                                     <div class="checkbox">
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                        <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
                                         <input disabled="@chbDisabled2" onclick="checkFluency()" asp-for="@IsChecked2" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked2" name="IsChecked2" value="true">
                                         <input name="IsChecked2" type="hidden" value="false">
@@ -366,7 +366,7 @@
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" disabled>บันทึก</button>
-                      
+
                     </div>
                 </article>
 
@@ -403,13 +403,13 @@
                             </div>
 
                             @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-3" role="group" aria-label="First group">
+                                    <div class="btn-group mr-3" role="group" aria-label="First group">
 
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
-                                    <input type="hidden" asp-for="@strJobId" />
-                                    <input type="hidden" asp-for="@strCapture" />
-                                </div>
-                            </div>*@
+                                        <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
+                                        <input type="hidden" asp-for="@strJobId" />
+                                        <input type="hidden" asp-for="@strCapture" />
+                                    </div>
+                                </div>*@
                         </div>
 
 
@@ -592,12 +592,12 @@
 
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
-    </div>
 
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
+    </div>
 </div>
 <!-- Content End -->
 
@@ -733,11 +733,13 @@
 
 
 
-        // Get the modal
+        // Get the modal Image  =======================================================
+
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
+
         function myClick(e) {
 
             modal.style.display = "block";
@@ -745,12 +747,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+            //  End Get the modal Image ==================================================
 
 
         function checkFluency() {

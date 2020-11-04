@@ -24,7 +24,7 @@
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
     bool HasDoctor = Model.Job.TotalDoctors > 0 ? true : false;
 
- 
+
     bool IsChecked1 = false;
     bool IsChecked2 = Model.Job.IsAppointed;
 
@@ -285,7 +285,7 @@
                                 <div class="form-group">
                                     <div class="checkbox">
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                                <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
                                         <input id="IsChecked1" name="IsChecked1" disabled onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
                                         <input name="IsChecked1" type="hidden" value="false">
@@ -376,9 +376,9 @@
                                 <div class="form-group">
                                     <div class="checkbox">
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                        <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
-                                        <input id="IsChecked2"  name="IsChecked2" onclick="checkFluency1(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked2" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
+                                        <input id="IsChecked2" name="IsChecked2" onclick="checkFluency1(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked2" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
                                         <input name="IsChecked2" type="hidden" value="false">
 
                                         <label title="สามารถลงนัดได้เทื่อมีแพทย์ในงาน 1 คนขึ้นไป">ลงนัด</label><br>
@@ -398,7 +398,7 @@
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" disabled>บันทึก</button>
-                        
+
                     </div>
                 </article>
 
@@ -429,7 +429,7 @@
                                 <thead>
 
                                     <tr class="bg-primary text-white">
-                                        <th width="10%"></th>                                       
+                                        <th width="10%"></th>
                                         <th width="30%">ชื่อ-สกุล</th>
                                         <th width="5%">เพศ</th>
                                         <th width="10%">อายุ (ปี)</th>
@@ -447,9 +447,9 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
                                                 </td>
-                                                
+
 
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
@@ -545,7 +545,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/FormAddDoctorDetail/@item.DoctorId"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
 
                                                 <td>
@@ -605,6 +605,16 @@
         <p id="txtDialog"></p>
     </div>
 
+    <!-- The Detail Modal -->
+    <div id="div_modal"></div>
+
+
+    <!-- The Image  Modal -->
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
+    </div>
 
 
 </div>
@@ -799,8 +809,8 @@
         var appstart = document.getElementById('appstart').ej2_instances[0];
         var append = document.getElementById('append').ej2_instances[0];
 
-     //   var ischb = document.getElementById("IsChecked2");
-        
+        //   var ischb = document.getElementById("IsChecked2");
+
         var totaldoctor = document.getElementById("totaldoctors");
 
         if (totaldoctor.value <= 0) {
@@ -808,23 +818,24 @@
             appstart.readonly = true;
             append.readonly = true;
             $("#IsChecked2").prop("disabled", true);
-          
+
         }
         else {
 
             appstart.readonly = false;
             append.readonly = false;
             $("#IsChecked2").prop("disabled", false);
-           
+
         }
 
 
 
-        // Get the modal
+        // Get the modal Image  =======================================================
+
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
 
         function myClick(e) {
 
@@ -833,14 +844,16 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+        //  End Get the modal Image ==================================================
 
- 
+
 
         function checkFluency1(e) {
             //  var checkbox = document.getElementById('IsChecked1');
@@ -948,6 +961,29 @@
             event.preventDefault();
 
         }
+    </script>
+
+    <script>
+
+        function runpartial(id) {
+
+            var url = "/@controller/PatientDetailView/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+
+          function rundoctor(id) {
+
+              var url = "/DoctorGroup/DoctorDetail/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
     </script>
 }
 

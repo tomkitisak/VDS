@@ -2147,7 +2147,7 @@ namespace vds.Controllers
             //dropdownlist 
             FillDropdownListForhospitalForm();
 
-            return View(editObj);
+            return PartialView("_PatientDetaillPartial", editObj);
 
         }
 

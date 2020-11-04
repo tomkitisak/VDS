@@ -145,13 +145,13 @@
                                     <div class="input-group">
                                         @if (userTypeId == "1")
                                         {
-                                            <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
-                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
+                                        <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
+                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
 
                                         }
                                         else
                                         {
-                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
+                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
                                         }
 
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
@@ -369,34 +369,36 @@
 
                                     @if (@Model.PatientList != null)
                                     {
-                                        @foreach (var item in @Model.PatientList)
+                                    @foreach (var item in @Model.PatientList)
                                         {
-                                            <tr>
-                                                <td>
-                                                    <a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>
-                                                </td>
-                                                <td>
-                                                    <a href="#" title="คลิกเพื่อลบข้อมูลผู้ป่วยออกจากงานนี้"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.PatientId');" class="icon-trash md-18"></i> </a>
+                                    <tr>
+                                        <td>
+                                            <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
 
-                                                </td>
+                                            @*<a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>*@
+                                        </td>
+                                        <td>
+                                            <a href="#" title="คลิกเพื่อลบข้อมูลผู้ป่วยออกจากงานนี้"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.PatientId');" class="icon-trash md-18"></i> </a>
 
-                                                <td>
-                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
-                                                </td>
+                                        </td>
 
-                                                <td>
-                                                    @item.Gender
-                                                </td>
-                                                <td>
-                                                    @(DateTime.Today.Year - item.DateOfBirth.Year)
-                                                </td>
-                                                <td>
-                                                    @item.DiseaseType.Name
-                                                </td>
-                                                <td>
-                                                    @item.Problem
-                                                </td>
-                                            </tr>
+                                        <td>
+                                            @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                        </td>
+
+                                        <td>
+                                            @item.Gender
+                                        </td>
+                                        <td>
+                                            @(DateTime.Today.Year - item.DateOfBirth.Year)
+                                        </td>
+                                        <td>
+                                            @item.DiseaseType.Name
+                                        </td>
+                                        <td>
+                                            @item.Problem
+                                        </td>
+                                    </tr>
                                         }
                                     }
 
@@ -415,21 +417,18 @@
     </div>
 
     @*<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="modelContent">
+            <div class="modal-dialog">
+                <div class="modal-content" id="modelContent">
+                </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
 
-        <!-- Modal content -->
-        <div class="modal-content"  id="modelContent">
-            <span class="close">&times;</span>
-            <p>Some text in the Modal..</p>
-        </div>
-
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
     </div>
 
 
@@ -440,6 +439,11 @@
     <div id="dialog" title="ลบข้อมูล">
         <p id="txtDialog"></p>
     </div>
+
+
+
+    <!-- The Detail Modal -->
+    <div id="div_modal"></div>
 
 </div>
 <!-- Content End -->
@@ -644,11 +648,12 @@
 
 
 
-        // Get the modal
+        // Get the modal Image  =======================================================
+
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
 
         function myClick(e) {
 
@@ -657,12 +662,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+        //  End Get the modal Image ==================================================
 
 
 
@@ -804,6 +811,21 @@
         }
 
     </script>
+
+    <script>
+
+        function runpartial(id) {
+
+            var url = "/@controller/PatientDetailView/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+    </script>
+
+   
 }
 
 

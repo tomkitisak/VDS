@@ -150,7 +150,7 @@
                                     <span asp-validation-for="@Model.Job.Name" class="text-danger"></span>
                                 </div>
                             </div>
-                          
+
                         </div>
 
 
@@ -379,53 +379,53 @@
                                     <label asp-for="@Model.Job.StartDate"></label>
                                     <div class="input-group">
                                         <ejs-datetimepicker id="workdate1" ejs-for="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดเริ่มต้น"></ejs-datetimepicker>-->
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
-                                    <!--</div>
-                                    <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
-                                </div>
+                @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                <!--</div>
+                            <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="@Model.Job.EndDate"></label>
+                            <div class="input-group">
+                                <ejs-datetimepicker id="workend1" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดสิ้นสุด"></ejs-datetimepicker>-->
+                @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                <!--</div>
+                            <span asp-validation-for="@Model.Job.EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="@Model.Job.Remark2"></label>
+                            <div class="input-group">
+                                <input asp-for="@Model.Job.Remark2" class="form-control" />
+                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                             </div>
+                            <span asp-validation-for="@Model.Job.Remark2" class="text-danger"></span>
 
                         </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label asp-for="@Model.Job.EndDate"></label>
-                                    <div class="input-group">
-                                        <ejs-datetimepicker id="workend1" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดสิ้นสุด"></ejs-datetimepicker>-->
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
-                                    <!--</div>
-                                    <span asp-validation-for="@Model.Job.EndDate" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label asp-for="@Model.Job.Remark2"></label>
-                                    <div class="input-group">
-                                        <input asp-for="@Model.Job.Remark2" class="form-control" />
-                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    </div>
-                                    <span asp-validation-for="@Model.Job.Remark2" class="text-danger"></span>
-
-                                </div>
-                            </div>
+                    </div>
 
 
-                        </div>
+                </div>
 
 
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <div class="checkbox">-->
-                                        @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <div class="checkbox">-->
+                @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
+                    <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
-                                        <!--<input disabled="@chbDisabled3" onclick="checkFluency()" asp-for="@IsChecked3" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
+                <!--<input disabled="@chbDisabled3" onclick="checkFluency()" asp-for="@IsChecked3" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
                                         <input name="IsChecked3" type="hidden" value="false">
                                         <label>ยืนยันการปิดงาน</label><br>
 
@@ -500,7 +500,7 @@
 
                                     <tr class="bg-primary text-white">
                                         <th width="10%"></th>
-                                        
+
                                         <th width="30%">ชื่อ-สกุล</th>
                                         <th width="5%">เพศ</th>
                                         <th width="10%">อายุ (ปี)</th>
@@ -518,9 +518,9 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
                                                 </td>
-                                              
+
 
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
@@ -589,13 +589,13 @@
                             </div>
 
                             @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-3" role="group" aria-label="First group">
+                                    <div class="btn-group mr-3" role="group" aria-label="First group">
 
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มแพทย์" />
-                                    <input type="hidden" asp-for="@strJobId" />
-                                    <input type="hidden" asp-for="@strCapture" />
-                                </div>
-                            </div>*@
+                                        <input type="submit" class="btn btn-primary" value="เพิ่มแพทย์" />
+                                        <input type="hidden" asp-for="@strJobId" />
+                                        <input type="hidden" asp-for="@strCapture" />
+                                    </div>
+                                </div>*@
                         </div>
 
 
@@ -604,7 +604,7 @@
                                 <thead>
                                     <tr class="bg-primary text-white">
                                         <th width="10%"></th>
-                                       
+
                                         <th width="5%">ภาพ</th>
                                         <th width="25%">ชื่อแพทย์</th>
                                         <th width="20%">โทรศัพท์</th>
@@ -620,10 +620,10 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/DoctorDetailView?id=@item.DoctorId&jobId=@strJobId"><i class="icon-doc md-18"></i></a>                                                  
+                                                    <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
 
-                                               
+
                                                 <td>
                                                     <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
                                                          class="thumb rounded-circle"
@@ -666,12 +666,25 @@
 
 
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
+    @*hidden field for storing current employeeId*@
+    <input type="hidden" id="hiddenId" />
+
+    <!-- ui-dialog -->
+    <div id="dialog" title="ลบข้อมูล">
+        <p id="txtDialog"></p>
     </div>
+
+    <!-- The Detail Modal -->
+    <div id="div_modal"></div>
+
+
+    <!-- The Image  Modal -->
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
+    </div>
+
 
 </div>
 <!-- Content End -->
@@ -788,30 +801,21 @@
                 }
             });
 
-            //$('#mainSearch').keyup(function () {
-            //    mainTable.search($(this).val()).draw();
-            //})
+
 
         });
 
 
-        @*$(function () {
-
-            if (@CanSave <= 0) {
-
-                $("#btnSave").prop("disabled", true);
-            }
-
-        })*@
 
 
 
+        // Get the modal Image  =======================================================
 
-        // Get the modal
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
+
         function myClick(e) {
 
             modal.style.display = "block";
@@ -819,12 +823,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+        //  End Get the modal Image ==================================================
 
 
         function checkFluency() {
@@ -843,6 +849,31 @@
 
 
     </script>
+
+    <script>
+
+        function runpartial(id) {
+
+            var url = "/@controller/PatientDetailView/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+
+          function rundoctor(id) {
+
+              var url = "/DoctorGroup/DoctorDetail/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+    </script>
+
+
 }
 
 

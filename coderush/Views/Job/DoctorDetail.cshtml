@@ -239,10 +239,11 @@
 </div>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
-    <span id="spanid" class="close">&times;</span>
-    <img class="modal-content" id="img01">
-    <div id="caption"></div>
+
+<div id="myModal" class="modal-img">
+    <span id="myClose" class="close-img">&times;</span>
+    <img class="modal-content-img" id="img01">
+    <div id="caption-img"></div>
 </div>
 
 
@@ -339,11 +340,12 @@
 
     <script>
 
-        // Get the modal
+        // Get the modal Image  =======================================================
+
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
 
         function myClick(e) {
 
@@ -352,13 +354,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        //   var span = document.getElementsByClassName("close");
-        var span = document.getElementById("spanid");
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+            //  End Get the modal Image ==================================================
 
     </script>
 

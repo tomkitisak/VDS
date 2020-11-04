@@ -1,0 +1,217 @@
+﻿@model Doctor
+<!-- Modal -->
+<div class="modal fade" id="viewmodal" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg"  >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">ข้อมูลแพทย์</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-12">
+
+                        <form   method="post" enctype="multipart/form-data">
+
+                            <article class="card mb-4">
+                               
+                                <div class="card-body">
+
+                                    <input type="hidden" asp-for="DoctorId" />
+
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label asp-for="ImageData"></label>
+                                            <div class="form-group">
+
+
+                                                <img id="logoImage" src="@ViewBag.ImageDataUrl" class="thumb" alt="@Model.FullName" asp-append-version="true" title="คลิกเพื่อขยายภาพ" onclick="myClick(this)" />
+
+                                                <div>
+                                                    <input type="file" id="real-file" name="file" hidden="hidden" />
+                                                    <button type="button" class="btn btn-primary" style="width:50%" id="custom-button" hidden>เลือกไฟล์รูปภาพ</button>
+                                                    <span id="custom-text" hidden>-ชื่อไฟล์รูปภาพ-</span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="PrefixTypeId"></label>
+                                                <div class="input-group">
+                                                    <select asp-for="PrefixTypeId" class="select2 form-control" asp-items="ViewBag.PrefixType" disabled></select>
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="PrefixTypeId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="FirstName"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="FirstName" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="LastName"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="LastName" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="MDLicense"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="MDLicense" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="MDLicense" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="Email"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="Email" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="Phone"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="Phone" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="Phone" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="LineId"></label>
+                                                <div class="input-group">
+                                                    <input asp-for="LineId" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="LineId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Address1"></label>
+                                        <div class="input-group">
+                                            <input asp-for="Address1" class="form-control" disabled />
+                                            <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                        </div>
+                                        <span asp-validation-for="Address1" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="SubDistrict"></label>
+                                                <div class="input-group">
+                                                    <input id="subdistrict" asp-for="SubDistrict" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="SubDistrict" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="District"></label>
+                                                <div class="input-group">
+                                                    <input id="district" asp-for="District" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="District" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="Province"></label>
+                                                <div class="input-group">
+                                                    <input id="province" asp-for="Province" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="Province" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="ZipCode"></label>
+                                                <div class="input-group">
+                                                    <input id="zipcode" asp-for="ZipCode" class="form-control" disabled />
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label asp-for="DoctorTypeId"></label>
+                                                <div class="input-group">
+                                                    <select asp-for="DoctorTypeId" class="select2 form-control" asp-items="ViewBag.DoctorType" disabled></select>
+                                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                                </div>
+                                                <span asp-validation-for="DoctorTypeId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                
+
+                                </div>
+                            </article>
+ 
+
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                 
+            </div>
+        </div>
+    </div>
+</div>

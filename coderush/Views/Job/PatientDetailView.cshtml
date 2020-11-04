@@ -3,11 +3,11 @@
     string controller = this.ViewContext.RouteData.Values["controller"].ToString();
     string action = this.ViewContext.RouteData.Values["action"].ToString();
     string modelName = "ผู้ป่วย";
-    ViewData["Title"] = "รายละเอียด"+ modelName;
+    ViewData["Title"] = "รายละเอียด" + modelName;
 
     string strJobId = ViewBag.jobId;
     string orgAction = TempData["OrgAction"].ToString();
-  
+
 }
 
 <!-- Content Start -->
@@ -71,7 +71,7 @@
                                 <div class="form-group">
                                     <label asp-for="FirstName"></label>
                                     <div class="input-group">
-                                        <input asp-for="FirstName" class="form-control" disabled/>
+                                        <input asp-for="FirstName" class="form-control" disabled />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="FirstName" class="text-danger"></span>
@@ -81,7 +81,7 @@
                                 <div class="form-group">
                                     <label asp-for="LastName"></label>
                                     <div class="input-group">
-                                        <input asp-for="LastName" class="form-control"disabled />
+                                        <input asp-for="LastName" class="form-control" disabled />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="LastName" class="text-danger"></span>
@@ -117,7 +117,7 @@
                                 <div class="form-group">
                                     <label>อายุปัจจุบัน(ปี)</label>
                                     <div class="input-group">
-                                        <input type="text" id="Age" name="Age"  class="form-control" data-val="true" disabled >
+                                        <input type="text" id="Age" name="Age" class="form-control" data-val="true" disabled>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
 
@@ -133,7 +133,7 @@
                                 <div class="form-group">
                                     <label asp-for="Phone"></label>
                                     <div class="input-group">
-                                        <input asp-for="Phone" class="form-control" disabled/>
+                                        <input asp-for="Phone" class="form-control" disabled />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Phone" class="text-danger"></span>
@@ -144,7 +144,7 @@
                         <div class="form-group">
                             <label asp-for="Address1"></label>
                             <div class="input-group">
-                                <input asp-for="Address1" class="form-control"  disabled/>
+                                <input asp-for="Address1" class="form-control" disabled />
                                 <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                             </div>
                             <span asp-validation-for="Address1" class="text-danger"></span>
@@ -178,7 +178,7 @@
                                 <div class="form-group">
                                     <label asp-for="Province"></label>
                                     <div class="input-group">
-                                        <input id="province" asp-for="Province" class="form-control" disabled/>
+                                        <input id="province" asp-for="Province" class="form-control" disabled />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Province" class="text-danger"></span>
@@ -252,7 +252,9 @@
 }
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+
     <script>
         $.Thailand({
             database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database

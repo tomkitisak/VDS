@@ -213,7 +213,7 @@
                                     <label asp-for="@Model.Job.TransDate"></label>
                                     <div class="input-group">
 
-                                        <ejs-datepicker id="transDate" format="dd-MM-yyyy" ejs-for="@Model.Job.TransDate" readonly ></ejs-datepicker>
+                                        <ejs-datepicker id="transDate" format="dd-MM-yyyy" ejs-for="@Model.Job.TransDate" readonly></ejs-datepicker>
 
                                     </div>
                                     <span asp-validation-for="@Model.Job.TransDate" class="text-danger"></span>
@@ -227,7 +227,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.JobStatusId"></label>
                                     <div class="input-group">
-                                        <input asp-for="@Model.Job.JobStatus.Description" class="form-control"  readonly />
+                                        <input asp-for="@Model.Job.JobStatus.Description" class="form-control" readonly />
 
                                         @*<select asp-for="@Model.Job.JobStatusId" class="select2 form-control" asp-items="ViewBag.JobStatus" hidden></select>*@
 
@@ -257,7 +257,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.TotalPatients"></label>
                                     <div class="input-group">
-                                        <input asp-for="@Model.Job.TotalPatients" class="form-control" readonly  />
+                                        <input asp-for="@Model.Job.TotalPatients" class="form-control" readonly />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
@@ -274,7 +274,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.PostDate"></label>
                                     <div class="input-group">
-                                        <ejs-datepicker id="postdate" format="dd-MM-yyyy" ejs-for="@Model.Job.PostDate" min="DateTime.Today"  ></ejs-datepicker>
+                                        <ejs-datepicker id="postdate" format="dd-MM-yyyy" ejs-for="@Model.Job.PostDate" min="DateTime.Today"></ejs-datepicker>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
@@ -292,11 +292,11 @@
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
                                             <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
-                                        <input  id="IsChecked1" name="IsChecked1"  onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
+                                        <input id="IsChecked1" name="IsChecked1" onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
                                         <input name="IsChecked1" type="hidden" value="false">
 
                                         <label title="สามารถส่งงานโพสต์ได้ เมื่อมีผู้ป่วย 1 คนขึ้นไป">ส่งงานโพสต์</label><br>
-                                         
+
                                     </div>
                                 </div>
                             </div>
@@ -384,7 +384,7 @@
                                         @foreach (var item in @Model.PatientList)
                                         {
                                             <tr>
-                                                <td> 
+                                                <td>
                                                     <a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>
                                                 </td>
                                                 <td>
@@ -427,10 +427,11 @@
 
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
+
+    <div id="myModal" class="modal-img">
+        <span id="myClose" class="close-img">&times;</span>
+        <img class="modal-content-img" id="img01">
+        <div id="caption-img"></div>
     </div>
 
 </div>
@@ -626,11 +627,12 @@
 
 
 
-        // Get the modal
+        // Get the modal Image  =======================================================
+
         var modal = document.getElementById("myModal");
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
+        var captionText = document.getElementById("caption-img");
 
         function myClick(e) {
 
@@ -639,12 +641,14 @@
             captionText.innerHTML = e.alt;
 
         }
+
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
+            //  End Get the modal Image ==================================================
 
 
 
