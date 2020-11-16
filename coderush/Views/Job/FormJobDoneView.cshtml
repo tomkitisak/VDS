@@ -92,7 +92,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งาน | งานแล้วเสร็จ</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานแล้วเสร็จ</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -102,12 +106,7 @@
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                @*<article class="card mb-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">ผลการปฏิบัติงาน</h4>
-                        </div>
-                    </article>*@
+ 
 
                 <article class="card mb-4">
                     <div class="card-header">

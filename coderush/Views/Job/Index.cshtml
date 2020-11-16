@@ -44,7 +44,7 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งานร้องขอ</h2>
+        <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>งานร้องขอ</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -55,7 +55,7 @@
         <div class="col-md-12">
             <ul class="nav nav-pills nav-justified" style="width:100%">
                 <li class="nav-item">
-                    <a id="atab1" class="nav-link" data-toggle="tab"  href="#tab1">งานใหม่</a>
+                    <a id="atab1" class="nav-link" data-toggle="tab" href="#tab1">งานใหม่</a>
                 </li>
                 <li class="nav-item">
                     <a id="atab2" class="nav-link" data-toggle="tab" href="#tab2">งานโพสต์</a>
@@ -126,48 +126,48 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                         @foreach (var item in @jobstatus1)
                                         {
 
                                             var mydate = item.TransDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                                        <tr>
-                                            <td>
- 
+                                            <tr>
+                                                <td>
 
-                                                <a href="/@controller/FormJobNew?id=@item.JobId"   title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
-                                              
 
-                                            </td>
-                                            <td>
-                                                <a href="/@controller/FormJobNewEdit?id=@item.JobId"  title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
+                                                    <a href="/@controller/FormJobNew?id=@item.JobId" title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
 
-                                            </td>
-                                            <td>
-                                                @item.Name
-                                            </td>
 
-                                            <td class="content-wrapper">
-                                                @item.Description
-                                            </td>
-                                            <td>
-                                                @item.Hospital.HospitalName
-                                            </td>
-                                            <td>
-                                                @item.TotalPatients
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    <a href="/@controller/FormJobNewEdit?id=@item.JobId" title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
 
-                                            <td>
-                                                @item.TotalDoctors
-                                            </td>
-                                            <td>
-                                                @mydate
-                                            </td>
-                                            <td>
-                                                @item.JobStatus.Description
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
 
-                                        </tr>
+                                                <td class="content-wrapper">
+                                                    @item.Description
+                                                </td>
+                                                <td>
+                                                    @item.Hospital.HospitalName
+                                                </td>
+                                                <td>
+                                                    @item.TotalPatients
+                                                </td>
+
+                                                <td>
+                                                    @item.TotalDoctors
+                                                </td>
+                                                <td>
+                                                    @mydate
+                                                </td>
+                                                <td>
+                                                    @item.JobStatus.Description
+                                                </td>
+
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -224,8 +224,8 @@
                                 <table id="grid2" class="table table-striped" cellspacing="0" width="100%">
                                     <thead>
                                         <tr class="bg-primary text-white">
-                                            <th width="3%"></th>
-                                            <th width="3%"></th>
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
                                             <th width="20%">ชื่องาน</th>
                                             <th width="20%">รายละเอียด</th>
                                             <th width="15%">โรงพยาบาล</th>
@@ -239,35 +239,35 @@
                                         @foreach (var item in jobstatus2)
                                         {
                                             var mydate = item.PostDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                                        <tr>
-                                            <td>
-                                                <a href="/@controller/FormJobAddDoctor?id=@item.JobId"   title="รายละเอียดงาน"><i class="icon-arrow-up-circle md-18"></i> </a>
-                                            </td>
+                                            <tr>
+                                                <td>
+                                                    <a href="/@controller/FormJobAddDoctor?id=@item.JobId" title="รายละเอียดงาน"><i class="icon-arrow-up-circle md-18"></i> </a>
+                                                </td>
 
-                                            <td>
-                                                <a href="/@controller/FormJobAddDoctorAppointment?id=@item.JobId"   title="ลงนัดหมาย"><i class="icon-note md-18"></i> </a>
+                                                <td>
+                                                    <a href="/@controller/FormJobAddDoctorAppointment?id=@item.JobId" title="ลงนัดหมาย"><i class="icon-note md-18"></i> </a>
 
-                                            </td>
-                                            <td>
-                                                @item.Name
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
 
-                                            <td>
-                                                @item.Description
-                                            </td>
-                                            <td>
-                                                @item.Hospital.HospitalName
-                                            </td>
-                                            <td>@item.TotalPatients</td>
-                                            <td>@item.TotalDoctors</td>
-                                            <td>
-                                                @mydate
-                                            </td>
-                                            <td>
-                                                @item.JobStatus.Description
-                                            </td>
+                                                <td>
+                                                    @item.Description
+                                                </td>
+                                                <td>
+                                                    @item.Hospital.HospitalName
+                                                </td>
+                                                <td>@item.TotalPatients</td>
+                                                <td>@item.TotalDoctors</td>
+                                                <td>
+                                                    @mydate
+                                                </td>
+                                                <td>
+                                                    @item.JobStatus.Description
+                                                </td>
 
-                                        </tr>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -333,37 +333,37 @@
                                         @foreach (var item in jobstatus3)
                                         {
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                                        <tr>
-                                            <td>
-                                                <a href="/@controller/FormJobAppointmentView/?id=@item.JobId"   title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
+                                            <tr>
+                                                <td>
+                                                    <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
 
-                                            </td>
-                                            <td>
-                                                <a href="/@controller/FormJobDoneEntry/?id=@item.JobId"   title="บันทึกผลปฏิบัติงาน"><i class="icon-note md-18"></i> </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/@controller/FormJobDoneEntry/?id=@item.JobId" title="บันทึกผลปฏิบัติงาน"><i class="icon-note md-18"></i> </a>
 
-                                            </td>
+                                                </td>
 
 
-                                            <td>
-                                                @item.Name
-                                            </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
 
-                                            <td>
-                                                @item.Description
-                                            </td>
-                                            <td>
-                                                @item.Hospital.HospitalName
-                                            </td>
-                                            <td>@item.TotalPatients</td>
-                                            <td>@item.TotalDoctors</td>
-                                            <td>
-                                                @mydate
-                                            </td>
-                                            <td>
-                                                @item.JobStatus.Description
-                                            </td>
+                                                <td>
+                                                    @item.Description
+                                                </td>
+                                                <td>
+                                                    @item.Hospital.HospitalName
+                                                </td>
+                                                <td>@item.TotalPatients</td>
+                                                <td>@item.TotalDoctors</td>
+                                                <td>
+                                                    @mydate
+                                                </td>
+                                                <td>
+                                                    @item.JobStatus.Description
+                                                </td>
 
-                                        </tr>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -429,36 +429,36 @@
                                         @foreach (var item in jobstatus4)
                                         {
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                                        <tr>
-                                            <td>
-                                                <a href="/@controller/FormJobDoneView/?id=@item.JobId"   title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
+                                            <tr>
+                                                <td>
+                                                    <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
 
-                                            </td>
-                                            <td>
-                                                <a href="/@controller/FormJobDoneEdit/?id=@item.JobId"   title="คลิกเพื่อแก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/@controller/FormJobDoneEdit/?id=@item.JobId" title="คลิกเพื่อแก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
 
-                                            </td>
+                                                </td>
 
-                                            <td>
-                                                @item.Name
-                                            </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
 
-                                            <td>
-                                                @item.Description
-                                            </td>
-                                            <td>
-                                                @item.Hospital.HospitalName
-                                            </td>
-                                            <td>@item.TotalPatients</td>
-                                            <td>@item.TotalDoctors</td>
-                                            <td>
-                                                @item.EndDate.ToString("dd-MM-yyyy")
-                                            </td>
-                                            <td>
-                                                @item.JobStatus.Description
-                                            </td>
+                                                <td>
+                                                    @item.Description
+                                                </td>
+                                                <td>
+                                                    @item.Hospital.HospitalName
+                                                </td>
+                                                <td>@item.TotalPatients</td>
+                                                <td>@item.TotalDoctors</td>
+                                                <td>
+                                                    @item.EndDate.ToString("dd-MM-yyyy")
+                                                </td>
+                                                <td>
+                                                    @item.JobStatus.Description
+                                                </td>
 
-                                        </tr>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>

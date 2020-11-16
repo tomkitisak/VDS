@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Syncfusion.EJ2.Linq;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using vds.Data;
 using vds.Models;
@@ -21,6 +22,7 @@ namespace vds.Controllers
         private readonly SuperAdminDefaultOptions _superAdminDefaultOptions;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly Services.App.ICommon _app;
 
         //dependency injection through constructor, to directly access services
         public MembershipController(
@@ -28,7 +30,8 @@ namespace vds.Controllers
             IOptions<IdentityDefaultOptions> identityDefaultOptions,
             IOptions<SuperAdminDefaultOptions> superAdminDefaultOptions,
             ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager
+            UserManager<ApplicationUser> userManager,
+            Services.App.ICommon app
             )
         {
             _security = security;
@@ -36,25 +39,30 @@ namespace vds.Controllers
             _superAdminDefaultOptions = superAdminDefaultOptions.Value;
             _context = context;
             _userManager = userManager;
+            _app = app;
         }
 
+        //fill viewdata as dropdownlist datasource for hospital form
+        private void FillDropdownListForhospitalForm()
+        {
+            ViewData["UserTypeId"] = _app.GetUserTypeSelectList();
 
+        }
         public IActionResult Index()
         {
-          
-            List<ApplicationUser> users = new List<ApplicationUser>();
-            var myuser =  _userManager.GetUserAsync(User);
 
+            List<UserView> users = new List<UserView>();
+            var myuser = _userManager.GetUserAsync(User);
             ViewBag.UserTypeId = myuser.Result.UserTypeId;
 
-           if (myuser.Result.UserTypeId != "0")
+            if (myuser.Result.UserTypeId != "0")
             {
-               var appUser = _security.GetMemberByApplicationId(_userManager.GetUserId(User));
+                var appUser = _security.GetMemberByApplicationId1(_userManager.GetUserId(User));
                 users.Add(appUser);
             }
             else
             {
-                users = _security.GetAllMembers();
+                users = _security.GetAllMembers1();
             }
 
             return View(users);
@@ -114,7 +122,7 @@ namespace vds.Controllers
                 _context.Update(updatedUser);
                 await _context.SaveChangesAsync();
 
-                TempData[StaticString.StatusMessage] = "Update success";
+                TempData[StaticString.StatusMessage] = "บันทึกข้อมูลเรียบร้อย!";
                 return RedirectToAction(nameof(ChangeProfile), new { id = updatedUser.Id });
             }
             catch (Exception ex)
@@ -218,7 +226,7 @@ namespace vds.Controllers
             changeRole.Id = id;
             changeRole.UserName = member.UserName;
 
-            
+
 
             //changeRole.IsSelfServiceRegistered = registeredRoles.Contains("SelfService") ? true : false;
             //changeRole.IsRecruitmentRegistered = registeredRoles.Contains("Recruitment") ? true : false;
@@ -251,7 +259,7 @@ namespace vds.Controllers
         //post submitted change role request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitChangeRole([Bind("Id", "IsTodoRegistered", "IsMembershipRegistered", "IsRoleRegistered", "IsHospitalRegistered", "IsDoctorRegistered", "IsEmployeeRegistered", "IsDoctorGroupRegistered","IsJobRegistered", "IsPatientRegistered", "IsSettingsRegistered")] ChangeRoles changeRoles)
+        public async Task<IActionResult> SubmitChangeRole([Bind("Id", "IsTodoRegistered", "IsMembershipRegistered", "IsRoleRegistered", "IsHospitalRegistered", "IsDoctorRegistered", "IsEmployeeRegistered", "IsDoctorGroupRegistered", "IsJobRegistered", "IsPatientRegistered", "IsSettingsRegistered")] ChangeRoles changeRoles)
         {
             try
             {
@@ -407,13 +415,19 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            Register reg = new Register();
+            reg.EmailConfirmed = true;
+
+            FillDropdownListForhospitalForm();
+
+
+            return View(reg);
         }
 
         //post submitted registration request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitRegister([Bind("EmailConfirmed,Email,PhoneNumber,Password,ConfirmPassword")] Register register)
+        public async Task<IActionResult> SubmitRegister([Bind("EmailConfirmed,Email,PhoneNumber,Password,ConfirmPassword,UserTypeId")] Register register)
         {
             try
             {
@@ -429,18 +443,175 @@ namespace vds.Controllers
                 newMember.PhoneNumber = register.PhoneNumber;
                 newMember.EmailConfirmed = register.EmailConfirmed;
                 newMember.isSuperAdmin = false;
-
+                newMember.UserTypeId = register.UserTypeId;
                 var result = await _userManager.CreateAsync(newMember, register.Password);
-                if (result.Succeeded)
+                // Add Role
+                ChangeRoles changeRoles = new ChangeRoles();
+
+                if (register.UserTypeId=="0")
                 {
-                    TempData[StaticString.StatusMessage] = "Register new member success";
-                    return RedirectToAction(nameof(ChangeProfile), new { id = newMember.Id });
+                    changeRoles.IsTodoRegistered = true;
+                    changeRoles.IsEmployeeRegistered = true;
+                    changeRoles.IsJobRegistered = true;
+                    changeRoles.IsDoctorGroupRegistered = true;
+                    changeRoles.IsDoctorRegistered = true;
+                    changeRoles.IsPatientRegistered = true;
+                    changeRoles.IsHospitalRegistered = true;
+                    changeRoles.IsMembershipRegistered = true;
+                    changeRoles.IsSettingsRegistered = true;
+
+
+                }
+                else
+                 if (register.UserTypeId == "1")  // co hospital
+                {
+
+                    changeRoles.IsTodoRegistered = true;
+                    changeRoles.IsJobRegistered = true;
+                    changeRoles.IsEmployeeRegistered = true;
+                    changeRoles.IsPatientRegistered = true;
+                    changeRoles.IsHospitalRegistered = true;
+                    changeRoles.IsMembershipRegistered = true;
+                    changeRoles.IsSettingsRegistered = true;
+                }
+                else
+                 if (register.UserTypeId == "2") // co doctorgroup
+                {
+
+                    changeRoles.IsTodoRegistered = true;
+                    changeRoles.IsJobRegistered = true;
+                    changeRoles.IsDoctorGroupRegistered = true;
+                    changeRoles.IsDoctorRegistered = true;
+                    changeRoles.IsMembershipRegistered = true;
+                    changeRoles.IsSettingsRegistered = true;
+                }
+                else
+                 if (register.UserTypeId == "3")  // doctor
+                {
+
+                    changeRoles.IsTodoRegistered = true;
+                    changeRoles.IsJobRegistered = true;
+                    changeRoles.IsDoctorRegistered = true;
+                    changeRoles.IsMembershipRegistered = true;
+                    changeRoles.IsSettingsRegistered = true;
+                }
+
+                //todo role
+                if (changeRoles.IsTodoRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Todo");
                 }
                 else
                 {
-                    TempData[StaticString.StatusMessage] = "Error: Register new member not success";
-                    return RedirectToAction(nameof(Register));
+                    await _userManager.RemoveFromRoleAsync(newMember, "Todo");
                 }
+
+                //membership role
+                if (changeRoles.IsMembershipRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Membership");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Membership");
+                }
+
+                //role role
+                if (changeRoles.IsRoleRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Role");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Role");
+                }
+
+                //SelfService role
+                if (changeRoles.IsSelfServiceRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "SelfService");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "SelfService");
+                }
+
+                //Doctor role
+                if (changeRoles.IsDoctorRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Doctor");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Doctor");
+                }
+
+
+                //Doctor role
+                if (changeRoles.IsJobRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Job");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Job");
+                }
+
+
+
+                //DoctorGroup role
+                if (changeRoles.IsDoctorGroupRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "DoctorGroup");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "DoctorGroup");
+                }
+
+                //Employee role
+                if (changeRoles.IsEmployeeRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Employee");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Employee");
+                }
+
+                //Employee role
+                if (changeRoles.IsHospitalRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Hospital");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Hospital");
+                }
+
+                //Employee role
+                if (changeRoles.IsPatientRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Patient");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Patient");
+                }
+
+
+                //Settings role
+                if (changeRoles.IsSettingsRegistered)
+                {
+                    await _userManager.AddToRoleAsync(newMember, "Settings");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(newMember, "Settings");
+                }
+
+                TempData[StaticString.StatusMessage] = "ลงทะเบียนผู้ใช้ใหม่เรียบร้อย!";
+                return RedirectToAction(nameof(ChangeProfile), new { id = newMember.Id });
 
             }
             catch (Exception ex)
@@ -449,6 +620,38 @@ namespace vds.Controllers
                 return RedirectToAction(nameof(Register));
             }
 
+        }
+
+
+        //display hospital item for deletion
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var member = _security.GetMemberByApplicationId(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(member);
+
+            if (result.Succeeded)
+            {
+                TempData[StaticString.StatusMessage] = "ลบข้อมูล " + member.UserName + "เรียบร้อยแล้ว!";
+
+            }
+            else
+            {
+                TempData[StaticString.StatusMessage] = "Error: Register new member not success";
+
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
     }

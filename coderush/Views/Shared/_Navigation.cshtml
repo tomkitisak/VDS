@@ -26,7 +26,8 @@
 
         TempData["userTypeId"] = usertype;
         TempData["hospitalId"] = hospitalId;
-        TempData["hospitalName"] = hospitalName; 
+        TempData["hospitalName"] = hospitalName;
+        TempData["coordinatorId"] = coordinatorId;
 
     }
 
@@ -61,15 +62,12 @@
 
                 <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route">
                     <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
-                        <i class="mdi mdi-laptop-mac md-24 mr-2"></i>
+                        <i class="mdi mdi-ambulance md-24 mr-2"></i>
                         <span class="menu-title">@Pages.Job.NavigationName</span>
                     </a>
                 </li>
 
             }
-
-
-
 
             <!--Doctor-->
 
@@ -99,7 +97,6 @@
 
 
 
-
             <!-- Patient -->
             @if (User.IsInRole(Pages.Patient.RoleName))
             {
@@ -108,7 +105,7 @@
                 if (usertype == "1")
                 {
 
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Patient.ControllerName)Route">
+                    <li class="disabled nav-item @Html.IsSelected(controller: Pages.Patient.ControllerName)Route">
                         <a class="nav-link waves-effect" title="@Pages.Patient.NavigationName" href="@Pages.Patient.UrlDefault?id=@hospitalId&userTypeId=@usertype">
                             <i class="mdi mdi-human-male-female md-24 mr-2"></i>
                             <span class="menu-title">@Pages.Patient.NavigationName</span>
@@ -117,7 +114,7 @@
                 }
                 else
                 {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Patient.ControllerName)Route">
+                    <li class="disabled  nav-item @Html.IsSelected(controller: Pages.Patient.ControllerName)Route">
                         <a class="nav-link waves-effect" title="@Pages.Patient.NavigationName" href="@Pages.Patient.UrlDefault?period=@(DateTime.Now.ToString("MM-yyyy"))">
                             <i class="mdi mdi-human-male-female md-24 mr-2"></i>
                             <span class="menu-title">@Pages.Patient.NavigationName</span>
@@ -213,161 +210,21 @@
             }
 
 
+            <!--Role-->
+            @if (User.IsInRole(Pages.Settings.RoleName))
+            {
+                <li class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route" >
+                    <a class="nav-link waves-effect" title="@Pages.Settings.NavigationName" href="javascript:void(0)">
+                        <i class="mdi mdi-apps md-24 mr-2"></i>
+                        <span class="menu-title">Setting</span>
+                    </a>
 
-            <li class="nav-item">
-                <a class="nav-link waves-effect" title="@Pages.Patient.NavigationName" href="#" ))">
-                    <i class="mdi mdi-apps md-24 mr-2"></i>
-                    <span class="menu-title">Setting</span>
-                </a>
-
-                @*<div class="dropdown d-inline">
-                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ข้อมูลระบบ
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
-                             style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <h6 class="dropdown-header"><b>เพิ่มข้อมูลใหม่</b></h6>
-                            <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
-                            <a class="dropdown-item" href="~/settings/AddDoctorType">สาขาความเชี่ยวชาญ</a>
-
-
-                        </div>
-                    </div>*@
-
-            </li>
-
-
-
-            @*ffff
-
-                <!--Todo: Recruitment for another version-->
-                @if (User.IsInRole(Pages.Recruitment.RoleName))
-                {
-                    <li hidden class="nav-item @Html.IsSelected(controller: Pages.Recruitment.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Recruitment.NavigationName" href="@Pages.Recruitment.UrlDefault">
-                            <i class="mdi mdi-account-multiple-plus md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Recruitment.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Todo: Settings for another version-->
-                @if (User.IsInRole(Pages.Settings.RoleName))
-                {
-                    <li hidden class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Settings.NavigationName" href="@Pages.Settings.UrlDefault">
-                            <i class="mdi mdi-brightness-7 md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Settings.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-
-                <!--Attendance-->
-                @if (User.IsInRole(Pages.Attendance.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Attendance.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Attendance.NavigationName" href="@Pages.Attendance.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-calendar-clock md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Attendance.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Leave-->
-                @if (User.IsInRole(Pages.Leave.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Leave.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Leave.NavigationName" href="@Pages.Leave.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-beach md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Leave.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Award-->
-                @if (User.IsInRole(Pages.Award.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Award.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Award.NavigationName" href="@Pages.Award.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-certificate md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Award.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Information-->
-                @if (User.IsInRole(Pages.Information.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Information.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Information.NavigationName" href="@Pages.Information.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-newspaper md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Information.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Asset-->
-                @if (User.IsInRole(Pages.Asset.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Asset.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Asset.NavigationName" href="@Pages.Asset.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-car md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Asset.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Expense-->
-                @if (User.IsInRole(Pages.Expense.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Expense.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Expense.NavigationName" href="@Pages.Expense.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-cash-multiple md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Expense.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Payroll-->
-                @if (User.IsInRole(Pages.Payroll.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Payroll.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Payroll.NavigationName" href="@Pages.Payroll.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-cash-usd md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Payroll.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Appraisal-->
-                @if (User.IsInRole(Pages.Appraisal.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Appraisal.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Appraisal.NavigationName" href="@Pages.Appraisal.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-counter md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Appraisal.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-                <!--Ticket-->
-                @if (User.IsInRole(Pages.Ticket.RoleName))
-                {
-                    <li class="nav-item @Html.IsSelected(controller: Pages.Ticket.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Ticket.NavigationName" href="@Pages.Ticket.UrlDefault?period=@(DateTime.Now.ToString("yyyy-MM"))">
-                            <i class="mdi mdi-comment-multiple-outline md-18 mr-2"></i>
-                            <span class="menu-title">@Pages.Ticket.NavigationName</span>
-                        </a>
-                    </li>
-                }
-
-
-            *@
-
+                </li>
+            }
 
         </ul>
     </nav>
+
+
 </aside>
 <!-- Left Navigation End -->

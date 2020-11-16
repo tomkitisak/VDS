@@ -60,6 +60,12 @@ namespace vds.Controllers
         //consume db context service, display all employee
         public IActionResult Index()
         {
+            string userTypeId = object.ReferenceEquals(null, TempData["userTypeId"]) ? TempData["userTypeId"].ToString() : null; 
+
+            if (userTypeId == "1")
+            {
+
+            }
             var objs = _context.Coordinator
                 .AsNoTracking()
                 .Include(x => x.Designation)
@@ -89,6 +95,9 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult Form(string id)
         {
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+
+            ViewBag.userTypeId = userTypeId;
             ViewBag.IsNew = false;
             ViewBag.ImageDataUrl = "/assets/images/noimage.png";
             //create new

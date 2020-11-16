@@ -9,11 +9,7 @@
     TempData["OrgAction"] = action;
 
     string strJobId = ViewBag.jobId;
-
-
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
-
-
     bool IsChecked1 = Model.Job.JobStatus.Status >= 2 ? true : false;
     bool chbDisabled = true;
 
@@ -37,9 +33,6 @@
     int totalPatients = 0;
     int totalDoctors = 0;
 
-
-
-
     if (Model.Job.JobStatus != null)
     {
         totalPatients = Model.PatientList.Count;
@@ -47,14 +40,9 @@
 
 
     }
-
-
-}
-
-
-@{
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
+
 }
 
 
@@ -92,8 +80,12 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานแล้วเสร็จ</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งาน | แก้ไขงานแล้วเสร็จ</h2>
+            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>แก้ไขงานแล้วเสร็จ</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
@@ -524,7 +516,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
 
                                                 </td>
 
@@ -626,7 +618,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/DoctorDetailView?id=@item.DoctorId&jobId=@strJobId"><i class="icon-doc md-18"></i></a>
+                                                    <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
 
                                                 <td>
@@ -669,15 +661,14 @@
         </div>
     </div>
 
-
-
-
     <div id="myModal" class="modal-img">
         <span id="myClose" class="close-img">&times;</span>
         <img class="modal-content-img" id="img01">
         <div id="caption-img"></div>
     </div>
 
+    <!-- The Detail Modal -->
+    <div id="div_modal"></div>
 </div>
 <!-- Content End -->
 
@@ -857,11 +848,11 @@
                 }
             });
 
-          
+
 
         });
 
- 
+
         // Get the modal Image  =======================================================
 
         var modal = document.getElementById("myModal");
@@ -883,7 +874,7 @@
         span.onclick = function () {
             modal.style.display = "none";
         }
-            //  End Get the modal Image ==================================================
+        //  End Get the modal Image ==================================================
 
 
         function checkFluency() {
@@ -929,10 +920,32 @@
 
                 startDate.readonly = true;
                 endDate.readonly = true;
-                
+
             }
         }
 
+    </script>
+    <script>
+
+        function runpartial(id) {
+
+            var url = "/@controller/PatientDetailView/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+
+          function rundoctor(id) {
+
+              var url = "/DoctorGroup/DoctorDetail/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
     </script>
 
 

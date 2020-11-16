@@ -7,23 +7,17 @@
     string modelName = "งาน";
 
     ViewData["Title"] = "บันทึกนัด";
-
     TempData["OrgAction"] = action;
     TempData["JobId"] = Model.Job.JobId;
 
-
     string strJobId = Model.Job.JobId;
     bool IsNew = ViewBag.IsNew;
-
     string userTypeId = TempData["userTypeId"].ToString();
-
-
     string strTitleHead = "บันทึกนัดหมาย";
     string strSwitch = "";
 
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
     bool HasDoctor = Model.Job.TotalDoctors > 0 ? true : false;
-
 
     bool IsChecked1 = false;
     bool IsChecked2 = Model.Job.IsAppointed;
@@ -43,9 +37,7 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
-
 
     bool chbDisabled = true;
 
@@ -70,46 +62,20 @@
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
 
 }
-
-
-@*<script>
-
-        var confirmObj;
-        var buttons = document.querySelectorAll('.dlgbtn');
-
-        function onLoadconfirm() {
-            confirmObj = this;
-            document.getElementById('confirmBtn').onclick = function () {
-                confirmObj.show();
-            };
-        }
-
-        function confirmBtnClick() {
-            confirmObj.hide();
-        }
-
-        function dialogClose() {
-            buttons[0].classList.remove('e-btn-hide');
-            buttons[1].classList.remove('e-btn-hide');
-            buttons[2].classList.remove('e-btn-hide');
-        }
-        function dialogOpen() {
-            buttons[0].classList.add('e-btn-hide');
-            buttons[1].classList.add('e-btn-hide');
-            buttons[2].classList.add('e-btn-hide');
-        }
-    </script>*@
-
-
+ 
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
 
 <!-- Content Start -->
 <div class="content-wrapper">
-    <!-- Heading Start -->
+   
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานโพสต์</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName | งานโพสต์</h2>
+            <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
@@ -977,7 +943,7 @@
 
           function rundoctor(id) {
 
-              var url = "/DoctorGroup/DoctorDetail/?id=" + id;
+              var url = "/@controller/DoctorDetailPartial/?id=" + id;
 
             $("#div_modal").load(url, function () {
                 $("#viewmodal").modal("show");

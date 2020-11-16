@@ -12,4 +12,5 @@ namespace vds.Models
         [Display(Name = "Allowance Type Description")]
         public string Description { get; set; }
     }
+   
 }

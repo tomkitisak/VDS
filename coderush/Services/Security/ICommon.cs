@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using vds.ViewModels;
 
 namespace vds.Services.Security
 {
@@ -14,9 +15,13 @@ namespace vds.Services.Security
 
         List<String> GetAllRoles();
 
-        List<ApplicationUser> GetAllMembers();
+        List<ApplicationUser> GetAllMembers();    
 
         ApplicationUser GetMemberByApplicationId(string applicationId);
+
+        List<UserView> GetAllMembers1();
+        UserView GetMemberByApplicationId1(string applicationId);
+
 
         Task<ApplicationUser> CreateApplicationUser(ApplicationUser applicationUser, string password);
 

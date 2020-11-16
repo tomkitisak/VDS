@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using vds.Data;
 using vds.Models;
@@ -216,6 +217,30 @@ namespace vds.Services.App
             list.Insert(0, blankOption);
             return new SelectList(list, "Value", "Text");
         }
+
+
+        public IEnumerable<SelectListItem> GetUserTypeSelectList()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list = _context.UserType.AsNoTracking()
+                .Where(x => x.UserLevel != 0)
+                .OrderBy(x => x.CreatedAtUtc)
+                .Select(x => new SelectListItem
+                {
+                    Value = x.UserTypeId,
+                    Text = x.Name
+                }).ToList();
+            SelectListItem blankOption = new SelectListItem()
+            {
+                Value = "",
+                Text = ""
+            };
+            list.Insert(0, blankOption);
+            return new SelectList(list, "Value", "Text");
+        }
+
+
+
 
 
         public IEnumerable<SelectListItem> GetDoctorType()

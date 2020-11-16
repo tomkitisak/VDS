@@ -116,6 +116,9 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult Form(string id)
         {
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+
+            ViewBag.userTypeId = userTypeId;
 
             ViewBag.IsNew = false;
             ViewBag.ImageDataUrl = "/assets/images/noimage.png";

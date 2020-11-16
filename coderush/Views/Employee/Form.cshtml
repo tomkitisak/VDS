@@ -5,6 +5,9 @@
     string modelName = "ผู้ประสานงาน";
     ViewData["Title"] = modelName;
     bool IsNew = ViewBag.IsNew;
+
+
+
 }
 
 <!-- Content Start -->
@@ -235,7 +238,16 @@
 
                 <article class="card mb-4">
                     <div class="card-header">
-                        <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                        @{
+                            if (ViewBag.userTypeId == "1")
+                            {
+                                <a href="javaScript:void(0)" class="btn btn-default">ย้อนกลับ</a>
+                            }
+                            else
+                            {
+                                <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
+                            }
+                        }
                         <button type="submit" class="btn btn-primary x">บันทึก</button>
                     </div>
                 </article>
@@ -451,7 +463,7 @@
         span.onclick = function () {
             modal.style.display = "none";
         }
-            //  End Get the modal Image ==================================================
+                //  End Get the modal Image ==================================================
 
     </script>
 

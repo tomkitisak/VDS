@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using vds.Data;
 using vds.Models;
+using vds.ViewModels;
 
 namespace vds.Services.Security
 {
@@ -95,12 +97,49 @@ namespace vds.Services.Security
             }
         }
 
+         
         public List<ApplicationUser> GetAllMembers()
         {
             try
             {
                 List<ApplicationUser> users = new List<ApplicationUser>();
-                users = _context.ApplicationUser.ToList();
+
+                users = _context.ApplicationUser.OrderBy(x=>x.UserTypeId).ToList();
+                     
+                return users;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public List<UserView> GetAllMembers1()
+        {
+            try
+            {
+                List<UserView> users = new List<UserView>();
+
+                users = _context.UserType
+                      .GroupJoin(_context.ApplicationUser,
+                            x => x.UserTypeId,
+                            y => y.UserTypeId,
+                            (x, y) => new { usertype = x, appuser = y }
+                      )
+                      .SelectMany(x => x.appuser.DefaultIfEmpty(),
+                      (x, y) => new { x = x.usertype, app = y })
+                      .Select(x => new UserView
+                      {
+                          Id = x.app.Id,
+                          UserName = x.app.UserName,
+                          Email = x.app.Email,
+                          EmailConfirmed = x.app.EmailConfirmed,
+                          PhoneNumber = x.app.PhoneNumber,
+                          isSuperAdmin = x.app.isSuperAdmin,
+                          UserTypeId = x.app.UserTypeId,
+                          UserLevel = x.x.UserLevel,
+                          Name = x.x.Name
+                      }).ToList();
 
                 return users;
             }
@@ -117,6 +156,8 @@ namespace vds.Services.Security
             {
                 ApplicationUser appUser = new ApplicationUser();
                 appUser = _context.ApplicationUser.Where(x => x.Id.Equals(applicationId)).FirstOrDefault();
+                   
+
                 return appUser;
             }
             catch (Exception)
@@ -125,6 +166,40 @@ namespace vds.Services.Security
                 throw;
             }
         }
+
+        public UserView GetMemberByApplicationId1(string applicationId)
+        {
+            try
+            {
+                UserView appUser = new UserView();
+                appUser = //_context.ApplicationUser.Where(x => x.Id.Equals(applicationId)).FirstOrDefault();
+                    _context.ApplicationUser.Join(_context.UserType,
+                    x => x.UserTypeId,
+                    y => y.UserTypeId,
+                    (x, y) => new { app = x, usr = y }).Where(x => x.app.Id.Equals(applicationId))
+                    .Select(x => new UserView
+                    {
+                        Id = x.app.Id,
+                        UserName = x.app.UserName,
+                        Email = x.app.Email,
+                        EmailConfirmed = x.app.EmailConfirmed,
+                        PhoneNumber = x.app.PhoneNumber,
+                        isSuperAdmin = x.app.isSuperAdmin,
+                        UserTypeId = x.app.UserTypeId,
+                        UserLevel = x.usr.UserLevel,
+                        Name = x.usr.Name
+                    }).FirstOrDefault();
+
+
+                return appUser;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
 
         public async Task<ApplicationUser> CreateApplicationUser(ApplicationUser applicationUser, string password)
         {

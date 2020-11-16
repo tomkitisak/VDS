@@ -2,14 +2,19 @@
 @model IdentityUser
 
 @{
-    ViewData["Title"] = "Change Profile";
+    ViewData["Title"] = "แก้ไขข้อมูลผู้ใช้";
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
 }
 
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-settings-variant"></i> ผู้ใช้งานระบบ | @ViewData["Title"]</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">ผู้ใช้งานระบบ</a></li>
+            <li class="breadcrumb-item active">ข้อมูลผู้ใช้</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-account-settings-variant"></i>@ViewData["Title"]</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>

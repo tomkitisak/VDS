@@ -52,9 +52,15 @@ namespace vds.Controllers
 
 
         //consume db context service, display all employee
-        public IActionResult Index(string id,string userTypeId)
+        public IActionResult Index()
         {
-            if  (String.IsNullOrEmpty(id))
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+            string hospitalId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
+
+            ViewBag.HospitalId = hospitalId;
+            ViewBag.userTypeId = userTypeId;
+
+            if  (String.IsNullOrEmpty(hospitalId))
             {
                 var objs = _context.Patient
                .AsNoTracking()
@@ -72,10 +78,9 @@ namespace vds.Controllers
               .Include(x => x.Hospital)
               .Include(x => x.DiseaseType)
               .Include(x => x.PrefixType)
-              .Where(x => x.HospitalId.Equals(id))
+              .Where(x => x.HospitalId.Equals(hospitalId))
               .OrderByDescending(x => x.CreatedAtUtc).ToList();
-                ViewBag.HospitalId = id;
-                ViewBag.userTypeId = userTypeId;
+
                return View(objs);
 
             }
@@ -101,10 +106,13 @@ namespace vds.Controllers
 
         //display employee create edit form
         [HttpGet]
-        public IActionResult Form(string patientId,string hospitalId,string userTypeId)
+        public IActionResult Form(string patientId,string hospitalId)
         {
             //  TempData[StaticString.StatusMessage] = "Error: ไม่พบข้อมูลโรงพยาบาล.";
             //   return RedirectToAction(nameof(Index), new { id = id });
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+
+          
             ViewBag.IsNew = false;
             ViewBag.userTypeId = userTypeId;
 

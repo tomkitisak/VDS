@@ -11,5 +11,8 @@ namespace vds.Models
         public string Name { get; set; }
         [Display(Name = "รายละเอียด")]
         public string Description { get; set; }
+
+        [Display(Name = "ประเภท")]
+        public int UserLevel { get; set; }
     }
 }

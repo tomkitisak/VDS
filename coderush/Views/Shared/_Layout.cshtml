@@ -22,6 +22,10 @@
 
 
 </head>
+
+
+
+
 <body>
     <!-- Wrapper Start -->
     <div id="wrapper">
@@ -30,7 +34,7 @@
         <div class="main-wrapper" id="main-wrapper">
             @await Html.PartialAsync("_Navigation")
 
-        
+
             <!-- Main Start -->
             <main>
                 @RenderBody()
@@ -79,11 +83,11 @@
             //initiate all datepicker class
             $('.datepicker').datepicker({
                 todayHighlight: true,
-                format: 'dd-mm-yyyy', 
+                format: 'dd-mm-yyyy',
                 changeMonth: true,
                 changeYear: true,
                 autoclose: true
-             });
+            });
 
             //initiate all datepickeryearmonth class
             $('.datepickeryearmonth').datepicker({

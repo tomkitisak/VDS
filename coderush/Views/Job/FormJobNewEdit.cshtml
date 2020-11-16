@@ -13,13 +13,8 @@
 
     string strJobId = ViewBag.jobId;
     string userTypeId = TempData["userTypeId"].ToString();
-
-
-
     string strTitleHead = "แก้ไขข้อมูล";
-
     string strSwitch = "แก้ไข";
-
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
 
 
@@ -42,8 +37,6 @@
 
 
     int totalPatients = 0;
-
-
     bool chbDisabled = true;
 
     if (Model.Job.JobStatus != null)
@@ -68,44 +61,20 @@
 
 }
 
-
-@*<script>
-
-        var confirmObj;
-        var buttons = document.querySelectorAll('.dlgbtn');
-
-        function onLoadconfirm() {
-            confirmObj = this;
-            document.getElementById('confirmBtn').onclick = function () {
-                confirmObj.show();
-            };
-        }
-
-        function confirmBtnClick() {
-            confirmObj.hide();
-        }
-
-        function dialogClose() {
-            buttons[0].classList.remove('e-btn-hide');
-            buttons[1].classList.remove('e-btn-hide');
-            buttons[2].classList.remove('e-btn-hide');
-        }
-        function dialogOpen() {
-            buttons[0].classList.add('e-btn-hide');
-            buttons[1].classList.add('e-btn-hide');
-            buttons[2].classList.add('e-btn-hide');
-        }
-    </script>*@
-
+ 
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
 
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
-    <!-- Heading Start -->
+ 
     <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานใหม่</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName | งานใหม่</h2>
+            <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->

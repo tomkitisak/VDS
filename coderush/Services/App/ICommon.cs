@@ -9,7 +9,8 @@ namespace vds.Services.App
     {
         Task GenerateSalaryByEmployeeByPeriod(string employeeId, string period, bool isApproved, bool isPaid);
 
-
+         
+        IEnumerable<SelectListItem> GetUserTypeSelectList();
 
         IEnumerable<SelectListItem> GetEmployeeSelectList();
 

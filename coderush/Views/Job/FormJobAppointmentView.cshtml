@@ -13,14 +13,10 @@
     TempData["OrgAction"] = action;
 
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
-
-
     bool IsChecked1 = Model.Job.JobStatus.Status >= 2 ? true : false;
     bool chbDisabled = true;
-
     bool IsChecked2 = Model.Job.JobStatus.Status == 3 ? true : false;
     bool chbDisabled2 = true;
-
     bool IsChecked3 = Model.Job.JobStatus.Status == 4 ? true : false;
     bool chbDisabled3 = IsChecked3 == true ? true : false;
 
@@ -34,31 +30,21 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
     int totalDoctors = 0;
-
-
-
 
     if (Model.Job.JobStatus != null)
     {
         totalPatients = Model.PatientList.Count;
         totalDoctors = Model.DoctorList.Count;
-
-
     }
 
-
-}
-
-
-@{
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
+
 }
 
-
+ 
 <script>
 
     var confirmObj;
@@ -93,7 +79,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @strCapture</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานนัดหมาย</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -103,12 +93,6 @@
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="SubmitForm3" method="post">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">เพิ่ม/ปรับปรุงข้อมูล-@(modelName)</h4>
-                    </div>
-                </article>
 
                 <article class="card mb-4">
                     <div class="card-header">

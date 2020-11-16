@@ -57,6 +57,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">ตารางนัดหมาย</a></li>
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
+
         <h2 class="mb-2"><i class="mdi mdi-calendar-multiple-check"></i> @ViewData["Title"] @(!String.IsNullOrEmpty(period) ? "สำหรับ " + period : "")</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
@@ -244,7 +249,10 @@
                 searching: true,
                 dom: 'lrtip',
                 scrollX: false,
-                pageLength: 5,
+                pageLength: 20,
+                language: {
+                    "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+                }
             });
 
             $('#mainSearch').keyup(function () {

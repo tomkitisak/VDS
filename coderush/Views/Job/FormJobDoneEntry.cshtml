@@ -10,9 +10,7 @@
 
     string strJobId = ViewBag.jobId;
 
-
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
-
 
     bool IsChecked1 = Model.Job.JobStatus.Status >= 2 ? true : false;
     bool chbDisabled = true;
@@ -92,7 +90,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i>งาน | บันทึกงานแล้วเสร็จ</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานนัดหมาย</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>บันทึกงานแล้วเสร็จ</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
