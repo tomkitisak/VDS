@@ -10,8 +10,8 @@ using vds.Data;
 namespace vds.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("25631116043953_ddd")]
-    partial class ddd
+    [Migration("25631117073422_upd17112563")]
+    partial class upd17112563
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1204,9 +1204,11 @@ namespace vds.Migrations
                     b.Property<string>("HospitalName")
                         .IsRequired();
 
-                    b.Property<string>("Lat");
+                    b.Property<string>("Lat")
+                        .IsRequired();
 
-                    b.Property<string>("Long");
+                    b.Property<string>("Long")
+                        .IsRequired();
 
                     b.Property<int>("OperatingRoom");
 

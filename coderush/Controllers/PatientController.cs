@@ -160,7 +160,7 @@ namespace vds.Controllers
         //post submitted employee data. if employeeId is null then create new, otherwise edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitForm([Bind] Patient patient, string userTypeId)
+        public async Task<IActionResult> SubmitForm([Bind] Patient patient)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace vds.Controllers
                     FillDropdownListForEmployeeForm();
 
                     TempData[StaticString.StatusMessage] = "บันทึกข้อมูลผู้ป่วยเรียบร้อยแล้ว";
-                    return RedirectToAction(nameof(Form), new { patientId = newPatient.PatientId , userTypeId = userTypeId });
+                    return RedirectToAction(nameof(Form), new { patientId = newPatient.PatientId});
                 }
 
                 //edit existing
@@ -248,7 +248,7 @@ namespace vds.Controllers
                     FillDropdownListForEmployeeForm();
 
                     TempData[StaticString.StatusMessage] = "ปรับปรุงข้อมูลผู้ป่วยเรียบร้อยแล้ว";
-                    return RedirectToAction(nameof(Form), new { patientId = editPatient.PatientId, userTypeId = userTypeId });
+                    return RedirectToAction(nameof(Form), new { patientId = editPatient.PatientId });
                 }
                 else
                 {

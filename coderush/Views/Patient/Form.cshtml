@@ -15,8 +15,13 @@
 
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+
+            <li class="breadcrumb-item"><a href="/@controller/index">ผู้ป่วย</a></li>
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+            <h2 class="mb-2"><i class="mdi mdi-human-male-female"></i> @modelName</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
@@ -411,9 +416,9 @@
 
 
         function calcAge() {
-           
+
             var date = $("#DateOfBirth").datepicker("getDate");
-          
+
             var today = new Date();
             var birthDate = new Date(date);
             var age = today.getFullYear() - birthDate.getFullYear();
@@ -432,8 +437,8 @@
 
     <script>
 
- 
- 
+
+
         if (('@IsNew') == "True") {
 
             $('.x').prop('disabled', false);
@@ -463,4 +468,4 @@
 
 
 
-}  
+}

@@ -8,6 +8,7 @@
     ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
 
     bool IsNew = ViewBag.IsNew; ;
+    string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 }
 
 
@@ -15,6 +16,17 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            @if (userTypeId == "1")
+            {
+                <li class="breadcrumb-item"><a href="javascript:void(0)">โรงพยาบาล</a></li>
+            }
+            else
+            {
+                <li class="breadcrumb-item"><a href="/@controller/index">โรงพยาบาล</a></li>
+            }
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
@@ -36,13 +48,7 @@
     <div class="row">
         <div class="col-12">
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">ข้อมูลรายละเอียด-@modelName</h4>
-                    </div>
-                </article>
-
+ 
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลทั่วไป</h4>
@@ -98,7 +104,7 @@
                                 <div class="form-group">
                                     <label asp-for="Hospital.Province"></label>
                                     <div class="input-group">
-                                        <input asp-for="Hospital.Province" id="province" class="form-control x" autocomplete="off" />
+                                        <input asp-for="Hospital.Province" id="province" class="form-control x" autocomplete="off" onchange="myMap()"/>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Hospital.Province" class="text-danger"></span>
@@ -516,7 +522,7 @@
                                 <div class="form-group">
                                     <label asp-for="Coordinator.DesignationId"></label>
                                     <div class="input-group">
-                                        <select asp-for="Coordinator.DesignationId" class="select2 form-control x" asp-items="ViewBag.Designation"></select>
+                                        <select asp-for="Coordinator.DesignationId" class="select2 form-control x" asp-items="ViewBag.Designation"  ></select>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Coordinator.DesignationId" class="text-danger"></span>
@@ -539,26 +545,7 @@
                     </div>
                 </article>
 
-
-                @*<article class="card mb-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">System User Account Info</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="SystemUserId"></label>
-                                <div class="input-group">
-                                    <select asp-for="SystemUserId" class="select2 form-control" asp-items="ViewBag.SystemUser"></select>
-                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                </div>
-                                <span asp-validation-for="SystemUserId" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                    </article>*@
-
-
-
+ 
                 <article class="card mb-4">
                     <div class="card-header">
                         @{
@@ -760,7 +747,7 @@
 
 
         function myMap() {
-
+           
             ConcatAddress();
 
             //Set the Latitude and Longitude of the Map
@@ -781,26 +768,21 @@
             var map = new google.maps.Map(document.getElementById("myDiv"), mapOptions);
 
             var geocoder = new google.maps.Geocoder();
-
-
-
             geocodeAddress(geocoder, map);
 
         }
 
         function geocodeAddress(geocoder, resultsMap) {
 
-            var address = document.getElementById('address').value;
+            var address = document.getElementById('address').value;         
+        //    if (String.IsNullOrEmpty(address))
+             //   return;
 
-            var contentString = '<div id="content">' + address +
-
-                '</div>';
+            var contentString = '<div id="content">' + address + '</div>';
 
             var infowindow = new google.maps.InfoWindow({
                 content: contentString
             });
-
-
 
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status === 'OK') {
@@ -811,14 +793,13 @@
 
                     });
 
-
                     infowindow.open(resultsMap, marker);
                     document.getElementById('lat').value = results[0].geometry.location.lat();
                     document.getElementById('long').value = results[0].geometry.location.lng();
 
 
                 } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+                  //  alert('ไม่สามารถระบุที่อยู่ได้ : ' + status);
                 }
             });
         }

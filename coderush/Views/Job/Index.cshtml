@@ -11,18 +11,14 @@
     string modelName = "งานร้องขอ";
     ViewData["Title"] = "งานร้องขอ";
 
-
-    string uType = TempData["userTypeId"].ToString();
-    string hId = TempData["hospitalId"].ToString();
+    string uType = ViewBag.userTypeId;
+    string hId = ViewBag.hospitalId;
 
     if (TempData["fromTab"] == null)
     {
         TempData["fromTab"] = 1;
     }
     string fromTab = TempData["fromTab"].ToString();
-
-
-
 
     HospitalSummary summary = _app.GetHospitalSummary();
     ChartDoughnut donutChart = _app.GetHospitalDoughnut();
@@ -35,7 +31,6 @@
     var alertanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
     var promptanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
-
 
 }
 

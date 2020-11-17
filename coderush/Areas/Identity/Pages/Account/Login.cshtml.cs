@@ -32,8 +32,6 @@ namespace vds.Areas.Identity.Pages.Account
             _identityDefaultOptions = identityDefaultOptions.Value;
         }
 
-
-
         [BindProperty]
         public InputModel Input { get; set; }
 

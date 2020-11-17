@@ -27,6 +27,16 @@
 
 
   <ItemGroup>
+    <None Include="wwwroot\assets\fontawesome\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\assets\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\assets\js\core\bootstrap-material-design.min.js" />
+    <None Include="wwwroot\assets\js\core\jquery.min.js" />
+    <None Include="wwwroot\assets\js\core\popper.min.js" />
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\external\jquery\jquery.js" />
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\jquery-ui.js" />
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\jquery-ui.min.js" />

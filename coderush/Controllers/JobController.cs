@@ -67,9 +67,11 @@ namespace vds.Controllers
         //======================================================== Index ===========================================================
         public IActionResult Index()
         {
-            string hId = TempData["hospitalId"].ToString();
-            string uType = TempData["userTypeId"].ToString();
-            
+            string hId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
+            string uType = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+
+            ViewBag.hospitalId = hId;
+            ViewBag.userTypeId = uType;
             try
             {
                 if (uType=="1")

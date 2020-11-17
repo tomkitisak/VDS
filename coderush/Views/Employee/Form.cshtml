@@ -6,7 +6,7 @@
     ViewData["Title"] = modelName;
     bool IsNew = ViewBag.IsNew;
 
-
+    string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 
 }
 
@@ -14,8 +14,19 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            @if (userTypeId == "1")
+            {
+                <li class="breadcrumb-item"><a href="javascript:void(0)">ผู้ประสานงาน</a></li>
+            }
+            else
+            {
+                <li class="breadcrumb-item"><a href="/@controller/index">ผู้ประสานงาน</a></li>
+            }
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+            <h2 class="mb-2"><i class="mdi mdi-account-multiple"></i> @modelName</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
@@ -35,12 +46,7 @@
     <div class="row">
         <div class="col-12">
             <form asp-controller="@controller" asp-action="Submit@(action)" enctype="multipart/form-data">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">ข้อมูล-@modelName</h4>
-                    </div>
-                </article>
+ 
 
                 <article class="card mb-4">
                     <div class="card-header">

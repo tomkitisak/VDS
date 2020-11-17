@@ -10,6 +10,7 @@
 
     EmployeeSummary summary = _app.GetEmployeeSummary();
     ChartDoughnut donutChart = _app.GetEmployeeDoughnut();
+
 }
 
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
@@ -18,7 +19,7 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+        <h2 class="mb-2"><i class="mdi mdi-account-multiple"></i> @modelName</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>

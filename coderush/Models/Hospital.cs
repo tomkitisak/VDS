@@ -42,9 +42,11 @@ namespace vds.Models
         [Display(Name = "บริการศักยภาพ")]
         public string Service { get; set; }
 
-
+        
         [Display(Name = "พิกัด LAT")]
         public string Lat { get; set; }
+
+        
         [Display(Name = "พิกัด LONG")]
         public string Long { get; set; }
 

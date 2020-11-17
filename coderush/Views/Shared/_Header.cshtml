@@ -9,6 +9,34 @@
     }
 }
 
+<style>
+
+    .notification {
+        background-color: #555;
+        color: white;
+        text-decoration: none;
+        padding: 15px 26px;
+        position: relative;
+        display: inline-block;
+        border-radius: 2px;
+    }
+
+        .notification:hover {
+            background: red;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 5px 10px;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+        }
+</style>
+
+
 <!-- Header Start -->
 <header class="top-bar flex-row align-items-center">
     <!-- Logo  -->
@@ -44,19 +72,27 @@
         <button class="d-md-none three-dots">
             <i class="mdi mdi-dots-vertical md-24"></i>
         </button>
-        
+
         <div class="notifications">
+
+            <div class="row align-items-center justify-content-center">
+                <div class="col" >
+                    <i class="fa fa-bell" style="font-size:24px"></i>
+                </div>
+            </div>
+
             <ul>
+
 
                 <li>
 
-                
-                        <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link" id="userProfile" aria-haspopup="true"
-                           aria-expanded="false">
-                            <img src="~/assets/images/users-thumbs/blank-person-white.png" height="24" width="24" alt="user" class="rounded-circle align-middle" />
-                          
-                        </a>
-        
+
+                    <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link" id="userProfile" aria-haspopup="true"
+                       aria-expanded="false">
+                        <img src="~/assets/images/users-thumbs/user-19.jpg" height="30" width="30" alt="ผ @email" class="rounded-circle align-middle" />
+                        @email
+                    </a>
+
                     <div class="dropdown-menu" aria-labelledby="userProfile">
                         <ul>
                             <li>

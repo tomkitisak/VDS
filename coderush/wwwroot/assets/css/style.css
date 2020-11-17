@@ -11750,12 +11750,12 @@ main {
 }
 /* line 31, ../sass/helpers/_common.scss */
 main .content-wrapper {
-  padding: 30px;
+  padding: 15px;
 }
 @media only screen and (max-width: 1024px) {
   /* line 31, ../sass/helpers/_common.scss */
   main .content-wrapper {
-    padding: 30px 15px;
+    padding: 15px 15px;
   }
 }
 
@@ -12163,7 +12163,7 @@ td {
 
 /* line 211, ../sass/base/_typography.scss */
 .heading {
-  padding-bottom: 30px;
+  padding-bottom: 8px;
   color: #000000;
 }
 /* line 214, ../sass/base/_typography.scss */
