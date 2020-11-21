@@ -17,7 +17,7 @@ namespace vds.Controllers
     public class EmployeeController : Controller
     {
 
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Services.Security.ICommon _security;
@@ -31,7 +31,7 @@ namespace vds.Controllers
             Services.Security.ICommon security,
             Services.App.ICommon app,
             SignInManager<ApplicationUser> signInManager,
-            IHostingEnvironment env
+            IWebHostEnvironment env
             )
         {
             _context = context;

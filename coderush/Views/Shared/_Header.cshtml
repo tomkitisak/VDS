@@ -1,11 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> _userManager
+@inject vds.Data.ApplicationDbContext _context;
 @{
+    var hospitalName = "";
+    var hospitalId = "";
     var email = "";
     var user1 = await _userManager.GetUserAsync(User);
     if (user1 != null)
     {
         email = user1.Email;
+        if (user1.UserTypeId == "1")
+        {
+            hospitalId = _context.Hospital.Where(x => x.CreatedById.Equals(user1.Id)).Select(x => x.HospitalId).FirstOrDefault();
+            hospitalName = _context.Hospital.Where(x => x.HospitalId.Equals(hospitalId)).Select(x => x.HospitalName).FirstOrDefault();
+        }
     }
 }
 
@@ -59,7 +67,7 @@
     <div class="navbar-container">
         <div class="right-bar align-self-center">
             <div class="search-area">
-                <input class="form-control no-border" type="text" placeholder="Search" id="mainSearch" name="mainSearch" />
+                <input class="form-control no-border" type="text" placeholder="ค้นหาข้อมูล" id="mainSearch" name="mainSearch" />
                 <div class="search-icon">
                     <i class="mdi mdi-magnify md-24"></i>
                     <i class="mdi mdi-arrow-left md-24"></i>
@@ -76,7 +84,8 @@
         <div class="notifications">
 
             <div class="row align-items-center justify-content-center">
-                <div class="col" >
+                <div class="col">
+                    @hospitalName
                     <i class="fa fa-bell" style="font-size:24px"></i>
                 </div>
             </div>
@@ -89,7 +98,7 @@
 
                     <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link" id="userProfile" aria-haspopup="true"
                        aria-expanded="false">
-                        <img src="~/assets/images/users-thumbs/user-19.jpg" height="30" width="30" alt="ผ @email" class="rounded-circle align-middle" />
+                        <img src="~/assets/images/users-thumbs/user-19.jpg" height="30" width="30" alt="@email" class="rounded-circle align-middle" />
                         @email
                     </a>
 

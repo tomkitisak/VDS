@@ -7,9 +7,9 @@
 
     string userTypeId = ViewBag.userTypeId;
     bool IsNew = ViewBag.IsNew;
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
 
 }
-
 <!-- Content Start -->
 <div class="content-wrapper">
 
@@ -29,9 +29,8 @@
                         <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox">
                         <span class="slider round"></span>
                     </label>
-
                 </div>
-                <label for="chbEdit">แก้ไข</label>
+                <label for="chbEdit">@strCaption</label>
             </div>
         </div>
         <div class="titles">
@@ -45,11 +44,6 @@
         <div class="col-12">
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
 
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">เพิ่ม / ปรับปรุงข้อมูล-@modelName</h4>
-                    </div>
-                </article>
 
                 <article class="card mb-4">
                     <div class="card-header">
@@ -139,9 +133,9 @@
                                     <label asp-for="DateOfBirth"></label>
                                     <div class="input-group">
 
-                                        <input onchange="calcAge();" type="text" id="DateOfBirth" name="DateOfBirth" asp-for="DateOfBirth" class="datepicker form-control x" data-val="true" data-val-required="The DateOfBirth field is required.">
+                                        @*<input onchange="calcAge();" type="text" id="DateOfBirth" name="DateOfBirth" asp-for="DateOfBirth" class="datepicker form-control x" data-val="true" data-val-required="The DateOfBirth field is required.">*@
 
-                                        @*<ejs-datepicker id="DateOfBirth" format="dd-MM-yyyy" ejs-for="DateOfBirth"></ejs-datepicker>*@
+                                        <ejs-datepicker id="DateOfBirth" change="calcAge" format="dd-MM-yyyy" ejs-for="DateOfBirth" placeholder="ป้อมข้อมูลวันเกิด"></ejs-datepicker>
 
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
@@ -289,6 +283,7 @@
 
 @section Styles{
 
+
     <style>
         /* The switch - the box around the slider */
         .switch {
@@ -360,6 +355,7 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
+
     <script>
 
         $.Thailand({
@@ -371,17 +367,8 @@
         });
 
 
-        //// Get the <span> element that closes the modal
-        //var dob = document.getElementById("DateOfBirth");
-        //// When the user clicks on <span> (x), close the modal
-        //dob.onchange = function () {
-        //    age(dob.nodeValue)
-
-        //}
-
-
-        function age(dob) {
-
+        function calcAge() {
+            var dob = document.getElementById("DateOfBirth").ej2_instances[0].value;
             var today = new Date(),
                 result = {
                     years: 0,
@@ -407,18 +394,22 @@
             }
             result.years = (result.months - (result.months % 12)) / 12;
             result.months = (result.months % 12);
-            document.getElementById("xx").innerHTML = result;
+            document.getElementById("Age").innerHTML = result;
 
         }
 
-        var agetxt = document.getElementById("Age");
-        calcAge();
 
+        //   var agetxt = document.getElementById("Age");
+        document.addEventListener('DOMContentLoaded', function () {
+            // Once the document is loaded, we will dynamically update the value of the other DatePicker's value based on the first DatePicker's value.
+            calcAge();
+            iniDob();
+            ChangeMode();
+        }, false);
 
         function calcAge() {
 
-            var date = $("#DateOfBirth").datepicker("getDate");
-
+            var date = document.getElementById("DateOfBirth").ej2_instances[0].value;
             var today = new Date();
             var birthDate = new Date(date);
             var age = today.getFullYear() - birthDate.getFullYear();
@@ -427,7 +418,8 @@
                 age = age - 1;
             }
 
-            agetxt.value = age;
+            //agetxt.value = age;
+            document.getElementById("Age").value = age;
         }
 
 
@@ -438,34 +430,42 @@
     <script>
 
 
+        function iniDob() {
 
-        if (('@IsNew') == "True") {
+            var dob = document.getElementById("DateOfBirth").ej2_instances[0];
 
-            $('.x').prop('disabled', false);
-            $('#chbEdit').prop('disabled', true);
+            if (('@IsNew') == "True") {
+
+                $('.x').prop('disabled', false);
+                $('#chbEdit').prop('checked', true);
+                dob.readonly = false;
+            }
+            else {
+
+                $('.x').prop('disabled', true);
+                dob.readonly = true;
+                $('#chbEdit').prop('checked', false);
+            }
         }
-        else {
-
-            $('.x').prop('disabled', true);
-            $('#chbEdit').prop('disabled', false);
-        }
-
 
         function ChangeMode(e) {
 
+            var dob = document.getElementById("DateOfBirth").ej2_instances[0];
             if (e.checked) {
 
                 $('.x').prop('disabled', false);
+                dob.readonly = false;
 
             }
             else {
 
                 $('.x').prop('disabled', true);
+                dob.readonly = true;
             }
         }
 
     </script>
 
-
+   
 
 }

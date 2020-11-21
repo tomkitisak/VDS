@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vds.Data;
+using vds.ViewModels;
 
 namespace vds.Migrations
 {
@@ -3335,6 +3336,11 @@ namespace vds.Migrations
                         .WithMany()
                         .HasForeignKey("UpdatedById1");
                 });
+
+            modelBuilder.Entity<HospitalSummary>().HasNoKey();
+
+            modelBuilder.Entity<HospitalViewRegionId>().HasNoKey();
+
 #pragma warning restore 612, 618
         }
     }

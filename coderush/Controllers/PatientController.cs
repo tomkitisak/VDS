@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using vds.Data;
@@ -18,6 +19,9 @@ namespace vds.Controllers
         private readonly Services.Security.ICommon _security;
         private readonly Services.App.ICommon _app;
         private readonly SignInManager<ApplicationUser> _signInManager;
+
+        DateTimeFormatInfo dmyEN = new CultureInfo("en-GB", false).DateTimeFormat;
+        DateTimeFormatInfo dmyTH = new CultureInfo("th-TH", false).DateTimeFormat;
 
         //dependency injection through constructor, to directly access services
         public PatientController(
@@ -87,8 +91,6 @@ namespace vds.Controllers
  
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> LoginOnBehalf(string id)
         {
@@ -123,8 +125,8 @@ namespace vds.Controllers
                 FillDropdownListForEmployeeForm();
 
                 Patient newObj = new Patient();
-                DateTime bd = Convert.ToDateTime(DateTime.Today.ToString("dd-MM-yyyy", new System.Globalization.CultureInfo("en-US")));
-                newObj.DateOfBirth = bd;
+               // DateTime bd = DateTime.Today; //Convert.ToDateTime(DateTime.Today.ToString("dd-MM-yyyy", new System.Globalization.CultureInfo("en-US")));
+                newObj.DateOfBirth = DateTime.Today;
 
                 if (!String.IsNullOrEmpty(hospitalId))
                 {
@@ -139,9 +141,8 @@ namespace vds.Controllers
 
             //edit object
             Patient editObj = new Patient();
-            editObj = _context.Patient.Where(x => x.PatientId.Equals(patientId)).FirstOrDefault();
-            DateTime obd = Convert.ToDateTime(editObj.DateOfBirth.ToString("dd-MM-yyyy",new System.Globalization.CultureInfo("en-US")));
-            editObj.DateOfBirth = obd;
+            editObj = _context.Patient.Where(x => x.PatientId.Equals(patientId)).FirstOrDefault();             
+           // editObj.DateOfBirth = Convert.ToDateTime(editObj.DateOfBirth.ToString("dd-MM-yyyy", new System.Globalization.CultureInfo("en-US")));
             if (editObj == null)
             {
                 return NotFound();
@@ -170,8 +171,6 @@ namespace vds.Controllers
                     return RedirectToAction(nameof(Form), new { patientId = patient.PatientId ?? "" });
                 }
 
-
-
                 //create new
                 if (patient.PatientId == null)
                 {
@@ -184,8 +183,10 @@ namespace vds.Controllers
                     newPatient.FirstName = patient.FirstName;
                     newPatient.LastName = patient.LastName;
                     newPatient.Gender = patient.Gender;
-                    newPatient.DateOfBirth = patient.DateOfBirth.AddYears(543);
 
+                    string myDate = patient.DateOfBirth.ToString(dmyEN.ShortDatePattern);
+                    newPatient.DateOfBirth = Convert.ToDateTime(Convert.ToDateTime(myDate, dmyEN).ToString(dmyTH.ShortDatePattern));
+ 
                     newPatient.Phone = patient.Phone;
                     newPatient.Address1 = patient.Address1;
 
@@ -225,7 +226,10 @@ namespace vds.Controllers
                     editPatient.FirstName = patient.FirstName;
                     editPatient.LastName = patient.LastName;
                     editPatient.Gender = patient.Gender;
-                    editPatient.DateOfBirth = patient.DateOfBirth.AddYears(543);
+
+ 
+                    string myDate = patient.DateOfBirth.ToString(dmyEN.ShortDatePattern);
+                    editPatient.DateOfBirth = Convert.ToDateTime(Convert.ToDateTime(myDate, dmyEN).ToString(dmyTH.ShortDatePattern));
 
                     editPatient.Phone = patient.Phone;
                     editPatient.Address1 = patient.Address1;

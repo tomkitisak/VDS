@@ -237,16 +237,32 @@
             }
 
 
-            <!--Role-->
+            <!--Setting-->
             @if (User.IsInRole(Pages.Settings.RoleName))
             {
-                <li class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route" hidden>
-                    <a class="nav-link waves-effect" title="@Pages.Settings.NavigationName" href="javascript:void(0)">
-                        <i class="mdi mdi-apps md-24 mr-2"></i>
-                        <span class="menu-title">Setting</span>
-                    </a>
+        <li class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route" hidden>
+            <a class="nav-link waves-effect" title="@Pages.Settings.NavigationName" href="javascript:void(0)">
+                <i class="mdi mdi-apps md-24 mr-2"></i>
+                <span class="menu-title">Setting</span>
+            </a>
 
-                </li>
+            <div class="dropdown d-inline">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    เพิ่มเติมข้อมูลระบบ
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
+                     style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                
+                    <a class="dropdown-item" href="~/hospital/index">ข้อมูลโรงพยาบาล</a>
+                    <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
+                    <a class="dropdown-item" href="~/settings/AddDiseaseType">ข้อมูลโรค</a>
+
+                </div>
+            </div>
+
+
+        </li>
             }
 
         </ul>

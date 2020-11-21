@@ -12,7 +12,6 @@ namespace vds.Data
         {
         }
 
-
         //custom entity, override identity user with new column
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         //custom entity, for simple todo app
@@ -91,10 +90,11 @@ namespace vds.Data
         public DbSet<JobPatient> JobPatient { get; set; }
 
         public DbSet<UserType> UserType { get; set; }
-        public DbQuery<HospitalViewRegionId> HospitalViewRegionId { get; set; }
 
-        public DbQuery<HospitalSummary> HospitalSummary { get; set; }
+        // CAll Store Procedure
+        public  DbSet<HospitalViewRegionId> HospitalViewRegionId { get; set; }
+        public  DbSet<HospitalSummary> HospitalSummary { get; set; }
 
-      
+        
     }
 }

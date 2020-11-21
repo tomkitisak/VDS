@@ -65,8 +65,6 @@ namespace vds.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-
-
             //set default return url from appsettings.json
             returnUrl = _identityDefaultOptions.DefaultReturnUrl;
 

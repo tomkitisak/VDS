@@ -3,24 +3,30 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.IO;
 using vds.Data;
 using vds.Models;
 using vds.Services.Security;
+  
 
 namespace vds
 {
+
+    
     // TEST GIT  12000
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+
         }
 
         public IConfiguration Configuration { get; }
@@ -39,6 +45,7 @@ namespace vds
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             /// Get Custom Identity Default Options
             IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
@@ -46,6 +53,7 @@ namespace vds
             services.Configure<IdentityDefaultOptions>(identityDefaultOptionsConfigurationSection);
 
             var identityDefaultOptions = identityDefaultOptionsConfigurationSection.Get<IdentityDefaultOptions>();
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -68,7 +76,7 @@ namespace vds
                 // email confirmation require
                 options.SignIn.RequireConfirmedEmail = identityDefaultOptions.SignInRequireConfirmedEmail;
             })
-                .AddDefaultUI(UIFramework.Bootstrap4)
+            //    .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -78,8 +86,10 @@ namespace vds
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = identityDefaultOptions.CookieHttpOnly;
-                options.Cookie.Expiration = TimeSpan.FromDays(identityDefaultOptions.CookieExpiration);
+                options.ExpireTimeSpan = TimeSpan.FromDays(identityDefaultOptions.CookieExpiration);
                 options.SlidingExpiration = identityDefaultOptions.SlidingExpiration;
+
+                options.LoginPath = "/identity/account/login";
             });
 
 
@@ -98,21 +108,21 @@ namespace vds
             /// scoped service 
             /// Add Custom Common Database servcie as scoped service
             services.AddScoped<Services.Database.ICommon, Services.Database.Common>();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
 
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             Services.Database.ICommon dbInit)
         {
 
             //Register Syncfusion license
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjk2Njk0QDMxMzgyZTMyMmUzMFlOUHZWNFozRXQwYWtXZnFOWFZwY21zRFliQmhLNDNPYVZySU9QeUdLNEU9;Mjk2Njk1QDMxMzgyZTMyMmUzMGNwZGJ2empqSUNOYllsb3BKUVpXR3c4VndwMENkbWs2Z3FWS1R0RXlib1k9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU1ODM5QDMxMzgyZTMzMmUzMGRGcFdrRVRucFdKeHNDK1JLOHBKblgzSTFxbU94cVRITEpVcDFOdExBM1k9");
             //custom exception handling, to catch 404
             app.Use(async (context, next) =>
             {
@@ -129,8 +139,9 @@ namespace vds
 
             if (env.IsDevelopment())
             {
+
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -146,15 +157,20 @@ namespace vds
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Todo}/{action=Index}/{id?}");
+                    pattern: "{controller=Todo}/{action=Index}/{id?}"); 
+                endpoints.MapRazorPages();
             });
+
 
             if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"node_modules", @"@syncfusion")))
             {

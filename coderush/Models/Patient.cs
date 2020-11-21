@@ -30,8 +30,7 @@ namespace vds.Models
         [Display(Name = "วัน-เดือน-ปีเกิด")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; } 
 
         public int  Age  
         {

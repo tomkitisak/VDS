@@ -25,7 +25,7 @@ namespace vds.Controllers
         readonly string modelName = "กลุ่มแพทย์";
 
 
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Services.Security.ICommon _security;
@@ -39,7 +39,7 @@ namespace vds.Controllers
             Services.Security.ICommon security,
             Services.App.ICommon app,
             SignInManager<ApplicationUser> signInManager,
-            IHostingEnvironment env
+            IWebHostEnvironment env
             )
         {
             _context = context;

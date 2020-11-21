@@ -11762,6 +11762,7 @@ main .content-wrapper {
 /* line 39, ../sass/helpers/_common.scss */
 #wrapper {
   overflow: hidden;
+  height:100%;
 }
 
 /* line 42, ../sass/helpers/_common.scss */

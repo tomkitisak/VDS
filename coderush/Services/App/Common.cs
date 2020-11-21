@@ -672,7 +672,7 @@ namespace vds.Services.App
         {
             HospitalSummary hospitalsummary = new HospitalSummary();
 
-            var hospitalsummary1 = _context.HospitalSummary.FromSql("dbo.HospitalSummary").ToList();
+            var hospitalsummary1 = _context.HospitalSummary.FromSqlRaw("dbo.HospitalSummary").ToList();
 
             foreach (var item in hospitalsummary1)
             {
@@ -2177,7 +2177,7 @@ namespace vds.Services.App
             try
             {
 
-                var HospitalRegion = _context.HospitalViewRegionId.FromSql("dbo.ListHospitalRegionId").ToList();
+                var HospitalRegion = _context.HospitalViewRegionId.FromSqlRaw("dbo.ListHospitalRegionId").ToList();
 
 
                 ChartDoughnut result = new ChartDoughnut();

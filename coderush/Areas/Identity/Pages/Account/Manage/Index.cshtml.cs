@@ -16,21 +16,23 @@ namespace vds.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+
+    //    private readonly IEmailSender _emailSender;
+
         private readonly IdentityDefaultOptions _identityDefaultOptions;
         private readonly SuperAdminDefaultOptions _superAdminDefaultOptions;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
+      //      IEmailSender emailSender,
             IOptions<IdentityDefaultOptions> identityDefaultOptions,
             IOptions<SuperAdminDefaultOptions> superAdminDefaultOptions
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
+        //    _emailSender = emailSender;
             _identityDefaultOptions = identityDefaultOptions.Value;
             _superAdminDefaultOptions = superAdminDefaultOptions.Value;
         }
@@ -134,7 +136,7 @@ namespace vds.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "ปรับปรุงข้อมูลผู้ใช้งานเรียบร้อยแล้ว";
             return RedirectToPage();
         }
 
@@ -162,10 +164,10 @@ namespace vds.Areas.Identity.Pages.Account.Manage
                 protocol: Request.Scheme);
 
 
-            await _emailSender.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            //await _emailSender.SendEmailAsync(
+            //    email,
+            //    "Confirm your email",
+            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();

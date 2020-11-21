@@ -117,7 +117,7 @@ namespace vds.Controllers
 
             ViewBag.Status = 0;
 
-            string hospitalId = TempData["hospitalId"].ToString();
+            string hospitalId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
             //create new
             if (id == null)
             {

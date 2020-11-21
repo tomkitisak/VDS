@@ -10,14 +10,16 @@ namespace vds.ViewModels
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "รหัสผ่านต้องมีความยาวไม่น้อยกว่า 6 ตัวอักษร!", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "รหัสผ่านใหม่")]
         public string NewPassword { get; set; }
 
+        [Required]
+        [StringLength(100, ErrorMessage = "รหัสผ่านต้องมีความยาวไม่น้อยกว่า 6 ตัวอักษร!", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "ยืนยันรหัสผ่าน")]
+        [Compare("NewPassword", ErrorMessage = "รหัสผ่านไม่ตรงกัน!")]
         public string ConfirmPassword { get; set; }
     }
 }

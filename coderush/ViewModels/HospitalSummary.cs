@@ -1,5 +1,9 @@
-﻿namespace vds.ViewModels
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace vds.ViewModels
 {
+
+    [Keyless]
     public class HospitalSummary
     {
         public int central { get; set; }

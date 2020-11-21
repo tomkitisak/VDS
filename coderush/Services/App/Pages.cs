@@ -8,7 +8,7 @@
             public const string ControllerName = "Todo";
             public const string RoleName = "Todo";
             public const string UrlDefault = "/Todo/Index";
-            public const string NavigationName = "ตารางนัด";
+            public const string NavigationName = "ตารางนัดหมายทั่วไป";
         }
         public static class Job
         {

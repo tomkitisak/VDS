@@ -16,8 +16,8 @@
         period = DateTime.Now.ToString("MM-yyyy", new System.Globalization.CultureInfo("en-GB"));
     }
 
-    TodoSummary todoSummary = _app.GetTodoSummaryByPeriod(period);
-    ChartDoughnut todoChart = _app.GetTodoDoughnutByPeriod(period);
+ //   TodoSummary todoSummary = _app.GetTodoSummaryByPeriod(period);
+  //  ChartDoughnut todoChart = _app.GetTodoDoughnutByPeriod(period);
 
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
 
@@ -261,7 +261,7 @@
 
         });
 
-        //Doughnut Chart
+        @*//Doughnut Chart
         $(function () {
             var doughnutChart = {
                 data: {
@@ -283,7 +283,7 @@
                 }
             }
             chart("doughnutChart", "doughnut", doughnutChart.data, doughnutChart.options);
-        });
+        });*@
 
         function onRefresh() {
             if ($('#Period').val() !== '') {

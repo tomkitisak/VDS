@@ -1,5 +1,8 @@
-﻿namespace vds.ViewModels
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace vds.ViewModels
 {
+    [Keyless]
     public class HospitalViewRegionId
     {
 

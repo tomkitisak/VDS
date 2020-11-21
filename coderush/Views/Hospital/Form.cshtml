@@ -8,6 +8,8 @@
     ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
 
     bool IsNew = ViewBag.IsNew; ;
+    string strCapture = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
+
     string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 }
 
@@ -38,7 +40,7 @@
                     </label>
 
                 </div>
-                <label>แก้ไข</label>
+                <label>@strCapture</label>
             </div>
         </div>
         <div class="titles">
@@ -474,7 +476,7 @@
                                 <div class="form-group">
                                     <label asp-for="Coordinator.SubDistrict"></label>
                                     <div class="input-group">
-                                        <input id="subdistrict2" asp-for="Coordinator.SubDistrict" class="form-control x" autocomplete="off" />
+                                        <input  id="subdistrict2" asp-for="Coordinator.SubDistrict" class="form-control x" autocomplete="off" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Coordinator.SubDistrict" class="text-danger"></span>
@@ -694,6 +696,10 @@
             margin-top: 0px;
             margin-bottom: 10px;
         }
+
+        input:disabled {
+            background: #dddddd;
+        }
     </style>
 
 }
@@ -734,17 +740,12 @@
 
         $(document).ready(function () {
 
-
             $('#hospitalname').on('input', function (e) {
-
                 $("#address").text($(this).val());
-
                 document.getElementById("address").value = $(this).val();
-
             });
             myMap();
         });
-
 
         function myMap() {
            
@@ -850,26 +851,47 @@
         });
 
 
-        if ('@IsNew'.value == true) {
-            $('.x').prop('disabled', false);
-            $('#chbEdit').prop('disabled', true);
-        }
-        else {
-            $('.x').prop('disabled', true);
-            $('#chbEdit').prop('disabled', false);
-        }
 
+        //   var agetxt = document.getElementById("Age");
+        document.addEventListener('DOMContentLoaded', function () {
+            // Once the document is loaded, we will dynamically update the value of the other DatePicker's value based on the first DatePicker's value.
+            iniDOM();
+            ChangeMode();
+        }, false);
 
-        function ChangeMode(e) {
+        function iniDOM() {
 
-            if (e.checked) {
+          //  var dob = document.getElementById("DateOfBirth").ej2_instances[0];
+            var hpSize = document.getElementById("hpsize").ej2_instances[0];
+            var hpRoom = document.getElementById("hproom").ej2_instances[0];
+            if (('@IsNew') == "True") {
 
                 $('.x').prop('disabled', false);
-
+                $('#chbEdit').prop('checked', true);
+                hpSize.readonly = false;
+                hpRoom.readonly = false;
             }
             else {
 
+                $('.x').prop('disabled', true);              
+                $('#chbEdit').prop('checked', false);
+                hpSize.readonly = true;
+                hpRoom.readonly = true;
+            }
+        }
+
+        function ChangeMode(e) {
+            var hpSize = document.getElementById("hpsize").ej2_instances[0];
+            var hpRoom = document.getElementById("hproom").ej2_instances[0];
+            if (e.checked) {
+                $('.x').prop('disabled', false);
+                hpSize.readonly = false;
+                hpRoom.readonly = false;
+            }
+            else {
                 $('.x').prop('disabled', true);
+                hpSize.readonly = true;
+                hpRoom.readonly = true;
             }
        }
 
