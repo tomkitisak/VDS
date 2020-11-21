@@ -175,7 +175,7 @@
                                     <label></label>
                                     <div class="input-group">
                                         <input id="myBtn" type="button" class="btn btn-primary x" value="แสดงแผนที่ที่ตั้งโรงพยาบาล" onclick="myMap()" />
-                                        <input id="address" hidden type="text" value="โรงพยาบาลดำเนินสะดวก ต.ดำเนินสาะดวก อ.ดำเนินสะดวก จ.ราชบุรี 70000" />
+                                        <input id="address" hidden type="text"  />
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                 <div class="form-group">
                                     <label asp-for="Hospital.Lat"></label>
                                     <div class="input-group">
-                                        <input id="lat" type="text" asp-for="Hospital.Lat" class="form-control text-right x" autocomplete="off" />
+                                        <input id="lat" type="text" asp-for="Hospital.Lat" class="form-control  x" autocomplete="off" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Hospital.Lat" class="text-danger"></span>
@@ -194,7 +194,7 @@
                                 <div class="form-group">
                                     <label asp-for="Hospital.Long"></label>
                                     <div class="input-group">
-                                        <input id="long" type="text" asp-for="Hospital.Long" class="form-control text-right x" autocomplete="off" disabled />
+                                        <input id="long" type="text" asp-for="Hospital.Long" class="form-control  x" autocomplete="off" disabled />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Hospital.Long" class="text-danger"></span>

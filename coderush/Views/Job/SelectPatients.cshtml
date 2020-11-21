@@ -13,10 +13,8 @@
     int countrecord = Model.Count;
     ViewData["Title"] = "ผู้ป่วย";
    
-
     EmployeeSummary summary = _app.GetEmployeeSummary();
     ChartDoughnut donutChart = _app.GetDoctorDoughnut();
-
 
 }
 
@@ -29,6 +27,8 @@
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
     </section><!-- Heading End -->
+
+
     <div class="row">
         <div class="col-12">
             <form asp-controller="@controller" asp-action="SubmitSelectPatients" method="post">
@@ -117,6 +117,9 @@
         </div>
 
     </div>
+
+
+
 </div>
 <!-- Content End -->
 

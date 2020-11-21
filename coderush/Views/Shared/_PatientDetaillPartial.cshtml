@@ -17,217 +17,216 @@
 
 
                 <!-- Content Start -->
-       
-                
-                        <div class="col-12">
-                            <form>
-                                <article class="card mb-4">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="HospitalId"></label>
-                                                    <div class="input-group">
-                                                        <select asp-for="HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="HospitalId" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                    </div>
-                                </article>
-
-                                <article class="card mb-4">
-                                    <div class="card-header">
-                                        <h4 class="card-title mb-0">ข้อมูลบุคคล</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <input type="hidden" asp-for="PatientId" />
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="PrefixTypeId"></label>
-                                                    <div class="input-group">
-                                                        <select asp-for="PrefixTypeId" class="select2 form-control" asp-items="ViewBag.PrefixType" disabled></select>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="PrefixTypeId" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="FirstName"></label>
-                                                    <div class="input-group">
-                                                        <input asp-for="FirstName" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="LastName"></label>
-                                                    <div class="input-group">
-                                                        <input asp-for="LastName" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="Gender"></label>
-                                                    <div class="input-group">
-                                                        <select asp-for="Gender" class="select2 form-control" asp-items="ViewBag.Gender" disabled></select>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="Gender" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="DateOfBirth"></label>
-                                                    <div class="input-group">
-                                                        <ejs-datepicker id="DateOfBirth"  format="dd-MM-yyyy" ejs-for="DateOfBirth" readonly="true"></ejs-datepicker>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>อายุปัจจุบัน(ปี)</label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="Age" name="Age" class="form-control" data-val="true" disabled>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row">
-
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="Phone"></label>
-                                                    <div class="input-group">
-                                                        <input asp-for="Phone" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="Phone" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                <div class="col-12">
+                    <form>
+                        <article class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-4">
                                         <div class="form-group">
-                                            <label asp-for="Address1"></label>
+                                            <label asp-for="HospitalId"></label>
                                             <div class="input-group">
-                                                <input asp-for="Address1" class="form-control" disabled />
+                                                <select asp-for="HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
                                                 <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                             </div>
-                                            <span asp-validation-for="Address1" class="text-danger"></span>
-                                        </div>
-
-
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="SubDistrict"></label>
-                                                    <div class="input-group">
-                                                        <input id="subdistrict" asp-for="SubDistrict" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="SubDistrict" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="District"></label>
-                                                    <div class="input-group">
-                                                        <input id="district" asp-for="District" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="District" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="Province"></label>
-                                                    <div class="input-group">
-                                                        <input id="province" asp-for="Province" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="Province" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="ZipCode"></label>
-                                                    <div class="input-group">
-                                                        <input id="zipcode" asp-for="ZipCode" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                                </div>
-                                            </div>
+                                            <span asp-validation-for="HospitalId" class="text-danger"></span>
                                         </div>
                                     </div>
-                                </article>
+                                </div>
 
+                            </div>
+                        </article>
 
-                                <article class="card mb-4">
-                                    <div class="card-header">
-                                        <h4 class="card-title mb-0">ข้อมูลอาการผู้ป่วย</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label asp-for="DiseaseTypeId"></label>
-                                                    <div class="input-group">
-                                                        <select asp-for="DiseaseTypeId" class="select2 form-control" asp-items="ViewBag.DiseaseType" disabled></select>
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="DiseaseTypeId" class="text-danger"></span>
-                                                </div>
+                        <article class="card mb-4">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">ข้อมูลบุคคล</h4>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" asp-for="PatientId" />
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="PrefixTypeId"></label>
+                                            <div class="input-group">
+                                                <select asp-for="PrefixTypeId" class="select2 form-control" asp-items="ViewBag.PrefixType" disabled></select>
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                             </div>
+                                            <span asp-validation-for="PrefixTypeId" class="text-danger"></span>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label asp-for="Problem"></label>
-                                                    <div class="input-group">
-                                                        <input asp-for="Problem" class="form-control" disabled />
-                                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                                    </div>
-                                                    <span asp-validation-for="Problem" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
-                                </article>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="FirstName"></label>
+                                            <div class="input-group">
+                                                <input asp-for="FirstName" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="LastName"></label>
+                                            <div class="input-group">
+                                                <input asp-for="LastName" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
 
-                            </form>
-                        </div>
-                    
-               
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="Gender"></label>
+                                            <div class="input-group">
+                                                <select asp-for="Gender" class="select2 form-control" asp-items="ViewBag.Gender" disabled></select>
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="DateOfBirth"></label>
+                                            <div class="input-group">
+                                                <ejs-datepicker id="DateOfBirth" format="dd-MM-yyyy" ejs-for="DateOfBirth" readonly="true"></ejs-datepicker>
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>อายุปัจจุบัน(ปี)</label>
+                                            <div class="input-group">
+                                                <input type="text" id="Age" name="Age" class="form-control" data-val="true" disabled>
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="Phone"></label>
+                                            <div class="input-group">
+                                                <input asp-for="Phone" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="Phone" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Address1"></label>
+                                    <div class="input-group">
+                                        <input asp-for="Address1" class="form-control" disabled />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="Address1" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="SubDistrict"></label>
+                                            <div class="input-group">
+                                                <input id="subdistrict" asp-for="SubDistrict" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="SubDistrict" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="District"></label>
+                                            <div class="input-group">
+                                                <input id="district" asp-for="District" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="District" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="Province"></label>
+                                            <div class="input-group">
+                                                <input id="province" asp-for="Province" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="Province" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="ZipCode"></label>
+                                            <div class="input-group">
+                                                <input id="zipcode" asp-for="ZipCode" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+
+                        <article class="card mb-4">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">ข้อมูลอาการผู้ป่วย</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="DiseaseTypeId"></label>
+                                            <div class="input-group">
+                                                <select asp-for="DiseaseTypeId" class="select2 form-control" asp-items="ViewBag.DiseaseType" disabled></select>
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="DiseaseTypeId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label asp-for="Problem"></label>
+                                            <div class="input-group">
+                                                <input asp-for="Problem" class="form-control" disabled />
+                                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                            </div>
+                                            <span asp-validation-for="Problem" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </article>
+
+                    </form>
+                </div>
+
+
                 <!-- Content End -->
             </div>
             <div class="modal-footer">
@@ -238,7 +237,11 @@
     </div>
 </div>
 <ejs-scripts></ejs-scripts>
-
+<style>
+    .modal-lg {
+        max-width: 60% !important;
+    }
+</style>
 
 <script>
     $.Thailand({
@@ -249,11 +252,8 @@
         $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
     });
 
-
-
     var agetxt = document.getElementById("Age");
     calcAge();
-
 
     function calcAge() {
 

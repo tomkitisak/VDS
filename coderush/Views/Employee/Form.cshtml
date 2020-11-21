@@ -5,7 +5,7 @@
     string modelName = "ผู้ประสานงาน";
     ViewData["Title"] = modelName;
     bool IsNew = ViewBag.IsNew;
-
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
     string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 
 }
@@ -36,7 +36,7 @@
                     </label>
 
                 </div>
-                <label for="chbEdit">แก้ไข</label>
+                <label for="chbEdit">@strCaption</label>
             </div>
         </div>
         <div class="titles">

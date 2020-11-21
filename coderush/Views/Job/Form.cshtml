@@ -8,35 +8,11 @@
 
     ViewData["Title"] = modelName + " Form";
 
-
-
     string userTypeId = TempData["userTypeId"].ToString();
     bool IsNew = ViewBag.IsNew;
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
 
     string strJobId = ViewBag.jobId;
-
-    string strTitleHead = "รายละเอียดงาน";
-    string strSwitch = "แก้ไข";
-
-    // Coordinator  ============================
-    if (userTypeId == "1")
-    {
-
-        // in Case of New Entry Job
-        if (IsNew)
-        {
-            strTitleHead = "เพิ่มข้อมูลงานใหม่";
-
-            strSwitch = "เพิ่ม";
-
-        }
-
-    }
-
-
-
-
-
 
     bool IsChecked1 = false;
 
@@ -55,10 +31,7 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
-
-
     bool chbDisabled = true;
 
     if (Model.Job.JobStatus != null)
@@ -66,61 +39,31 @@
         totalPatients = Model.PatientList.Count;
         if (totalPatients > 0)
         {
-
             chbDisabled = false;
         }
 
         if (!IsNew)
         {
-
             chbDisabled = true;
         }
-
     }
-
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
-
 }
 
-
-@*<script>
-
-        var confirmObj;
-        var buttons = document.querySelectorAll('.dlgbtn');
-
-        function onLoadconfirm() {
-            confirmObj = this;
-            document.getElementById('confirmBtn').onclick = function () {
-                confirmObj.show();
-            };
-        }
-
-        function confirmBtnClick() {
-            confirmObj.hide();
-        }
-
-        function dialogClose() {
-            buttons[0].classList.remove('e-btn-hide');
-            buttons[1].classList.remove('e-btn-hide');
-            buttons[2].classList.remove('e-btn-hide');
-        }
-        function dialogOpen() {
-            buttons[0].classList.add('e-btn-hide');
-            buttons[1].classList.add('e-btn-hide');
-            buttons[2].classList.add('e-btn-hide');
-        }
-    </script>*@
-
-
+ 
 
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
     <!-- Heading Start -->
     <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item active">งานใหม่</li>
+        </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName | รายละเอียด</h2>
+            <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> งานใหม่</h2>
             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
@@ -130,7 +73,7 @@
                     </label>
 
                 </div>
-                <label for="chbEdit">@strSwitch</label>
+                <label for="chbEdit">@strCaption</label>
             </div>
         </div>
         <div class="titles">
@@ -143,12 +86,6 @@
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">@strTitleHead</h4>
-                    </div>
-                </article>
 
                 <article class="card mb-4">
                     <div class="card-header">

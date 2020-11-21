@@ -8,11 +8,8 @@
 
     ViewData["Title"] = "โพสต์งาน";
 
-
-
-
     bool IsNew = ViewBag.IsNew;
-
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
     string strJobId = ViewBag.jobId;
     string userTypeId = ViewBag.userTypeId;
 
@@ -21,16 +18,6 @@
     string strSwitch = "";
 
     bool HasPatient = Model.Job.TotalPatients > 0? true : false;
-
-
-
-
-    // Coordinator  ============================
-    if (userTypeId == "1")
-    {
-
-    }
-
 
     bool IsChecked1 = false;
 
@@ -49,10 +36,7 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
-
-
     bool chbDisabled = true;
 
     if (Model.Job.JobStatus != null)
@@ -60,7 +44,6 @@
         totalPatients = Model.PatientList.Count;
         if (totalPatients > 0)
         {
-
             chbDisabled = false;
         }
 
@@ -69,43 +52,12 @@
 
             chbDisabled = true;
         }
-
     }
 
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
 
 }
-
-
-@*<script>
-
-        var confirmObj;
-        var buttons = document.querySelectorAll('.dlgbtn');
-
-        function onLoadconfirm() {
-            confirmObj = this;
-            document.getElementById('confirmBtn').onclick = function () {
-                confirmObj.show();
-            };
-        }
-
-        function confirmBtnClick() {
-            confirmObj.hide();
-        }
-
-        function dialogClose() {
-            buttons[0].classList.remove('e-btn-hide');
-            buttons[1].classList.remove('e-btn-hide');
-            buttons[2].classList.remove('e-btn-hide');
-        }
-        function dialogOpen() {
-            buttons[0].classList.add('e-btn-hide');
-            buttons[1].classList.add('e-btn-hide');
-            buttons[2].classList.add('e-btn-hide');
-        }
-    </script>*@
-
 
 
 <!-- Content Start -->
@@ -139,15 +91,7 @@
 
     <div class="row">
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">@strTitleHead</h4>
-                    </div>
-                </article>
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลโรงพยาบาล</h4>

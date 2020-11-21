@@ -1,0 +1,134 @@
+﻿@model IList<PatientSelectViewModel>
+@using vds.ViewModels;
+@{
+    string jobId = ViewBag.jobId;
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    int count = Model.Count;
+    string css = count <= 0 ? "hidden" : "";
+}
+
+<!-- Modal -->
+<div class="modal fade" id="viewmodal" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form asp-controller="@controller" asp-action="SubmitSelectPatients" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addContactLabel">ข้อมูลผู้ป่วย</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Content Start -->
+                    <div class="row">
+                        <div class="col-12">
+
+                            <article class="card mb-4">
+                                <div class="card-body">
+
+                                    <div class="table-responsive">
+                                        <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr class="bg-primary text-white">
+                                                    <th width="10%">
+                                                        <input type="checkbox" name="allcheck" id="selectAll" style="margin-right:5px" />เลือก
+                                                    </th>
+
+                                                    <th width="30%">ชื่อ-สกุล</th>
+                                                    <th width="15%">โรค</th>
+                                                    <th width="30%">ปัญหา</th>
+                                                    <th width="15%">เบอร์โทร</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @if (Model != null)
+                                                {
+                                                    for (var i = 0; i < Model.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="hidden" asp-for="@Model[i].PatientSelect.Value" />
+                                                                <input asp-for="@Model[i].PatientSelect.Selected" />
+                                                                <input type="hidden" asp-for="@Model[i].PatientId" />
+                                                                <input type="hidden" asp-for="@jobId" />
+                                                            </td>
+                                                            <td>
+                                                                @(Model[i].PrefixType.Name + Model[i].FirstName + "  " + Model[i].LastName)
+                                                            </td>
+                                                            <td>
+                                                                @Model[i].DiseaseType.Name
+                                                            </td>
+
+                                                            <td>
+                                                                @Model[i].Problem
+                                                            </td>
+
+                                                            <td>
+                                                                @Model[i].Phone
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <!-- Content End -->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+                    <input type="submit" class="btn btn-primary" value="บันทึก" @css />
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+<style>
+    .modal-lg {
+        max-width: 60% !important;
+    }
+</style>
+<script>
+ 
+    var mainTable;
+    mainTable = $('#grid1').DataTable({
+        lengthChange: false,
+        info: false,
+        searching: true,
+        dom: 'lrtip',
+        scrollX: false,
+        pageLength: 20,
+        language: {
+            "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+        }
+    });
+
+    //function iniDOM()
+    //{
+    //    var mainTable;
+    //    mainTable = $('#grid').DataTable({
+    //        lengthChange: false,
+    //        info: false,
+    //        searching: true,
+    //        dom: 'lrtip',
+    //        scrollX: false,
+    //        pageLength: 15,
+    //        language: {
+    //            "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
+    //        }
+    //    });
+    //}
+ 
+     
+
+</script>
+

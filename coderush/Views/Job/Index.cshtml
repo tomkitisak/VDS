@@ -111,11 +111,11 @@
                                         <tr class="bg-primary text-white">
                                             <th width="5%"></th>
                                             <th width="5%"></th>
-                                            <th width="10%">ชื่องาน</th>
-                                            <th width="20%">รายละเอียด</th>
+                                            <th width="15%">ชื่องาน</th>
+                                            <th width="25%">รายละเอียด</th>
                                             <th width="15%">โรงพยาบาล</th>
-                                            <th width="15%">ผู้ป่วย(คน)</th>
-                                            <th width="15%">แพทย์(คน)</th>
+                                            <th width="10%">ผู้ป่วย(คน)</th>
+                                            <th width="10%">แพทย์(คน)</th>
                                             <th width="15%">วันที่เปิด</th>
                                             <th width="5%">สถานะ</th>
                                         </tr>
@@ -128,15 +128,10 @@
                                             var mydate = item.TransDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
                                             <tr>
                                                 <td>
-
-
-                                                    <a href="/@controller/FormJobNew?id=@item.JobId" title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
-
-
+                                                    <a href="/@controller/FormJobNewEdit?id=@item.JobId" title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/@controller/FormJobNewEdit?id=@item.JobId" title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
-
+                                                    <a href="/@controller/FormJobNew?id=@item.JobId" title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
                                                 </td>
                                                 <td>
                                                     @item.Name
