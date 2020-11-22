@@ -10,16 +10,11 @@
     TempData["OrgAction"] = "FormJobNew";
 
     bool IsNew = ViewBag.IsNew;
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "โพสต์งาน";
 
     string strJobId = ViewBag.jobId;
     string userTypeId = ViewBag.userTypeId;
-
-    string strTitleHead = "โพสต์งาน";
-    string strSwitch = "";
-
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
-
-
     bool IsChecked1 = false;
 
     if (Model.Job.JobStatus != null)
@@ -37,9 +32,7 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
-
     bool chbDisabled = true;
 
     if (Model.Job.JobStatus != null)
@@ -47,13 +40,10 @@
         totalPatients = Model.PatientList.Count;
         if (totalPatients > 0)
         {
-
             chbDisabled = false;
         }
-
         if (!IsNew)
         {
-
             chbDisabled = true;
         }
 
@@ -63,39 +53,7 @@
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
 
 }
-
-
-@*<script>
-
-        var confirmObj;
-        var buttons = document.querySelectorAll('.dlgbtn');
-
-        function onLoadconfirm() {
-            confirmObj = this;
-            document.getElementById('confirmBtn').onclick = function () {
-                confirmObj.show();
-            };
-        }
-
-        function confirmBtnClick() {
-            confirmObj.hide();
-        }
-
-        function dialogClose() {
-            buttons[0].classList.remove('e-btn-hide');
-            buttons[1].classList.remove('e-btn-hide');
-            buttons[2].classList.remove('e-btn-hide');
-        }
-        function dialogOpen() {
-            buttons[0].classList.add('e-btn-hide');
-            buttons[1].classList.add('e-btn-hide');
-            buttons[2].classList.add('e-btn-hide');
-        }
-    </script>*@
-
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
-
-
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
@@ -112,31 +70,21 @@
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
                     <label class="switch">
-                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" disabled>
+                        <input id="chbEdit" name="chbEdit"   type="checkbox" checked>
                         <span class="slider round"></span>
                     </label>
 
                 </div>
-                <label for="chbEdit">@strSwitch</label>
+                <label for="chbEdit">@strCaption</label>
             </div>
         </div>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
     </section><!-- Heading End -->
-
-
     <div class="row">
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">@strTitleHead</h4>
-                    </div>
-                </article>
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลโรงพยาบาล</h4>
@@ -150,13 +98,14 @@
                                     <div class="input-group">
                                         @if (userTypeId == "1")
                                         {
-                                        <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
-                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
+                                            <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
+                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
 
                                         }
                                         else
                                         {
-                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
+                                            <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
+                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
                                         }
 
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
@@ -214,7 +163,6 @@
                             </div>
 
                         </div>
-
                         <div class="row" @cssClass>
                             <div class="col-4">
                                 <div class="form-group">
@@ -231,20 +179,13 @@
                             </div>
 
                         </div>
-
-
-
                     </div>
                 </article>
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">โพสต์งาน</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -256,12 +197,7 @@
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -286,7 +222,7 @@
                                             <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
 
                                         <input id="IsChecked1" name="IsChecked1" onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
-                                        <input name="IsChecked1" type="hidden" value="false">
+                                        <input name="IsChecked1" asp-for="@Model.Job.IsPosted" type="hidden" value="false">
 
                                         <label title="สามารถส่งงานโพสต์ได้ เมื่อมีผู้ป่วย 1 คนขึ้นไป">ส่งงานโพสต์</label><br>
 
@@ -294,9 +230,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
 
@@ -304,23 +237,18 @@
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary">บันทึก</button>
-
+                        <input hidden asp-for="@Model.Job.Name" />
+                        <input hidden asp-for="@Model.Job.HospitalId" />
                     </div>
                 </article>
 
             </form>
         </div>
     </div>
-
-
-
-
     <div class="row" @cssClass>
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="SelectPatients" method="get">
-
-
                 <article class="card mb-4">
 
                     <div class="card-header">
@@ -328,8 +256,6 @@
                     </div>
 
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
 
                             <div class="input-group">
@@ -339,21 +265,15 @@
                                 </span>
 
                             </div>
-
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
-                                    <input type="hidden" asp-for="@userTypeId" />
-                                    <input type="hidden" asp-for="@Model.Job.HospitalId" />
-                                    <input type="hidden" asp-for="@Model.Job.JobId" />
-
-
+                                    <a title="คลิกเพิ่มข้อมูลผู้ป่วย" href="javascript:void(0)" onclick="SelectPatientsPartial('@strJobId')" class="btn btn-primary">
+                                        <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                    </a>
                                 </div>
                             </div>
+
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
@@ -374,36 +294,36 @@
 
                                     @if (@Model.PatientList != null)
                                     {
-                                    @foreach (var item in @Model.PatientList)
+                                        @foreach (var item in @Model.PatientList)
                                         {
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
+                                            <tr>
+                                                <td>
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
 
-                                            @*<a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>*@
-                                        </td>
-                                        <td>
-                                            <a href="#" title="คลิกเพื่อลบข้อมูลผู้ป่วยออกจากงานนี้"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.PatientId');" class="icon-trash md-18"></i> </a>
+                                                    @*<a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId&userTypeId=@userTypeId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>*@
+                                                </td>
+                                                <td>
+                                                    <a href="#" title="คลิกเพื่อลบข้อมูลผู้ป่วยออกจากงานนี้"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.PatientId');" class="icon-trash md-18"></i> </a>
 
-                                        </td>
+                                                </td>
 
-                                        <td>
-                                            @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
-                                        </td>
+                                                <td>
+                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                                </td>
 
-                                        <td>
-                                            @item.Gender
-                                        </td>
-                                        <td>
-                                            @(DateTime.Today.Year - item.DateOfBirth.Year)
-                                        </td>
-                                        <td>
-                                            @item.DiseaseType.Name
-                                        </td>
-                                        <td>
-                                            @item.Problem
-                                        </td>
-                                    </tr>
+                                                <td>
+                                                    @item.Gender
+                                                </td>
+                                                <td>
+                                                    @(DateTime.Today.Year - item.DateOfBirth.Year)
+                                                </td>
+                                                <td>
+                                                    @item.DiseaseType.Name
+                                                </td>
+                                                <td>
+                                                    @item.Problem
+                                                </td>
+                                            </tr>
                                         }
                                     }
 
@@ -421,35 +341,20 @@
         </div>
     </div>
 
-    @*<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content" id="modelContent">
-                </div>
-            </div>
-        </div>*@
-
     <!-- The Modal -->
-
     <div id="myModal" class="modal-img">
         <span id="myClose" class="close-img">&times;</span>
         <img class="modal-content-img" id="img01">
         <div id="caption-img"></div>
     </div>
-
-
-
     @*hidden field for storing current employeeId*@
     <input type="hidden" id="hiddenId" />
     <!-- ui-dialog -->
     <div id="dialog" title="ลบข้อมูล">
         <p id="txtDialog"></p>
     </div>
-
-
-
     <!-- The Detail Modal -->
     <div id="div_modal"></div>
-
 </div>
 <!-- Content End -->
 
@@ -472,7 +377,6 @@
             width: 60px;
             height: 34px;
         }
-
             /* Hide default HTML checkbox */
             .switch input {
                 opacity: 0;
@@ -492,7 +396,6 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
             .slider:before {
                 position: absolute;
                 content: "";
@@ -554,9 +457,6 @@
     </style>
 }
 
-
-
-
 @section Scripts {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
@@ -585,24 +485,6 @@
     </script>
 
     <script>
-
-
-        //if ($('#sendMail').val() == 'True') {
-        //    $('#sendMailLabel').addClass('checked');
-        //} else {
-        //    $('#sendMailLabel').removeClass('checked');
-        //}
-        //$('#sendMailLabel').on('change', function () {
-        //    if ($('#sendMailLabel').hasClass('checked')) {
-        //        $('#sendMail').val('True');
-        //    } else {
-        //        $('#sendMail').val('False');
-        //    }
-        //});
-
-
-
-
         $.Thailand({
             database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
             $district: $('#subdistrict'), // input ของตำบล
@@ -610,12 +492,7 @@
             $province: $('#province'), // input ของจังหวัด
             $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
         });
-
-
         $(document).ready(function () {
-
-
-
             var mainTable = $('#grid').DataTable({
                 lengthChange: false,
                 info: false,
@@ -627,7 +504,6 @@
                     "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
                 }
             });
-
             var mainTable1 = $('#grid1').DataTable({
                 lengthChange: false,
                 info: false,
@@ -639,20 +515,12 @@
                     "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
                 }
             });
-
             //$('#mainSearch').keyup(function () {
             //    mainTable.search($(this).val()).draw();
             //})
 
         });
-
-
-
         var postdate = document.getElementById('postdate').ej2_instances[0];
-
-
-
-
         // Get the modal Image  =======================================================
 
         var modal = document.getElementById("myModal");
@@ -667,7 +535,6 @@
             captionText.innerHTML = e.alt;
 
         }
-
         // Get the <span> element that closes the modal
         var span = document.getElementById("myClose");
         // When the user clicks on <span> (x), close the modal
@@ -675,9 +542,6 @@
             modal.style.display = "none";
         }
         //  End Get the modal Image ==================================================
-
-
-
         function checkFluency(e) {
             //  var checkbox = document.getElementById('IsChecked1');
 
@@ -687,12 +551,8 @@
             }
             else {
                 $("#btnSave").prop("disabled", true);
-
             }
         }
-
-
-
     </script>
     <script>
 
@@ -708,27 +568,16 @@
             $("#btnSave").prop("disabled", true);
             $("#IsChecked1").prop("disabled", true);
         }
-
-
         if (('@IsNew') == "True") {
 
             $('.x').prop('disabled', false);
           //  postdate.readonly = false;
-
-
-
         }
         else {
 
             $('.x').prop('disabled', true);
         //    postdate.readonly = true;
-
-
-
-
         }
-
-
         function ChangeMode(e) {
 
             if (e.checked) {
@@ -736,8 +585,6 @@
                 $('.x').prop('disabled', false);
                 postdate.readonly = false;
                 $("#btnSave").prop("hidden", false);
-
-
             }
             else {
 
@@ -772,9 +619,7 @@
                     click: function () {
 
                         $(this).dialog("close");
-
                         window.location.href = "/job/SubmitDeletePatientFromJob/?id=" + document.getElementById("hiddenId").value + "&jobId=@strJobId";
-
                     }
                 },
                 {
@@ -786,8 +631,6 @@
 
             ]
         }, "option", "position", { my: "center", at: "center", of: window }).prev(".ui-dialog-titlebar").css("background", "#269bff").css("color", "#ffffff");
-
-
 
         // Link to open the dialog
         $("#dialog-link").click(function (event) {
@@ -804,7 +647,6 @@
                 $(this).removeClass("ui-state-hover");
             }
         );
-
 
         function deleteData(short, full, id) {
 
@@ -828,9 +670,22 @@
             });
 
         };
+
+
+        function SelectPatientsPartial(id) {
+
+            var url = "/@controller/SelectPatientsPartial/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+
+
     </script>
 
-   
+
 }
 
 

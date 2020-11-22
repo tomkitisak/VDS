@@ -46,21 +46,17 @@
         totalPatients = Model.PatientList.Count;
         if (totalPatients > 0)
         {
-
             chbDisabled = false;
         }
 
         if (!IsNew)
         {
-
             chbDisabled = true;
         }
 
     }
-
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
-
 }
  
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
@@ -72,7 +68,7 @@
     <section class="heading">
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
-            <li class="breadcrumb-item active">งานโพสต์</li>
+            <li class="breadcrumb-item active">ลงนัดหมายงานโพสต์</li>
         </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
@@ -478,14 +474,7 @@
                             </div>
 
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มแพทย์" />
-                                    <input type="hidden" asp-for="@strJobId" />
-                                    <input type="hidden" asp-for="@userTypeId" />
-                                    <input type="hidden" asp-for="@action" />
-
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -709,7 +698,6 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
 
-
         //if ($('#sendMail').val() == 'True') {
         //    $('#sendMailLabel').addClass('checked');
         //} else {
@@ -722,10 +710,6 @@
         //        $('#sendMail').val('False');
         //    }
         //});
-
-
-
-
         $.Thailand({
             database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
             $district: $('#subdistrict'), // input ของตำบล
@@ -734,10 +718,7 @@
             $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
         });
 
-
         $(document).ready(function () {
-
-
 
             var mainTable = $('#grid').DataTable({
                 lengthChange: false,
@@ -768,32 +749,51 @@
             //})
 
         });
+        //   var agetxt = document.getElementById("Age");
+        document.addEventListener('DOMContentLoaded', function () {
+            // Once the document is loaded, we will dynamically update the value of the other DatePicker's value based on the first DatePicker's value.          
+            ChangeMode();
+        }, false);
 
 
+        function ChangeMode(e) {
 
-        var postdate = document.getElementById('postdate').ej2_instances[0];
-        var appstart = document.getElementById('appstart').ej2_instances[0];
-        var append = document.getElementById('append').ej2_instances[0];
+            //var postdate = document.getElementById("postdate").ej2_instances[0];
+            //if (e.checked) {
+            //    $('.x').prop('disabled', false);
+            //    postdate.readonly = false;
+            //    $("#btnSave").prop("disabled", false);
+            //    if (tt.value <= 0) {
+            //        $("#IsChecked1").prop("disabled", true);
+            //    }
+            //}
+            //else {
 
-        //   var ischb = document.getElementById("IsChecked2");
-
-        var totaldoctor = document.getElementById("totaldoctors");
-
-        if (totaldoctor.value <= 0) {
-
-            appstart.readonly = true;
-            append.readonly = true;
-            $("#IsChecked2").prop("disabled", true);
-
+            //    $('.x').prop('disabled', true);
+            //    postdate.readonly = true;
+            //    $("#btnSave").prop("disabled", true);
+            //}
         }
-        else {
 
-            appstart.readonly = false;
-            append.readonly = false;
-            $("#IsChecked2").prop("disabled", false);
-
+        window.onload = function (e) {
+            var postdate = document.getElementById('postdate').ej2_instances[0];
+            var appstart = document.getElementById('appstart').ej2_instances[0];
+            var append = document.getElementById('append').ej2_instances[0];
+            //   var ischb = document.getElementById("IsChecked2");
+            var totaldoctor = document.getElementById("totaldoctors");
+            if (totaldoctor.value <= 0) {
+                appstart.readonly = true;
+                append.readonly = true;
+                $("#IsChecked2").prop("disabled", true);
+            }
+            else {
+                appstart.readonly = false;
+                append.readonly = false;
+                $("#IsChecked2").prop("disabled", false);
+            }
         }
 
+        
 
 
         // Get the modal Image  =======================================================

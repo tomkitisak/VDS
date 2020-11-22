@@ -185,80 +185,14 @@
                                     <span asp-validation-for="@Model.Job.JobStatusId" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-                <!--<article class="card mb-4" @cssClass>
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">โพสต์งาน</h4>
-                    </div>
-                    <div class="card-body">
-
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label asp-for="@Model.Job.TotalPatients"></label>
-                                    <div class="input-group">
-                                        <input id="totalpatient" asp-for="@totalPatients" class="form-control x" readonly />
-                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    </div>
-                                    <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label asp-for="@Model.Job.PostDate"></label>
-                                    <div class="input-group">
-                                        <ejs-datepicker id="postdate" format="dd-MM-yyyy" ejs-for="@Model.Job.PostDate" min="DateTime.Today"></ejs-datepicker>
-                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    </div>
-                                    <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <div class="checkbox">-->
-                @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                    <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
-
-                <!--<input id="IsChecked1" name="IsChecked1" onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." class="x">
-                                        <input name="IsChecked1" type="hidden" value="false">
-
-                                        <label title="สามารถส่งงานโพสต์ได้ เมื่อมีผู้ป่วย 1 คนขึ้นไป">ส่งงานโพสต์</label><br>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                </article>-->
-
+                
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary x">บันทึก</button>
-
                     </div>
                 </article>
 

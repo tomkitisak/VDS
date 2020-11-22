@@ -3,16 +3,15 @@
 @inject vds.Data.ApplicationDbContext _context;
 @{
     var hospitalName = "";
-    var hospitalId = "";
+    var usertypeDesc = "";
     var email = "";
     var user1 = await _userManager.GetUserAsync(User);
     if (user1 != null)
     {
         email = user1.Email;
         if (user1.UserTypeId == "1")
-        {
-            hospitalId = _context.Hospital.Where(x => x.CreatedById.Equals(user1.Id)).Select(x => x.HospitalId).FirstOrDefault();
-            hospitalName = _context.Hospital.Where(x => x.HospitalId.Equals(hospitalId)).Select(x => x.HospitalName).FirstOrDefault();
+        {         
+            usertypeDesc = _context.UserType.Where(x => x.UserTypeId.Equals(user1.UserTypeId)).Select(x => x.Name).FirstOrDefault();
         }
     }
 }
@@ -82,20 +81,14 @@
         </button>
 
         <div class="notifications">
-
             <div class="row align-items-center justify-content-center">
                 <div class="col">
-                    @hospitalName
                     <i class="fa fa-bell" style="font-size:24px"></i>
+                    <span style="color:white">@usertypeDesc</span>
                 </div>
             </div>
-
             <ul>
-
-
                 <li>
-
-
                     <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link" id="userProfile" aria-haspopup="true"
                        aria-expanded="false">
                         <img src="~/assets/images/users-thumbs/user-19.jpg" height="30" width="30" alt="@email" class="rounded-circle align-middle" />

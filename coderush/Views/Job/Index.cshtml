@@ -81,7 +81,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
                              style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                          
+
                             <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
                             <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
                         </div>
@@ -131,7 +131,7 @@
                                                     <a href="/@controller/FormJobNewEdit?id=@item.JobId" title="แก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/@controller/FormJobNew?id=@item.JobId" title="ส่งงานขึ้นโพสต์"><i class="icon-arrow-up-circle md-18"></i> </a>
+                                                    <a href="/@controller/FormJobNew?id=@item.JobId" title="ส่งงานขึ้นโพสต์"><i class="icon-cloud-upload md-18"></i> </a>
                                                 </td>
                                                 <td>
                                                     @item.Name
@@ -185,7 +185,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
                              style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                             
+
                             <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
                             <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
                         </div>
@@ -201,13 +201,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="card-title mb-0">งานโพสต์</h4>
-                                @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                        <div class="btn-group mr-3" role="group" aria-label="First group">
-                                            <a href="/@controller/Form" class="btn btn-primary">
-                                                <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
-                                            </a>
-                                        </div>
-                                    </div>*@
+
                             </div>
 
                             <div class="table-responsive">
@@ -223,41 +217,60 @@
                                             <th width="10%">แพทย์(คน)</th>
                                             <th width="10%">วันโพสต์</th>
                                             <th width="5%">สถานะ</th>
+                                            <th width="5%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in jobstatus2)
                                         {
                                             var mydate = item.PostDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                                            <tr>
+                                        <tr>
+                                            @if (uType == "1")
+                                            {
                                                 <td>
-                                                    <a href="/@controller/FormJobAddDoctor?id=@item.JobId" title="รายละเอียดงาน"><i class="icon-arrow-up-circle md-18"></i> </a>
+                                                    <a href="/@controller/FormJobPostEdit?id=@item.JobId" title="แก้ไขงานโพสต์"><i class="icon-note md-18"></i> </a>
+
                                                 </td>
 
                                                 <td>
-                                                    <a href="/@controller/FormJobAddDoctorAppointment?id=@item.JobId" title="ลงนัดหมาย"><i class="icon-note md-18"></i> </a>
+                                                    <a href="/@controller/FormJobAddAppointment?id=@item.JobId" title="ลงนัดหมายผ่าตัด หลังจากเพิ่มแพทย์เข้างานโพสต์แล้ว"><i class="icon-calendar md-18"></i> </a>
 
                                                 </td>
                                                 <td>
-                                                    @item.Name
+                                                    <a href="/@controller/FormJobAddDoctor?id=@item.JobId" title="เพิ่มแพทย์ในงานโพสต์"><i class="icon-user-follow md-18"></i> </a>
                                                 </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <a href="/@controller/FormJobAddDoctor?id=@item.JobId" title="เพิ่มแพทย์เข้างาน"><i class="icon-user md-18"></i> </a>
+                                                </td>
+                                            }
 
-                                                <td>
-                                                    @item.Description
-                                                </td>
-                                                <td>
-                                                    @item.Hospital.HospitalName
-                                                </td>
-                                                <td>@item.TotalPatients</td>
-                                                <td>@item.TotalDoctors</td>
-                                                <td>
-                                                    @mydate
-                                                </td>
-                                                <td>
-                                                    @item.JobStatus.Description
-                                                </td>
+                                            <td>
+                                                @item.Name
+                                            </td>
 
-                                            </tr>
+                                            <td>
+                                                @item.Description
+                                            </td>
+                                            <td>
+                                                @item.Hospital.HospitalName
+                                            </td>
+                                            <td>@item.TotalPatients</td>
+                                            <td>@item.TotalDoctors</td>
+                                            <td>
+                                                @mydate
+                                            </td>
+                                            <td>
+                                                @item.JobStatus.Description
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" title="ติดต่อเจ้าหน้าที่ รพ."><i class="icon-envelope md-18"></i> </a>
+
+                                            </td>
+
+                                        </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -287,7 +300,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
                              style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                          
+
                             <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
                             <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
                         </div>
@@ -325,7 +338,7 @@
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
+                                                    <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-info md-18"></i> </a>
 
                                                 </td>
                                                 <td>
@@ -383,7 +396,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
                              style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            
+
                             <a class="dropdown-item" href="~/settings/AddDepartment">ข้อมูลหน่วยงาน</a>
                             <a class="dropdown-item" href="~/settings/AddDesignation">ข้อมูลตำแหน่งงาน</a>
                         </div>
@@ -421,7 +434,7 @@
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
                                             <tr>
                                                 <td>
-                                                    <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
+                                                    <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-info md-18"></i> </a>
 
                                                 </td>
                                                 <td>

@@ -112,23 +112,17 @@
         }
     });
 
-    //function iniDOM()
-    //{
-    //    var mainTable;
-    //    mainTable = $('#grid').DataTable({
-    //        lengthChange: false,
-    //        info: false,
-    //        searching: true,
-    //        dom: 'lrtip',
-    //        scrollX: false,
-    //        pageLength: 15,
-    //        language: {
-    //            "emptyTable": "-ไม่มีข้อมูล-"//Change your default empty table message
-    //        }
-    //    });
-    //}
- 
-     
+    $(function () {
+        $("#selectAll").click(function () {
+            $("input[type=checkbox]").prop('checked', $(this).prop('checked'))
+        });
+
+        $("input[type=checkbox]").click(function () {
+            if (!$(this).prop('checked')) {
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    })
 
 </script>
 

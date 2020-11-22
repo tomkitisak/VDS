@@ -13,10 +13,6 @@
     string strJobId = ViewBag.jobId;
     string userTypeId = ViewBag.userTypeId;
 
-
-    string strTitleHead = "โพสต์งาน";
-    string strSwitch = "";
-
     bool HasPatient = Model.Job.TotalPatients > 0? true : false;
 
     bool IsChecked1 = false;
@@ -80,7 +76,7 @@
                     </label>
 
                 </div>
-                <label for="chbEdit">@strSwitch</label>
+                <label for="chbEdit">@strCaption</label>
             </div>
         </div>
         <div class="titles">
