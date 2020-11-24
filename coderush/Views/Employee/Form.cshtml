@@ -5,6 +5,7 @@
     string modelName = "ผู้ประสานงาน";
     ViewData["Title"] = modelName;
     bool IsNew = ViewBag.IsNew;
+    string cssChecked = IsNew ? "checked" : "";
     string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
     string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 
@@ -31,7 +32,7 @@
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
                     <label class="switch">
-                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox">
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" @cssChecked >
                         <span class="slider round"></span>
                     </label>
 
@@ -418,25 +419,20 @@
             }
         });
 
+     //   alert(('@IsNew'));
 
-
-        if (('@IsNew').value == true) {
-
+        if (('@IsNew') == 'True') {
             $('.x').prop('disabled', false);
-            $('#chbEdit').prop('disabled', true);
+            $('#chbEdit').prop('disabled', true);          
         }
         else {
             $('.x').prop('disabled', true);
-            $('#chbEdit').prop('disabled', false);
+            $('#chbEdit').prop('disabled', false);            
         }
 
-
         function ChangeMode(e) {
-
             if (e.checked) {
-
                 $('.x').prop('disabled', false);
-
             }
             else {
 

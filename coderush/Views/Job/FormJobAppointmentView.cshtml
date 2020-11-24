@@ -44,8 +44,7 @@
 
 }
 
- 
-<script>
+@*<script>
 
     var confirmObj;
     var buttons = document.querySelectorAll('.dlgbtn');
@@ -71,7 +70,7 @@
         buttons[1].classList.add('e-btn-hide');
         buttons[2].classList.add('e-btn-hide');
     }
-</script>
+</script>*@
 
 
 
@@ -80,8 +79,9 @@
     <!-- Heading Start -->
     <section class="heading">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
-            <li class="breadcrumb-item active">งานนัดหมาย</li>
+            <li class="breadcrumb-item"><a href="/@controller/index/1">งานร้องขอ</a></li>
+            <li class="breadcrumb-item"><a href="/@controller/index/3">งานนัดหมาย</a></li>
+            <li class="breadcrumb-item active">รายละเอียดงาน</li>
         </ul>
         <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
         <div class="titles">
@@ -134,12 +134,8 @@
                                     <span asp-validation-for="@Model.Job.Name" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
                         <div class="row">
-
                             <div class="col-12">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.Description"></label>
@@ -150,9 +146,6 @@
                                     <span asp-validation-for="@Model.Job.Description" class="text-danger"></span>
                                 </div>
                             </div>
-
-
-
                         </div>
                         <div class="row">
 
@@ -186,20 +179,13 @@
                             </div>
 
                         </div>
-
-
-
                     </div>
                 </article>
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">โพสต์งาน</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -211,12 +197,7 @@
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -227,34 +208,25 @@
                                         <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-
                                     <input disabled="@chbDisabled" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked1" name="IsChecked1" value="true">
                                     <input name="IsChecked1" type="hidden" value="false">
                                     <label>ส่งงานโพสต์</label><br>
-
-
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </article>
-
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">บันทึกนัด</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -276,11 +248,7 @@
                                     <span asp-validation-for="@Model.Job.TotalDoctors" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -292,7 +260,6 @@
                                     <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-4">
@@ -305,7 +272,6 @@
                                     <span asp-validation-for="@Model.Job.AppEndDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
@@ -321,11 +287,7 @@
                                     <input type="hidden" asp-for="@Model.Job.Remark1" class="form-control" />
                                 </div>
                             </div>
-
-
                         </div>
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -340,98 +302,12 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-
-
-                <!--<article class="card mb-4" @cssClass>
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">บันทึกผลการปฏิบัติงาน</h4>
-                    </div>
-                    <div class="card-body">
-
-
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label asp-for="@Model.Job.StartDate"></label>
-                                    <div class="input-group">
-                                        <ejs-datetimepicker id="workdate1" ejs-for="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดเริ่มต้น"></ejs-datetimepicker>-->
-                @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
-                <!--</div>
-                            <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label asp-for="@Model.Job.EndDate"></label>
-                            <div class="input-group">
-                                <ejs-datetimepicker id="workend1" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดสิ้นสุด"></ejs-datetimepicker>-->
-                @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
-                <!--</div>
-                            <span asp-validation-for="@Model.Job.EndDate" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label asp-for="@Model.Job.Remark2"></label>
-                            <div class="input-group">
-                                <input asp-for="@Model.Job.Remark2" class="form-control" />
-                                <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                            </div>
-                            <span asp-validation-for="@Model.Job.Remark2" class="text-danger"></span>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <div class="checkbox">-->
-                @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                    <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
-
-                <!--<input disabled="@chbDisabled3" onclick="checkFluency()" asp-for="@IsChecked3" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
-                                        <input name="IsChecked3" type="hidden" value="false">
-                                        <label>ยืนยันการปิดงาน</label><br>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                </article>-->
-
-
-
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" hidden>บันทึก</button>
-
                     </div>
                 </article>
 
@@ -466,15 +342,7 @@
                                 </span>
 
                             </div>
-
-                            @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                        <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
-                                        <input type="hidden" asp-for="@strJobId" />
-                                        <input type="hidden" asp-for="@strCapture" />
-                                    </div>
-                                </div>*@
+ 
                         </div>
 
 
@@ -543,7 +411,7 @@
     <div class="row" @cssClass id="target1">
 
         <div class="col-12">
-            <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target1" header="Delete Multiple Items" showCloseIcon="true">
+            @*<ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target1" header="Delete Multiple Items" showCloseIcon="true">
                 <e-content-template>
                     <div>Are you sure you want to permanently delete these items?</div>
                 </e-content-template>
@@ -551,7 +419,7 @@
                     <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton" click="confirmBtnClick"></e-dialog-dialogbutton>
                     <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClick"></e-dialog-dialogbutton>
                 </e-dialog-buttons>
-            </ejs-dialog>
+            </ejs-dialog>*@
 
             <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
                 <article class="card mb-4">
@@ -571,15 +439,7 @@
                                 </span>
 
                             </div>
-
-                            @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                        <input type="submit" class="btn btn-primary" value="เพิ่มแพทย์" />
-                                        <input type="hidden" asp-for="@strJobId" />
-                                        <input type="hidden" asp-for="@strCapture" />
-                                    </div>
-                                </div>*@
+ 
                         </div>
 
 

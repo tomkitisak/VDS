@@ -13,7 +13,7 @@ namespace vds.Services.CustomValidation
         {
             var job = (Job)validationContext.ObjectInstance;
 
-            if (job.StartDate == null)
+            if (job.AppStartDate == null)
                 return new ValidationResult("required.");
 
             DateTime startdate = job.StartDate;

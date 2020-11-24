@@ -9,10 +9,9 @@
     ViewData["Title"] = "งานโพสต์";
     TempData["OrgAction"] = action;
     bool IsNew = ViewBag.IsNew;
+
     string strJobId = ViewBag.jobId;
     string userTypeId = TempData["userTypeId"].ToString();
-    string strTitleHead = "แพทย์ร่วมงาน";
-    string strSwitch = "";
 
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
     bool IsChecked1 = false;
@@ -21,7 +20,6 @@
     {
         IsChecked1 = Model.Job.JobStatus.Status == 2 ? true : false;
     }
-
     ViewBag.confirmbutton = new
     {
         content = "Yes",
@@ -40,21 +38,15 @@
         totalPatients = Model.PatientList.Count;
         if (totalPatients > 0)
         {
-
             chbDisabled = false;
         }
-
         if (!IsNew)
         {
-
             chbDisabled = true;
         }
-
     }
-
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
-
 }
 
 
@@ -67,8 +59,9 @@
     <!-- Heading Start -->
     <section class="heading">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
-            <li class="breadcrumb-item active">เพิ่มแพทย์ในงานโพสต์</li>
+            <li class="breadcrumb-item"><a href="/@controller/index/1">งานร้องขอ</a></li>
+            <li class="breadcrumb-item"><a href="/@controller/index/2">งานโพสต์</a></li>
+            <li class="breadcrumb-item active">เพิ่มแพทย์งานโพสต์</li>
         </ul>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -77,12 +70,12 @@
                 <div class="btn-group mr-3" role="group" aria-label="First group">
                     <!-- Rounded switch -->
                     <label class="switch">
-                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" disabled>
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" checked>
                         <span class="slider round"></span>
                     </label>
 
                 </div>
-                <label for="chbEdit">@strSwitch</label>
+                <label for="chbEdit">เพิ่มแพทย์</label>
             </div>
         </div>
         <div class="titles">
@@ -93,15 +86,7 @@
 
     <div class="row">
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">@strTitleHead</h4>
-                    </div>
-                </article>
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลโรงพยาบาล</h4>
@@ -111,17 +96,16 @@
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.HospitalId"></label>
-
                                     <div class="input-group">
                                         @if (userTypeId == "1")
                                         {
-                                        <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
-                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
+                                            <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
+                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
 
                                         }
                                         else
                                         {
-                                        <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
+                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
                                         }
 
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
@@ -208,8 +192,6 @@
                         <h4 class="card-title mb-0">โพสต์งาน</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -221,12 +203,7 @@
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -236,69 +213,44 @@
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
-
-
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <div class="checkbox">
                                         @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
                                             <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
-
                                         <input id="IsChecked1" name="IsChecked1" disabled onclick="checkFluency(this)" title="สามารถส่งงานโพสต์ได้ ต้องมีผู้ป่วยไม่น้อยกว่า 1 ราย" asp-for="@IsChecked1" type="checkbox" data-val="true" data-val-required="The IsChecked field is required.">
                                         <input name="IsChecked1" type="hidden" value="false">
-
                                         <label title="สามารถส่งงานโพสต์ได้ เมื่อมีผู้ป่วย 1 คนขึ้นไป">ส่งงานโพสต์</label><br>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" hidden>บันทึก</button>
-
                     </div>
                 </article>
-
             </form>
         </div>
     </div>
-
-
-
-
     <div class="row" @cssClass>
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="SelectPatients" method="get">
-
-
                 <article class="card mb-4">
-
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลผู้ป่วย</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="table-responsive">
                             <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
-
                                     <tr class="bg-primary text-white">
                                         <th width="10%"></th>
                                         <th width="30%">ชื่อ-สกุล</th>
@@ -306,40 +258,37 @@
                                         <th width="10%">อายุ (ปี)</th>
                                         <th width="15%">โรค</th>
                                         <th width="30%">ปัญหา</th>
-
                                     </tr>
-
                                 </thead>
                                 <tbody>
 
                                     @if (@Model.PatientList != null)
                                     {
-                                    @foreach (var item in @Model.PatientList)
+                                        @foreach (var item in @Model.PatientList)
                                         {
-                                    <tr>
-                                        <td>
-                                            @*<a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>*@
-                                            <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
+                                            <tr>
+                                                <td>
+                                                    @*<a href="/@controller/PatientDetailView?id=@item.PatientId&jobId=@strJobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i></a>*@
+                                                    <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
+                                                </td>
 
-                                        </td>
+                                                <td>
+                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                                </td>
 
-                                        <td>
-                                            @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
-                                        </td>
-
-                                        <td>
-                                            @item.Gender
-                                        </td>
-                                        <td>
-                                            @(DateTime.Today.Year - item.DateOfBirth.Year)
-                                        </td>
-                                        <td>
-                                            @item.DiseaseType.Name
-                                        </td>
-                                        <td>
-                                            @item.Problem
-                                        </td>
-                                    </tr>
+                                                <td>
+                                                    @item.Gender
+                                                </td>
+                                                <td>
+                                                    @(DateTime.Today.Year - item.DateOfBirth.Year)
+                                                </td>
+                                                <td>
+                                                    @item.DiseaseType.Name
+                                                </td>
+                                                <td>
+                                                    @item.Problem
+                                                </td>
+                                            </tr>
                                         }
                                     }
 
@@ -357,44 +306,31 @@
         </div>
     </div>
 
-
-
     <div class="row">
-
         <div class="col-12">
-
-
             <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลแพทย์</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
                             </div>
 
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มแพทย์" />
-                                    <input type="hidden" asp-for="@strJobId" />
-                                    <input type="hidden" asp-for="@userTypeId" />
-                                    <input type="hidden" asp-for="@action" />
-
+                                    <div class="btn-group mr-3" role="group" aria-label="First group">
+                                        <a title="คลิกเพิ่มข้อมูลแพทย์" href="javascript:void(0)" onclick="SelectDoctorsPartial('@strJobId')" class="btn btn-primary">
+                                            <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="table-responsive">
                             <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
@@ -407,50 +343,40 @@
                                         <th width="20%">โทรศัพท์</th>
                                         <th width="20%">Line</th>
                                         <th width="20%">Email</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (@Model.DoctorList != null)
                                     {
-                                    @foreach (var item in @Model.DoctorList)
+                                        @foreach (var item in @Model.DoctorList)
                                         {
-                                    <tr>
-                                        <td>
-                                         
-                                            <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
+                                            <tr>
+                                                <td>
+                                                    <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0)" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
+                                                </td>
+                                                <td>
+                                                    <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
+                                                         class="thumb rounded-circle"
+                                                         height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
+                                                         asp-append-version="true" onclick="myClick(this)" />
+                                                </td>
+                                                <td>
+                                                    @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
+                                                </td>
+                                                <td>
+                                                    @item.Phone
+                                                </td>
+                                                <td>
+                                                    @item.LineId
+                                                </td>
+                                                <td>
+                                                    @item.Email
+                                                </td>
 
-                                        </td>
-
-                                        <td>
-
-                                            <a href="javascript:void(0)" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
-
-
-                                        </td>
-                                        <td>
-                                            <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
-                                                 class="thumb rounded-circle"
-                                                 height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
-                                                 asp-append-version="true" onclick="myClick(this)" />
-
-                                        </td>
-
-                                        <td>
-                                            @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
-                                        </td>
-
-                                        <td>
-                                            @item.Phone
-                                        </td>
-                                        <td>
-                                            @item.LineId
-                                        </td>
-                                        <td>
-                                            @item.Email
-                                        </td>
-
-                                    </tr>
+                                            </tr>
 
                                         }
                                     }
@@ -467,9 +393,6 @@
 
         </div>
     </div>
-
-
-
 
     @*hidden field for storing current employeeId*@
     <input type="hidden" id="hiddenId" />
@@ -716,9 +639,6 @@
 
             }
         }
-
-
-
     </script>
     <script>
 
@@ -729,17 +649,13 @@
                 $('.x').prop('disabled', false);
                 postdate.readonly = false;
                 $("#btnSave").prop("hidden", false);
-
-
             }
             else {
-
                 $('.x').prop('disabled', true);
                 postdate.readonly = true;
                 $("#btnSave").prop("hidden", true);
             }
         }
-
     </script>
 
     <script>
@@ -829,6 +745,19 @@
             });
 
         };
+
+        function SelectDoctorsPartial(id) {
+
+            var url = "/@controller/SelectDoctorsPartial/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
+
+
+
     </script>
 
 }

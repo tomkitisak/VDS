@@ -12,6 +12,7 @@
 
     string strJobId = Model.Job.JobId;
     bool IsNew = ViewBag.IsNew;
+
     string userTypeId = TempData["userTypeId"].ToString();
     string strTitleHead = "บันทึกนัดหมาย";
     string strSwitch = "";
@@ -67,7 +68,8 @@
     <!-- Heading Start -->
     <section class="heading">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
+            <li class="breadcrumb-item"><a href="/@controller/index/1">งานร้องขอ</a></li>
+            <li class="breadcrumb-item"><a href="/@controller/index/2">งานโพสต์</a></li>
             <li class="breadcrumb-item active">ลงนัดหมายงานโพสต์</li>
         </ul>
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -81,7 +83,7 @@
                     </label>
 
                 </div>
-                <label for="chbEdit">@strSwitch</label>
+                <label for="chbEdit">ลงนัดหมาย</label>
             </div>
         </div>
         <div class="titles">
@@ -293,11 +295,10 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.AppStartDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="appstart" format="dd-MM-yyyy HH:mm" ejs-for="@Model.Job.AppStartDate" min="DateTime.Today" readonly="true"></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="appstart" format="dd-MM-yyyy HH:mm" ejs-for="@Model.Job.AppStartDate" change="runupd" min="DateTime.Today" readonly="true" ></ejs-datetimepicker>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
-
 
                                 </div>
                             </div>
@@ -309,7 +310,7 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.AppEndDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="append" format="dd-MM-yyyy HH:mm" ejs-for="@Model.Job.AppEndDate" min="DateTime.Today" readonly="true"></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="append" format="dd-MM-yyyy HH:mm" ejs-for="@Model.Job.AppEndDate" min="@Model.Job.AppStartDate" readonly="true" strictMode="true"></ejs-datetimepicker>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.AppEndDate" class="text-danger"></span>
@@ -349,13 +350,8 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
@@ -373,23 +369,15 @@
 
     <div class="row" @cssClass>
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="SelectPatients" method="get">
-
-
                 <article class="card mb-4">
-
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลผู้ป่วย</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="table-responsive">
                             <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
-
                                     <tr class="bg-primary text-white">
                                         <th width="10%"></th>
                                         <th width="30%">ชื่อ-สกุล</th>
@@ -399,7 +387,6 @@
                                         <th width="30%">ปัญหา</th>
 
                                     </tr>
-
                                 </thead>
                                 <tbody>
 
@@ -411,7 +398,6 @@
                                                 <td>
                                                     <a href="javascript:void(0)" onclick="runpartial('@item.PatientId')" title="ดูรายละเอียดคนไข้"><i class="icon-doc md-18"></i></a>
                                                 </td>
-
 
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
@@ -447,38 +433,25 @@
         </div>
     </div>
 
-
-
     <div class="row">
-
         <div class="col-12">
-
-
-            <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
+           <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลแพทย์</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
                             </div>
 
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                                 
                             </div>
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
@@ -502,25 +475,18 @@
                                                 <td>
                                                     <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
-
                                                 <td>
-
                                                     <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
-
-
                                                 </td>
                                                 <td>
                                                     <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
                                                          class="thumb rounded-circle"
                                                          height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
                                                          asp-append-version="true" onclick="myClick(this)" />
-
                                                 </td>
-
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
                                                 </td>
-
                                                 <td>
                                                     @item.Phone
                                                 </td>
@@ -752,27 +718,16 @@
         //   var agetxt = document.getElementById("Age");
         document.addEventListener('DOMContentLoaded', function () {
             // Once the document is loaded, we will dynamically update the value of the other DatePicker's value based on the first DatePicker's value.          
-            ChangeMode();
+            runupd();
         }, false);
 
 
-        function ChangeMode(e) {
+        function runupd(e) {
 
-            //var postdate = document.getElementById("postdate").ej2_instances[0];
-            //if (e.checked) {
-            //    $('.x').prop('disabled', false);
-            //    postdate.readonly = false;
-            //    $("#btnSave").prop("disabled", false);
-            //    if (tt.value <= 0) {
-            //        $("#IsChecked1").prop("disabled", true);
-            //    }
-            //}
-            //else {
+            var appstart = document.getElementById("appstart").ej2_instances[0];
+            var append = document.getElementById("append").ej2_instances[0];
+            append.min = appstart.value;
 
-            //    $('.x').prop('disabled', true);
-            //    postdate.readonly = true;
-            //    $("#btnSave").prop("disabled", true);
-            //}
         }
 
         window.onload = function (e) {
@@ -785,11 +740,13 @@
                 appstart.readonly = true;
                 append.readonly = true;
                 $("#IsChecked2").prop("disabled", true);
+                $("#remark1").prop("readonly", true);
             }
             else {
                 appstart.readonly = false;
                 append.readonly = false;
                 $("#IsChecked2").prop("disabled", false);
+                $("#remark1").prop("readonly", false);
             }
         }
 

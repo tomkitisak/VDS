@@ -31,58 +31,49 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
     int totalDoctors = 0;
-
-
-
 
     if (Model.Job.JobStatus != null)
     {
         totalPatients = Model.PatientList.Count;
         totalDoctors = Model.DoctorList.Count;
 
-
     }
 
-
-}
-
-
-@{
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
+
 }
 
 
-<script>
+@*<script>
 
-    var confirmObj;
-    var buttons = document.querySelectorAll('.dlgbtn');
+        var confirmObj;
+        var buttons = document.querySelectorAll('.dlgbtn');
 
-    function onLoadconfirm() {
-        confirmObj = this;
-        document.getElementById('confirmBtn').onclick = function () {
-            confirmObj.show();
-        };
-    }
+        function onLoadconfirm() {
+            confirmObj = this;
+            document.getElementById('confirmBtn').onclick = function () {
+                confirmObj.show();
+            };
+        }
 
-    function confirmBtnClick() {
-        confirmObj.hide();
-    }
+        function confirmBtnClick() {
+            confirmObj.hide();
+        }
 
-    function dialogClose() {
-        buttons[0].classList.remove('e-btn-hide');
-        buttons[1].classList.remove('e-btn-hide');
-        buttons[2].classList.remove('e-btn-hide');
-    }
-    function dialogOpen() {
-        buttons[0].classList.add('e-btn-hide');
-        buttons[1].classList.add('e-btn-hide');
-        buttons[2].classList.add('e-btn-hide');
-    }
-</script>
+        function dialogClose() {
+            buttons[0].classList.remove('e-btn-hide');
+            buttons[1].classList.remove('e-btn-hide');
+            buttons[2].classList.remove('e-btn-hide');
+        }
+        function dialogOpen() {
+            buttons[0].classList.add('e-btn-hide');
+            buttons[1].classList.add('e-btn-hide');
+            buttons[2].classList.add('e-btn-hide');
+        }
+    </script>*@
 
 
 
@@ -92,9 +83,23 @@
     <section class="heading">
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
-            <li class="breadcrumb-item active">งานนัดหมาย</li>
+            <li class="breadcrumb-item"><a href="/@controller/index">งานนัดหมาย</a></li>
+            <li class="breadcrumb-item active">บันทึกงานแล้วเสร็จ</li>
         </ul>
-        <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>บันทึกงานแล้วเสร็จ</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
+            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-3" role="group" aria-label="First group">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input id="chbEdit" name="chbEdit" disabled type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+
+                </div>
+                <label for="chbEdit">บันทึกงานเสร็จ</label>
+            </div>
+        </div>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -104,12 +109,6 @@
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post">
-
-                @*<article class="card mb-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">ผลการปฏิบัติงาน</h4>
-                        </div>
-                    </article>*@
 
                 <article class="card mb-4">
                     <div class="card-header">
@@ -188,29 +187,19 @@
                                         <input asp-for="@Model.Job.JobStatus.Description" class="form-control" readonly />
                                         <input asp-for="@Model.Job.JobStatusId" class="form-control" hidden />
 
-                                        @*<select asp-for="@Model.Job.JobStatusId" class="select2 form-control" asp-items="ViewBag.JobStatus" hidden></select>*@
-
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.JobStatusId" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
-
                     </div>
                 </article>
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">โพสต์งาน</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -222,12 +211,7 @@
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -238,7 +222,6 @@
                                         <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="row">
@@ -256,16 +239,11 @@
 
                     </div>
                 </article>
-
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">บันทึกนัด</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -289,16 +267,13 @@
                             </div>
 
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.AppStartDate"></label>
                                     <div class="input-group">
                                         <ejs-datetimepicker id="workdate" ejs-for="@Model.Job.AppStartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดเริ่มต้น" readonly="true"></ejs-datetimepicker>
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
                                 </div>
@@ -311,7 +286,7 @@
                                     <label asp-for="@Model.Job.AppEndDate"></label>
                                     <div class="input-group">
                                         <ejs-datetimepicker id="workend" ejs-for="@Model.Job.AppEndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลานัดสิ้นสุด" readonly="true"></ejs-datetimepicker>
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.AppEndDate" class="text-danger"></span>
                                 </div>
@@ -332,62 +307,44 @@
                                     <input type="hidden" asp-for="@Model.Job.Remark1" class="form-control" />
                                 </div>
                             </div>
-
-
                         </div>
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <div class="checkbox">
-
                                         <input disabled="@chbDisabled2" asp-for="@IsChecked2" type="checkbox" readonly data-val="true" data-val-required="The IsChecked field is required." id="IsChecked2" name="IsChecked2" value="true">
                                         <input name="IsChecked2" type="hidden" value="false">
                                         <label>ยืนยันนัด</label><br>
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">บันทึกผลการปฏิบัติงาน</h4>
                     </div>
                     <div class="card-body">
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.StartDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="StartDate" ejs-for="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลา"></ejs-datetimepicker>
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                        <ejs-datetimepicker id="startdate" ejs-for="@Model.Job.StartDate" change="runupd" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลา"></ejs-datetimepicker>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.EndDate"></label>
                                     <div class="input-group">
-                                        <ejs-datetimepicker id="workend1" ejs-for="@Model.Job.EndDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลาสิ้นสุด"></ejs-datetimepicker>
-                                        @*<span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>*@
+                                        <ejs-datetimepicker id="enddate" ejs-for="@Model.Job.EndDate" min="@Model.Job.StartDate" format="dd-MM-yyyy HH:mm" placeholder="ป้อนข้อมูลวัน-เวลาสิ้นสุด" strictMode="true"></ejs-datetimepicker>
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.EndDate" class="text-danger"></span>
                                 </div>
@@ -429,20 +386,12 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" disabled>บันทึก</button>
-
                     </div>
                 </article>
 
@@ -450,41 +399,24 @@
         </div>
     </div>
 
-
-
-
     <div class="row" @cssClass>
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="SelectPatients" method="get">
-
-
                 <article class="card mb-4">
-
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลผู้ป่วย</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
                             </div>
- 
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
-
                                     <tr class="bg-primary text-white">
 
                                         <th width="5%"></th>
@@ -493,9 +425,7 @@
                                         <th width="10%">อายุ (ปี)</th>
                                         <th width="20%">โรค</th>
                                         <th width="30%">ปัญหา</th>
-
                                     </tr>
-
                                 </thead>
                                 <tbody>
 
@@ -542,9 +472,7 @@
 
         </div>
     </div>
-
     <div class="row" @cssClass id="target1">
-
         <div class="col-12">
             <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target1" header="Delete Multiple Items" showCloseIcon="true">
                 <e-content-template>
@@ -555,41 +483,29 @@
                     <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClick"></e-dialog-dialogbutton>
                 </e-dialog-buttons>
             </ejs-dialog>
-
             <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลแพทย์</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
                             </div>
- 
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
                                     <tr class="bg-primary text-white">
-
                                         <th width="5%"></th>
                                         <th width="5%">ภาพ</th>
                                         <th width="30%">ชื่อแพทย์</th>
                                         <th width="20%">โทรศัพท์</th>
                                         <th width="20%">Line</th>
                                         <th width="20%">Email</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -601,19 +517,15 @@
                                                 <td>
                                                     <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
-
                                                 <td>
                                                     <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
                                                          class="thumb rounded-circle"
                                                          height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
                                                          asp-append-version="true" onclick="myClick(this)" />
-
                                                 </td>
-
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
                                                 </td>
-
                                                 <td>
                                                     @item.Phone
                                                 </td>
@@ -623,25 +535,17 @@
                                                 <td>
                                                     @item.Email
                                                 </td>
-
                                             </tr>
-
                                         }
                                     }
-
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </article>
-
             </form>
-
-
         </div>
     </div>
-
 
 
     @*hidden field for storing current employeeId*@
@@ -654,7 +558,6 @@
 
     <!-- The Detail Modal -->
     <div id="div_modal"></div>
-
 
     <!-- The Image  Modal -->
     <div id="myModal" class="modal-img">
@@ -676,6 +579,70 @@
     <!-- ================== MODAL IMAGE  ================== -->
     <link rel="stylesheet" href="~/css/modal_image.css" />
     <!-- ================== BEGIN PAGE LEVEL END ================== -->
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
 
     <style>
 
@@ -834,6 +801,20 @@
             }
         }
 
+        //   var agetxt = document.getElementById("Age");
+        document.addEventListener('DOMContentLoaded', function () {
+            // Once the document is loaded, we will dynamically update the value of the other DatePicker's value based on the first DatePicker's value.
+            runupd();
+        }, false);
+
+
+        function runupd(e) {
+
+            var startdate = document.getElementById("startdate").ej2_instances[0];
+            var enddate = document.getElementById("enddate").ej2_instances[0];
+            enddate.min = startdate.value;
+
+        }
 
 
     </script>

@@ -9,7 +9,9 @@
     string doctorgroupid = ViewBag.doctorgroupid;
 
     var DropDownList = new Syncfusion.EJ2.DropDowns.DropDownList() { DataSource = ViewBag.DropDownData, Query = "new ej.data.Query()", AllowFiltering = true, Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "Name", Text = "Name" } };
-
+    bool isNew = ViewBag.IsNew;
+    string strCaption = isNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
+    string cssChecked = isNew ? "checked" : "";
 
 }
 
@@ -22,7 +24,25 @@
 
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-switch"></i> @modelName</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index/">กลุ่มแพทย์อาสา</a></li>
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-2"><i class="mdi mdi-account-switch"></i>กลุ่มแพทย์</h2>
+            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-3" role="group" aria-label="First group">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" @cssChecked>
+                        <span class="slider round"></span>
+                    </label>
+
+                </div>
+                <label for="chbEdit">@strCaption</label>
+            </div>
+        </div>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -32,11 +52,6 @@
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
 
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">เพิ่ม / ปรับปรุงข้อมูล-@modelName</h4>
-                    </div>
-                </article>
 
                 <article class="card mb-4">
                     <div class="card-header">
@@ -298,9 +313,9 @@
                             <h4 class="card-title mb-0">รายชื่อแพทย์ในกลุ่ม</h4>
                             <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                    <input type="submit" class="btn btn-primary" value="เพิ่มข้อมูลแพทย์" />
-                                    <input type="hidden" asp-for="@doctorgroupid" />
+                                    <a title="คลิกเพิ่มข้อมูลแพทย์" href="javascript:void(0)" onclick="SelectDoctorsPartial('@doctorgroupid')" class="btn btn-primary">
+                                        <i class="mdi mdi-plus-circle"></i> เพิ่มข้อมูล
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -379,6 +394,71 @@
     <!-- ================== MODAL IMAGE  ================== -->
     <link rel="stylesheet" href="~/css/modal_image.css" />
     <!-- ================== BEGIN PAGE LEVEL END ================== -->
+
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
     <style>
 
         .modal {
@@ -477,7 +557,7 @@
 
         function runpartial(id) {
 
-            var url = "/doctorgroup/doctordetail/?id=" + id;  
+            var url = "/doctorgroup/doctordetail/?id=" + id;
 
             $("#div_modal").load(url, function () {
                 $("#viewmodal").modal("show");
@@ -510,8 +590,19 @@
         span.onclick = function () {
             modal.style.display = "none";
         }
-            //  End Get the modal Image ==================================================
+                //  End Get the modal Image ==================================================
 
+
+
+         function SelectDoctorsPartial(id) {
+
+            var url = "/@controller/SelectDoctorsPartial/?id=" + id;
+
+            $("#div_modal").load(url, function () {
+                $("#viewmodal").modal("show");
+            });
+
+        };
 
 
 

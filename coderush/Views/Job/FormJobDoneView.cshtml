@@ -10,10 +10,6 @@
 
     string strJobId = ViewBag.jobId;
 
-
-    var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
-
-
     bool IsChecked1 = Model.Job.JobStatus.Status >= 2 ? true : false;
     bool chbDisabled = true;
 
@@ -33,58 +29,20 @@
         content = "No",
     };
 
-
     int totalPatients = 0;
     int totalDoctors = 0;
-
-
-
 
     if (Model.Job.JobStatus != null)
     {
         totalPatients = Model.PatientList.Count;
         totalDoctors = Model.DoctorList.Count;
-
-
     }
-
-
 }
-
 
 @{
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
 }
-
-
-<script>
-
-    var confirmObj;
-    var buttons = document.querySelectorAll('.dlgbtn');
-
-    function onLoadconfirm() {
-        confirmObj = this;
-        document.getElementById('confirmBtn').onclick = function () {
-            confirmObj.show();
-        };
-    }
-
-    function confirmBtnClick() {
-        confirmObj.hide();
-    }
-
-    function dialogClose() {
-        buttons[0].classList.remove('e-btn-hide');
-        buttons[1].classList.remove('e-btn-hide');
-        buttons[2].classList.remove('e-btn-hide');
-    }
-    function dialogOpen() {
-        buttons[0].classList.add('e-btn-hide');
-        buttons[1].classList.add('e-btn-hide');
-        buttons[2].classList.add('e-btn-hide');
-    }
-</script>
 
 
 
@@ -93,8 +51,9 @@
     <!-- Heading Start -->
     <section class="heading">
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/@controller/index">งานร้องขอ</a></li>
-            <li class="breadcrumb-item active">งานแล้วเสร็จ</li>
+            <li class="breadcrumb-item"><a href="/@controller/index/1">งานร้องขอ</a></li>
+            <li class="breadcrumb-item"><a href="/@controller/index/4">งานดำเนินการแล้วเสร็จ</a></li>
+            <li class="breadcrumb-item active">รายละเอียดงาน</li>
         </ul>
         <h2 class="mb-2"><i class="mdi mdi-ambulance"></i>รายละเอียดงาน</h2>
         <div class="titles">
@@ -158,8 +117,6 @@
                                     <span asp-validation-for="@Model.Job.Description" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div class="row">
@@ -174,9 +131,7 @@
                                     <span asp-validation-for="@Model.Job.TransDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row" @cssClass>
                             <div class="col-4">
                                 <div class="form-group">
@@ -184,30 +139,19 @@
                                     <div class="input-group">
                                         <input asp-for="@Model.Job.JobStatus.Description" class="form-control" readonly />
                                         <input asp-for="@Model.Job.JobStatusId" class="form-control" hidden />
-
-                                        @*<select asp-for="@Model.Job.JobStatusId" class="select2 form-control" asp-items="ViewBag.JobStatus" hidden></select>*@
-
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="@Model.Job.JobStatusId" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
-
                     </div>
                 </article>
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">โพสต์งาน</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -219,50 +163,35 @@
                                     <span asp-validation-for="@Model.Job.TotalPatients" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.PostDate"></label>
                                     <div class="input-group">
                                         <ejs-datepicker id="postdate" format="dd-MM-yyyy" ejs-for="@Model.Job.PostDate" readonly></ejs-datepicker>
-
                                         <span asp-validation-for="@Model.Job.PostDate" class="text-danger"></span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-
                                     <input disabled="@chbDisabled" asp-for="@Model.Job.IsPosted" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked1" name="IsChecked1" value="true">
                                     <input name="IsChecked1" type="hidden" value="false">
                                     <label>ส่งงานโพสต์</label><br>
-
-
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </article>
-
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">บันทึกนัด</h4>
                     </div>
                     <div class="card-body">
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -284,11 +213,7 @@
                                     <span asp-validation-for="@Model.Job.TotalDoctors" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -300,7 +225,6 @@
                                     <span asp-validation-for="@Model.Job.AppStartDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-4">
@@ -313,11 +237,9 @@
                                     <span asp-validation-for="@Model.Job.AppEndDate" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
-
                             <div class="col-12">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.Remark1"></label>
@@ -329,42 +251,25 @@
                                     <input type="hidden" asp-for="@Model.Job.Remark1" class="form-control" />
                                 </div>
                             </div>
-
-
                         </div>
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <div class="checkbox">
-
                                         <input disabled="@chbDisabled2" asp-for="@Model.Job.IsAppointed" type="checkbox" readonly data-val="true" data-val-required="The IsChecked field is required." id="IsChecked2" name="IsChecked2" value="true">
                                         <input name="IsChecked2" type="hidden" value="false">
                                         <label>ยืนยันนัด</label><br>
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-
-
                 <article class="card mb-4" @cssClass>
                     <div class="card-header">
                         <h4 class="card-title mb-0">บันทึกผลการปฏิบัติงาน</h4>
                     </div>
                     <div class="card-body">
-
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -375,8 +280,7 @@
                                     </div>
                                     <span asp-validation-for="@Model.Job.StartDate" class="text-danger"></span>
                                 </div>
-                            </div>
-
+                           </div>
                         </div>
                         <div class="row">
                             <div class="col-4">
@@ -391,9 +295,7 @@
                             </div>
 
                         </div>
-
                         <div class="row">
-
                             <div class="col-12">
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.Remark2"></label>
@@ -405,105 +307,57 @@
 
                                 </div>
                             </div>
-
-
                         </div>
-
-
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <div class="checkbox">
-                                        @*<input onclick="checkFluency()" type="checkbox" asp-for="@isPost" id="chbEntryList" name="chbEntryList">
-                                            <label for="@isPost">ส่งงานเข้าโพสต์</label><br>*@
-
                                         <input disabled="@chbDisabled3" onclick="checkFluency()" asp-for="@Model.Job.IsDone" type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="IsChecked3" name="IsChecked3" value="true">
                                         <input name="IsChecked3" type="hidden" value="false">
                                         <label>ยืนยันการปิดงาน</label><br>
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </article>
-
-
-
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
                         <button id="btnSave" type="submit" class="btn btn-primary" hidden>บันทึก</button>
-
                     </div>
                 </article>
-
             </form>
         </div>
     </div>
-
-
-
-
     <div class="row" @cssClass>
         <div class="col-12">
-
             <form asp-controller="@controller" asp-action="SelectPatients" method="get">
-
-
                 <article class="card mb-4">
-
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลผู้ป่วย</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
-                            </div>
-
-                            @*<div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group mr-3" role="group" aria-label="First group">
-
-                                        <input type="submit" class="btn btn-primary" value="เพิ่มผู้ป่วย" />
-                                        <input type="hidden" asp-for="@strJobId" />
-                                        <input type="hidden" asp-for="@strCapture" />
-                                    </div>
-                                </div>*@
+                            </div>                       
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
-
                                     <tr class="bg-primary text-white">
-
                                         <th width="10%"></th>
                                         <th width="30%">ชื่อ-สกุล</th>
                                         <th width="5%">เพศ</th>
                                         <th width="10%">อายุ (ปี)</th>
                                         <th width="15%">โรค</th>
                                         <th width="30%">ปัญหา</th>
-
                                     </tr>
-
                                 </thead>
                                 <tbody>
-
                                     @if (@Model.PatientList != null)
                                     {
                                         @foreach (var item in @Model.PatientList)
@@ -532,56 +386,29 @@
                                             </tr>
                                         }
                                     }
-
-
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
-
                 </article>
-
             </form>
-
         </div>
     </div>
-
     <div class="row" @cssClass id="target1">
-
         <div class="col-12">
-            <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" created="onLoadconfirm" width="400px" target="#target1" header="Delete Multiple Items" showCloseIcon="true">
-                <e-content-template>
-                    <div>Are you sure you want to permanently delete these items?</div>
-                </e-content-template>
-                <e-dialog-buttons>
-                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton" click="confirmBtnClick"></e-dialog-dialogbutton>
-                    <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClick"></e-dialog-dialogbutton>
-                </e-dialog-buttons>
-            </ejs-dialog>
-
             <form asp-controller="@controller" asp-action="SelectDoctors" method="get">
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลแพทย์</h4>
                     </div>
-
                     <div class="card-body">
-
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
-
                             <div class="input-group">
-
                                 <span class="input-group-addon" aria-hidden="true">
                                     <span class="glyphicon glyphicon-ok text-success"></span>
                                 </span>
-
                             </div>
-
                         </div>
-
-
                         <div class="table-responsive">
                             <table id="grid1" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
@@ -611,9 +438,7 @@
                                                          class="thumb rounded-circle"
                                                          height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
                                                          asp-append-version="true" onclick="myClick(this)" />
-
                                                 </td>
-
                                                 <td>
                                                     @(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)
                                                 </td>
@@ -657,8 +482,7 @@
 
     <!-- The Detail Modal -->
     <div id="div_modal"></div>
-
-
+    
     <!-- The Image  Modal -->
     <div id="myModal" class="modal-img">
         <span id="myClose" class="close-img">&times;</span>
@@ -705,9 +529,6 @@
     </style>
 }
 
-
-
-
 @section Scripts {
 
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
@@ -727,9 +548,6 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
 
- 
-
-
         $.Thailand({
             database: '/jquery.Thailand.js/database/db.json', // path หรือ url ไปยัง database
             $district: $('#subdistrict'), // input ของตำบล
@@ -737,8 +555,6 @@
             $province: $('#province'), // input ของจังหวัด
             $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
         });
-
-
         $(document).ready(function () {
 
             var mainTable;
@@ -768,10 +584,7 @@
                 }
             });
 
-
-
         });
-
 
         // Get the modal Image  =======================================================
 
@@ -795,23 +608,16 @@
             modal.style.display = "none";
         }
         //  End Get the modal Image ==================================================
-
-
         function checkFluency() {
             var checkbox = document.getElementById('IsChecked3');
 
             if (checkbox.checked == true) {
                 $("#btnSave").prop("disabled", false);
-
             }
             else {
                 $("#btnSave").prop("disabled", true);
-
             }
         }
-
-
-
     </script>
     <script>
 
@@ -827,7 +633,7 @@
 
           function rundoctor(id) {
 
-              var url = "/DoctorGroup/DoctorDetail/?id=" + id;
+              var url = "/@controller/DoctorDetailPartial/?id=" + id;
 
             $("#div_modal").load(url, function () {
                 $("#viewmodal").modal("show");

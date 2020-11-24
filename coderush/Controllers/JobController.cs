@@ -33,6 +33,7 @@ namespace vds.Controllers
         //
         DateTimeFormatInfo dmyEN = new CultureInfo("en-GB", false).DateTimeFormat;
         DateTimeFormatInfo dmyTH = new CultureInfo("th-TH", false).DateTimeFormat;
+
         //dependency injection through constructor, to directly access services
         public JobController(
             ApplicationDbContext context,
@@ -50,7 +51,6 @@ namespace vds.Controllers
 
         }
 
-
         //fill viewdata as dropdownlist datasource for hospital form
         private void FillDropdownListForhospitalForm()
         {
@@ -63,13 +63,15 @@ namespace vds.Controllers
             ViewData["SystemUser"] = _app.GetSystemUserSelectList();
             ViewData["DiseaseType"] = _app.GetDiseaseTypeSelectList();
             ViewData["DoctorType"] = _app.GetDoctorTypeSelectList();
-
         }
 
-
         //======================================================== Index ===========================================================
-        public IActionResult Index()
+        public IActionResult Index(int fromTab)
         {
+            if (fromTab > 0)
+            {
+                TempData["fromTab"] = fromTab;
+            }
             string hId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
             string uType = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
 
@@ -314,10 +316,8 @@ namespace vds.Controllers
                      .ToList();
 
             List<DoctorSelectedViewModel> ds = new List<DoctorSelectedViewModel>();
-
             foreach (var item in doctors)
             {
-
                 ds.Add(new DoctorSelectedViewModel
                 {
                     DoctorGroupId = ID,
@@ -345,7 +345,7 @@ namespace vds.Controllers
         //post submitted hospital data. if hospitalId is null then create new, otherwise edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitSelectDoctor(string jobId, List<DoctorSelectedViewModel> doctor)
+        public async Task<IActionResult> SubmitSelectDoctors(string jobId, List<DoctorSelectedViewModel> doctor)
         {
 
             string OrgAction = TempData["OrgAction"].ToString();
@@ -382,7 +382,7 @@ namespace vds.Controllers
 
                     _context.SaveChanges();
 
-                    TempData[StaticString.StatusMessage] = "บันทึกข้อมูล" + modelName + "เรียบร้อยแล้ว.";
+                    TempData[StaticString.StatusMessage] = "เพิ่มข้อมูลแพทย์เรียบร้อยแล้ว.";
                 }
             }
 
@@ -398,11 +398,51 @@ namespace vds.Controllers
         }
 
 
+        [HttpGet]    
+        public IActionResult SelectDoctorsPartial(string id)
+        {
+             ViewBag.jobId = id;        
+            var InJobReady = _context.JobDoctor
+               .AsNoTracking()
+               .Where(x => x.JobId.Equals(id)).ToList();
+
+            var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
+
+            ViewBag.GroupName = "";
+
+            var doctors = _context.Doctor
+                     .AsNoTracking()
+                     .Include(x => x.DoctorType)
+                     .Include(x => x.PrefixType)
+                     .Where(x => !IdInJobReady.Contains(x.DoctorId))
+                     .ToList();
+
+            List<DoctorSelectedViewModel> ds = new List<DoctorSelectedViewModel>();
+            foreach (var item in doctors)
+            {
+                ds.Add(new DoctorSelectedViewModel
+                {
+                    DoctorGroupId = id,
+                    DoctorId = item.DoctorId,
+                    PrefixTypeId = item.PrefixTypeId,
+                    PrefixType = item.PrefixType,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Phone = item.Phone,
+                    Email = item.Email,
+                    LineId = item.LineId,
+                    ImageData = item.ImageData,
+                    DoctorTypeId = item.DoctorTypeId,
+                    DoctorType = item.DoctorType
+
+                });
+            }
+            return PartialView("_SelectDoctorsPartial", ds);
+        }
+
         [HttpGet]
         public IActionResult SelectPatients([Bind(Prefix = "Job")] Job job)
         {
-
-
             string ID = ViewBag.jobId = job.JobId;
 
             var InReady = _context.JobPatient
@@ -425,7 +465,6 @@ namespace vds.Controllers
 
                 ds.Add(new PatientSelectViewModel
                 {
-
                     PatientId = item.PatientId,
                     PrefixTypeId = item.PrefixTypeId,
                     PrefixType = item.PrefixType,
@@ -437,25 +476,19 @@ namespace vds.Controllers
 
                 });
             }
-
-
             return View(ds);
-
         }
 
         [HttpGet]
         public IActionResult SelectPatientsPartial(string id)
         {
             string hospitalId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
-
             ViewBag.jobId = id;
-
             var InReady = _context.JobPatient
                .AsNoTracking()
                .Where(x => x.JobId.Equals(id)).ToList();
 
             var IdArray = InReady.Select(x => x.PatientId).ToArray();
-
             ViewBag.GroupName = "";
             var patients = _context.Patient
                      .AsNoTracking()
@@ -470,7 +503,6 @@ namespace vds.Controllers
 
                 ds.Add(new PatientSelectViewModel
                 {
-
                     PatientId = item.PatientId,
                     PrefixTypeId = item.PrefixTypeId,
                     PrefixType = item.PrefixType,
@@ -482,8 +514,6 @@ namespace vds.Controllers
 
                 });
             }
-
-
             return PartialView("_SelectPatientsPartial", ds);
 
         }
@@ -494,8 +524,6 @@ namespace vds.Controllers
         public async Task<IActionResult> SubmitSelectPatients(string jobId, List<PatientSelectViewModel> patient)
         {
             string orgAction = TempData["OrgAction"].ToString();
-
-
             int mycount = patient.Where(x => x.PatientSelect.Selected).Count();
             try
             {
@@ -538,9 +566,7 @@ namespace vds.Controllers
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
                 return RedirectToAction(orgAction, new { id = jobId });
             }
-
             return RedirectToAction(orgAction, new { id = jobId });
-
         }
 
 
@@ -1081,14 +1107,9 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult FormJobDoneView(string id)
         {
-
             ViewBag.jobId = id;
-
             ViewBag.Status = 0;
             TempData["fromTab"] = 4;
-
-
-
             //edit object
             //ViewBag.Status = _context.Job.Where(x=>x.JobId.Equals(id)).Select(x=>x.JobStatus.Status).SingleOrDefault();
 
@@ -1210,13 +1231,9 @@ namespace vds.Controllers
         [ValidateAntiForgeryToken]
 
         public async Task<IActionResult> SubmitFormJobDoneEntry([Bind] Job job, bool IsChecked3)
-
-        {
-            var status = _context.JobStatus.FirstOrDefault(x => x.Status == 3);
-
+        {         
             try
             {
-
 
                 if (!ModelState.IsValid)
                 {
@@ -1224,51 +1241,39 @@ namespace vds.Controllers
                     return RedirectToAction(nameof(FormJobDoneEntry), new { id = job.JobId ?? "" });
                 }
 
-
-
                 ////edit existing
                 Job editjob = new Job();
                 editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
-
-
+  
                 if (editjob != null)
                 {
                     if (IsChecked3)
                     {
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 4).Select(x => x.JobStatusId).FirstOrDefault();
-                        editjob.StartDate = job.AppStartDate.AddYears(543);
-                        editjob.EndDate = job.AppEndDate.AddYears(543);
-                        editjob.JobEndEntryDate = DateTime.Now.AddYears(543);
+                        editjob.StartDate = job.StartDate.AddYears(543);
+                        editjob.EndDate = job.EndDate.AddYears(543);
+                        editjob.JobEndEntryDate = DateTime.Now;
                         editjob.Remark2 = job.Remark2;
                         editjob.IsDone = true;
                     }
-
-
                     editjob.UpdatedBy = await _userManager.GetUserAsync(User);
                     editjob.UpdatedAtUtc = DateTime.UtcNow;
-
                     _context.Update(editjob);
-
                     _context.SaveChanges();
-
-
                     //dropdownlist 
                     FillDropdownListForhospitalForm();
-
-                    TempData[StaticString.StatusMessage] = "ปรับปรุงข้อมูล" + modelName + "เรียบร้อยแล้ว.";
+                    TempData[StaticString.StatusMessage] = "บันทึกข้อมูลงานแล้วเสร็จเรียบร้อยแล้ว.";
                     return RedirectToAction(nameof(FormJobDoneView), new { id = job.JobId });
                 }
                 else
                 {
                     return NotFound();
                 }
-
             }
             catch (Exception ex)
             {
-
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
-                return RedirectToAction(nameof(FormJobDoneView), new { id = job.JobId });
+                return RedirectToAction(nameof(FormJobDoneEntry), new { id = job.JobId });
             }
         }
         /*==================================================== Form Job Done Entry  ==============================================================*/
@@ -1276,17 +1281,12 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult FormJobDoneEdit(string id)
         {
-
             ViewBag.jobId = id;
-
             ViewBag.Status = 0;
             TempData["fromTab"] = 4;
 
-
-
             //edit object
-            //ViewBag.Status = _context.Job.Where(x=>x.JobId.Equals(id)).Select(x=>x.JobStatus.Status).SingleOrDefault();
-
+        
             List<PatientSelectViewModel> dt = new List<PatientSelectViewModel>();
 
             var patientReadyIn = _context.JobPatient
@@ -1324,16 +1324,14 @@ namespace vds.Controllers
             editObj.Job.PostDate = Convert.ToDateTime(editObj.Job.PostDate, new System.Globalization.CultureInfo("en-US"));
             editObj.Job.AppEntryDate = Convert.ToDateTime(editObj.Job.AppEntryDate, new System.Globalization.CultureInfo("en-US"));
 
-            editObj.Job.StartDate = DateTime.Now;
-            editObj.Job.EndDate = DateTime.Now;
+            editObj.Job.StartDate = Convert.ToDateTime(editObj.Job.StartDate, new System.Globalization.CultureInfo("en-US"));
+            editObj.Job.EndDate = Convert.ToDateTime(editObj.Job.EndDate, new System.Globalization.CultureInfo("en-US"));
             editObj.Job.JobEndEntryDate = DateTime.Today;
-
 
             if (editObj.Job == null)
             {
                 return NotFound();
             }
-
 
             //dropdownlist 
             FillDropdownListForhospitalForm();
@@ -1373,18 +1371,18 @@ namespace vds.Controllers
                     if (IsChecked3)
                     {
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 4).Select(x => x.JobStatusId).FirstOrDefault();
-                        editjob.StartDate = job.AppStartDate.AddYears(543);
-                        editjob.EndDate = job.AppEndDate.AddYears(543);
-                        editjob.JobEndEntryDate = DateTime.Now.AddYears(543);
+                        editjob.StartDate = job.StartDate.AddYears(543);
+                        editjob.EndDate = job.EndDate.AddYears(543);
+                        editjob.JobEndEntryDate = DateTime.Now;
                         editjob.Remark2 = job.Remark2;
                         editjob.IsDone = true;
                     }
                     else
                     {
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 3).Select(x => x.JobStatusId).FirstOrDefault();
-                        editjob.StartDate = DateTime.Now.AddYears(543);
-                        editjob.EndDate = DateTime.Now.AddYears(543);
-                        editjob.JobEndEntryDate = DateTime.Now.AddYears(543);
+                        editjob.StartDate = DateTime.Now;
+                        editjob.EndDate = DateTime.Now;
+                        editjob.JobEndEntryDate = DateTime.Now;
                         editjob.Remark2 = string.Empty;
                         editjob.IsDone = false;
                     }
@@ -1770,6 +1768,7 @@ namespace vds.Controllers
                     editjob.Name = job.Name;
                     editjob.Description = job.Description;
                     string myDate = job.PostDate.ToString(dmyEN.ShortDatePattern);
+                   
                     if (IsChecked1)
                     {
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 2).Select(x => x.JobStatusId).FirstOrDefault();
@@ -1939,14 +1938,12 @@ namespace vds.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> SubmitFormJobAddAppointment([Bind] Job job, bool IsChecked2, string userTypeId)
+        public async Task<IActionResult> SubmitFormJobAddAppointment([Bind] Job job, bool IsChecked2)
 
         {
             string orgAction = TempData["OrgAction"].ToString();
             try
             {
-
-
                 if (!ModelState.IsValid)
                 {
                     TempData[StaticString.StatusMessage] = "Error: Model state not valid.";
@@ -1956,33 +1953,25 @@ namespace vds.Controllers
                 ////edit existing
                 Job editjob = new Job();
                 editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
-
-
+               
                 if (editjob != null)
                 {
-
-
                     if (IsChecked2)
                     {
                         editjob.AppStartDate = job.AppStartDate.AddYears(543);
                         editjob.AppEndDate = job.AppEndDate.AddYears(543);
+                        editjob.AppEntryDate = DateTime.Today;
                         editjob.IsAppointed = true;
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 3).Select(x => x.JobStatusId).FirstOrDefault();
                         editjob.Remark1 = job.Remark1;
                     }
 
-
                     editjob.UpdatedBy = await _userManager.GetUserAsync(User);
                     editjob.UpdatedAtUtc = DateTime.UtcNow;
-
                     _context.Update(editjob);
-
                     _context.SaveChanges();
-
-
                     //dropdownlist 
                     FillDropdownListForhospitalForm();
-
                     TempData[StaticString.StatusMessage] = "ปรับปรุงข้อมูล" + modelName + "เรียบร้อยแล้ว.";
                     return RedirectToAction(orgAction, new { id = job.JobId });
                 }
@@ -1990,76 +1979,11 @@ namespace vds.Controllers
                 {
                     return NotFound();
                 }
-
             }
             catch (Exception ex)
             {
-
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
                 return RedirectToAction(orgAction, new { id = job.JobId });
-            }
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> SubmitFormJobAppointment([Bind] Job job, bool IsChecked1, string userTypeId)
-
-        {
-            try
-            {
-
-
-                if (!ModelState.IsValid)
-                {
-                    TempData[StaticString.StatusMessage] = "Error: Model state not valid.";
-                    return RedirectToAction(nameof(FormJobPost), new { id = job.JobId, userTypeId = userTypeId });
-                }
-
-                ////edit existing
-                Job editjob = new Job();
-                editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
-
-
-                if (editjob != null)
-                {
-                    // Server is locale Thai  accept  year in BE
-                    editjob.TotalPatients = job.TotalPatients;
-
-                    if (IsChecked1)
-                    {
-                        editjob.PostDate = job.PostDate.AddYears(543);
-                        editjob.IsPosted = true;
-                        editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 2).Select(x => x.JobStatusId).FirstOrDefault();
-                    }
-
-
-                    editjob.UpdatedBy = await _userManager.GetUserAsync(User);
-                    editjob.UpdatedAtUtc = DateTime.UtcNow;
-
-                    _context.Update(editjob);
-
-                    _context.SaveChanges();
-
-
-                    //dropdownlist 
-                    FillDropdownListForhospitalForm();
-
-                    TempData[StaticString.StatusMessage] = "ปรับปรุงข้อมูล" + modelName + "เรียบร้อยแล้ว.";
-                    return RedirectToAction(nameof(FormJobPost), new { id = job.JobId, userTypeId = userTypeId });
-                }
-                else
-                {
-                    return NotFound();
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
-                return RedirectToAction(nameof(FormJobPost), new { id = job.JobId, userTypeId = userTypeId });
             }
         }
 
@@ -2068,8 +1992,6 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult FormAddDoctorDetail(string id)
         {
-
-
             //edit object
             Doctor editObj = new Doctor();
             editObj = _context.Doctor.Where(x => x.DoctorId.Equals(id)).FirstOrDefault();
@@ -2083,12 +2005,9 @@ namespace vds.Controllers
             string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             ViewBag.ImageDataUrl = imageDataURL;
 
-
             //dropdownlist 
             FillDropdownListForhospitalForm();
-
             return View(editObj);
-
         }
 
 

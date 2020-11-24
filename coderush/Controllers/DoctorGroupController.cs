@@ -278,6 +278,8 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult Form(string id)
         {
+
+            ViewBag.IsNew = false;
             //create new
             if (id == null)
             {
@@ -292,23 +294,18 @@ namespace vds.Controllers
 
                 ViewBag.DataSource = OrdersDetails.GetAllRecords();
                 ViewBag.DropDownData = new Countries().CountriesList();
-
+                ViewBag.IsNew = true;
                 return View(doctorgroupview);
 
             }
 
-
             //edit object
-            ViewBag.doctorgroupid = id;
-
+            ViewBag.doctorgroupid = id;        
             List<DoctorSelectedViewModel> dt = new List<DoctorSelectedViewModel>();
-
             var doctorsInGroupReady = _context.DoctorGroupDoctor
                .AsNoTracking()
                .Where(x => x.DoctorGroupId.Equals(id)).ToList();
-
             var doctorIdInGroupReady = doctorsInGroupReady.Select(x => x.DoctorId).ToArray();
-
 
             DoctorGroupView editObj = new DoctorGroupView();
             editObj.DoctorGroup = _context.DoctorGroup.Where(x => x.DoctorGroupId.Equals(id)).FirstOrDefault();
@@ -335,12 +332,9 @@ namespace vds.Controllers
             {
                 ViewBag.ImageDataUrl = "/assets/images/noimage.png";
             }
-
             //dropdownlist 
             FillDropdownListForhospitalForm();
-
             return View(editObj);
-
         }
          
 
@@ -609,6 +603,104 @@ namespace vds.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult SelectDoctorsPartial(string id)
+        {
+            ViewBag.jobId = id;
+            var InJobReady = _context.JobDoctor
+               .AsNoTracking()
+               .Where(x => x.JobId.Equals(id)).ToList();
+
+            var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
+
+            ViewBag.GroupName = "";
+
+            var doctors = _context.Doctor
+                     .AsNoTracking()
+                     .Include(x => x.DoctorType)
+                     .Include(x => x.PrefixType)
+                     .Where(x => !IdInJobReady.Contains(x.DoctorId))
+                     .ToList();
+
+            List<DoctorSelectedViewModel> ds = new List<DoctorSelectedViewModel>();
+            foreach (var item in doctors)
+            {
+                ds.Add(new DoctorSelectedViewModel
+                {
+                    DoctorGroupId = id,
+                    DoctorId = item.DoctorId,
+                    PrefixTypeId = item.PrefixTypeId,
+                    PrefixType = item.PrefixType,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Phone = item.Phone,
+                    Email = item.Email,
+                    LineId = item.LineId,
+                    ImageData = item.ImageData,
+                    DoctorTypeId = item.DoctorTypeId,
+                    DoctorType = item.DoctorType
+
+                });
+            }
+            return PartialView("_SelectDoctorsPartial", ds);
+        }
+
+
+
+        //post submitted hospital data. if hospitalId is null then create new, otherwise edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitSelectDoctors(string jobId, List<DoctorSelectedViewModel> doctor)
+        {
+
+            string OrgAction = TempData["OrgAction"].ToString();
+            int countdoctor = doctor.Where(x => x.DoctorSelect.Selected).Count();
+            try
+            {
+                if (countdoctor > 0)
+                {
+                    foreach (var item in doctor)
+                    {
+                        if (item.DoctorSelect.Selected)
+                        {
+                            JobDoctor newdoctor = new JobDoctor();
+                            newdoctor.JobDoctorId = Guid.NewGuid().ToString();
+                            newdoctor.JobId = jobId;
+                            newdoctor.DoctorId = item.DoctorId;
+                            newdoctor.CreatedBy = await _userManager.GetUserAsync(User);
+                            newdoctor.CreatedAtUtc = DateTime.UtcNow;
+                            newdoctor.UpdatedBy = newdoctor.CreatedBy;
+                            newdoctor.UpdatedAtUtc = newdoctor.CreatedAtUtc;
+                            _context.JobDoctor.Add(newdoctor);
+                        }
+                    }
+                    _context.SaveChanges();
+
+                    int mycount = _context.JobDoctor.Where(x => x.JobId.Equals(jobId)).Count();
+                    var update = _context.Job.Where(o => o.JobId == jobId).FirstOrDefault();
+                    if (update != null)
+                    {
+                        update.TotalDoctors = mycount;
+                        _context.Update(update);
+                    }
+
+
+                    _context.SaveChanges();
+
+                    TempData[StaticString.StatusMessage] = "เพิ่มข้อมูลแพทย์เรียบร้อยแล้ว.";
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+                TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
+                return RedirectToAction(OrgAction, new { id = jobId });
+            }
+
+            return RedirectToAction(OrgAction, new { id = jobId });
+
+        }
 
     }
 }
