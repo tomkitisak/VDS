@@ -45,7 +45,8 @@ namespace vds.Services.Security
                         Email = _superAdminDefaultOptions.Email,
                         UserName = _superAdminDefaultOptions.Email,
                         EmailConfirmed = true,
-                        isSuperAdmin = true
+                        isSuperAdmin = true,
+                        UserTypeId = "0"
                     }
                     , _superAdminDefaultOptions.Password);
 
@@ -120,33 +121,83 @@ namespace vds.Services.Security
             {
                 List<UserView> users = new List<UserView>();
 
-                users = _context.UserType
-                      .GroupJoin(_context.ApplicationUser,
+                users = _context.ApplicationUser
+                    .Join(_context.UserType,
                             x => x.UserTypeId,
                             y => y.UserTypeId,
-                            (x, y) => new { usertype = x, appuser = y }
-                      )
-                      .SelectMany(x => x.appuser.DefaultIfEmpty(),
-                      (x, y) => new { x = x.usertype, app = y })
+                            (x, y) => new { appuser = x, usertype = y }
+                      )                    
                       .Select(x => new UserView
                       {
-                          Id = x.app.Id,
-                          UserName = x.app.UserName,
-                          Email = x.app.Email,
-                          EmailConfirmed = x.app.EmailConfirmed,
-                          PhoneNumber = x.app.PhoneNumber,
-                          isSuperAdmin = x.app.isSuperAdmin,
-                          UserTypeId = x.app.UserTypeId,
-                          UserLevel = x.x.UserLevel,
-                          Name = x.x.Name
+                          Id =x.appuser.Id,
+                          UserName = x.appuser.UserName,
+                          Email = x.appuser.Email,
+                          EmailConfirmed = x.appuser.EmailConfirmed,
+                          PhoneNumber = x.appuser.PhoneNumber,
+                          isSuperAdmin = x.appuser.isSuperAdmin,
+                          UserTypeId = x.appuser.UserTypeId,
+                          UserLevel = x.usertype.UserLevel,
+                          Name = x.usertype.Name
                       }).ToList();
 
+
                 return users;
+
+                //     context.OrderMasters
+                //.GroupJoin(context.OrderDetails
+                //   , od => od.OrderId
+                //   , o => o.OrderId
+                //   , (o, od) => new {
+                //       Order = o,
+                //       OrderD = od
+                //       //,o.OrderDate  
+                //   })
+                // //.Where(a => a.OrderDate < DateTime.Now.AddDays(-100))  
+                // .Select(s => s);
+
+
+                // //Using lambda,  
+                // var lresult2 = context.OrderMasters
+                //                .Join(context.OrderDetails
+                //                , od => od.OrderId
+                //                , o => o.OrderId
+                //                , (o, od) => new {
+                //                    o.OrderNo,
+                //                    od.ProductName,
+                //                    o.OrderDate
+                //                })
+                //                 //.Where(a => a.OrderDate < DateTime.Now.AddDays(-100))  
+                //                 .Select(s => s);
+
+
+                // users = _context.UserType
+                //     .GroupJoin(_context.ApplicationUser,
+                //             x => x.UserTypeId,
+                //             y => y.UserTypeId,
+                //             (x, y) => new { usertype = x, appuser = y }
+                //       )
+                //       .SelectMany(x => x.appuser.DefaultIfEmpty(),
+                //       (x, y) => new { x = x.usertype, app = y })
+                //       .Select(x => new UserView
+                //       {
+                //           Id = 
+                //           UserName = x.app.UserName,
+                //           Email = x.app.Email,
+                //           EmailConfirmed = x.app.EmailConfirmed,
+                //           PhoneNumber = x.app.PhoneNumber,
+                //           isSuperAdmin = x.app.isSuperAdmin,
+                //           UserTypeId = x.app.UserTypeId,
+                //           UserLevel = x.x.UserLevel,
+                //           Name = x.x.Name
+                //       }).ToList();
+
+
             }
             catch (Exception)
             {
-
+               
                 throw;
+                
             }
         }
 

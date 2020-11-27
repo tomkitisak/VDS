@@ -6,7 +6,6 @@ namespace vds.Models
     //type of allowance
     public class JobPatient : Base
     {
-
         public string JobPatientId { get; set; }
 
         [Required]
@@ -14,7 +13,7 @@ namespace vds.Models
         public string JobId { get; set; }
         public Job Job { get; set; }
 
-        [Required]
+       
         [Display(Name = "คนไข้")]
         public string PatientId { get; set; }
 

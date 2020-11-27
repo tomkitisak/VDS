@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using vds.ViewModels;
 using Syncfusion.EJ2.Linq;
+using vds.Services;
 
 namespace vds.Controllers
 {
@@ -60,18 +61,18 @@ namespace vds.Controllers
 
             if (prefixTypeId == null)
             {
-                
+
                 objs.PrefixType = new PrefixType();
                 objs.PrefixTypeList = _context.PrefixType
                     .AsNoTracking()
-                    .OrderBy(x => x.Order).ThenBy(y=>y.Name).ToList();
+                    .OrderBy(x => x.Order).ThenBy(y => y.Name).ToList();
             }
             else
             {
 
                 objs.PrefixType = _context.PrefixType
                     .AsNoTracking()
-                   .Where(x=>x.PrefixTypeId.Equals(prefixTypeId)).FirstOrDefault();
+                   .Where(x => x.PrefixTypeId.Equals(prefixTypeId)).FirstOrDefault();
 
                 objs.PrefixTypeList = _context.PrefixType
                     .AsNoTracking()
@@ -124,7 +125,7 @@ namespace vds.Controllers
 
                     TempData[StaticString.StatusMessage] = "บันทึกข้อมูลคำนำหน้าชื่อเรียบร้อยแล้ว.";
 
-                    return RedirectToAction(nameof(AddPrefixType),   ControllerContext.ActionDescriptor.ControllerName  );
+                    return RedirectToAction(nameof(AddPrefixType), ControllerContext.ActionDescriptor.ControllerName);
 
                     //  return RedirectToAction(nameof(AddPrefixType),   ControllerContext.ActionDescriptor.ControllerName , new { prefixTypeId = newObj.PrefixTypeId });
                 }
@@ -151,8 +152,8 @@ namespace vds.Controllers
                     //    FillDropdownListForhospitalForm();
 
                     TempData[StaticString.StatusMessage] = "บันทึกข้อมูลคำนำหน้าชื่อเรียบร้อยแล้ว.";
-                    return RedirectToAction(nameof(AddPrefixType),  ControllerContext.ActionDescriptor.ControllerName);
-                
+                    return RedirectToAction(nameof(AddPrefixType), ControllerContext.ActionDescriptor.ControllerName);
+
                 }
                 else
                 {
@@ -164,7 +165,7 @@ namespace vds.Controllers
             {
 
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
-                return RedirectToAction(nameof(AddPrefixType), ControllerContext.ActionDescriptor.ControllerName );
+                return RedirectToAction(nameof(AddPrefixType), ControllerContext.ActionDescriptor.ControllerName);
             }
 
         }
@@ -195,7 +196,7 @@ namespace vds.Controllers
         }
 
 
-       //-------------------------------------------- DiseaseType --------------------------------------------------------
+        //-------------------------------------------- DiseaseType --------------------------------------------------------
 
         public IActionResult AddDiseaseType(string id)
         {
@@ -208,7 +209,7 @@ namespace vds.Controllers
                 objs.DiseaseType = new DiseaseType();
                 objs.DiseaseTypeList = _context.DiseaseType
                     .AsNoTracking()
-                    .OrderBy(x => x.Order).ThenBy(y=>y.Name).ToList();
+                    .OrderBy(x => x.Order).ThenBy(y => y.Name).ToList();
             }
             else
             {
@@ -392,8 +393,6 @@ namespace vds.Controllers
                 if (department.DepartmentId == null)
                 {
 
-                    var intOrder = _context.Department.DefaultIfEmpty().Max(x => x.Order);
-
                     Department newObj = new Department();
                     newObj.DepartmentId = Guid.NewGuid().ToString();
 
@@ -408,8 +407,6 @@ namespace vds.Controllers
                     _context.Department.Add(newObj);
                     //  Add Data to Database
                     _context.SaveChanges();
-
-
 
                     TempData[StaticString.StatusMessage] = "บันทึกข้อมูลหน่วยงานเรียบร้อยแล้ว.";
 
@@ -768,6 +765,101 @@ namespace vds.Controllers
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
                 return RedirectToAction(nameof(AddDoctorType), ControllerContext.ActionDescriptor.ControllerName);
             }
+        }
+
+        /*-------------------------------------  Department -------------------------------------------------------*/
+
+        public IActionResult AddEmailSender( )
+        {
+            //  ViewBag.SenderController = ControllerContext.ActionDescriptor.ControllerName;
+            EmailSenderConfig objs = new EmailSenderConfig();
+            objs = _context.EmailSenderConfig
+                .AsNoTracking()
+                .FirstOrDefault();
+            return View(objs);
+        }
+
+ 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> SubmitAddEmailSender(EmailSenderConfig objs)
+        {
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    TempData[StaticString.StatusMessage] = "Error: Model state not valid.";
+                    return RedirectToAction(nameof(AddEmailSender),  objs.Id );
+                }
+ 
+                //  create new
+                if (objs.Id == null)
+                {
+
+                    EmailSenderConfig newObj = new EmailSenderConfig();
+                    newObj.Id = Guid.NewGuid().ToString();
+
+                    newObj.MailServer = objs.MailServer;
+                    newObj.MailPort = objs.MailPort;
+                    newObj.SenderName = objs.SenderName;
+                    newObj.Email = objs.Email;
+                    newObj.Password = objs.Password;
+                    newObj.CreatedBy = await _userManager.GetUserAsync(User);
+                    newObj.CreatedAtUtc = DateTime.UtcNow;
+                    newObj.UpdatedBy = newObj.CreatedBy;
+                    newObj.UpdatedAtUtc = newObj.CreatedAtUtc;
+                    _context.EmailSenderConfig.Add(newObj);
+                    //  Add Data to Database
+                    _context.SaveChanges();
+
+ 
+                    TempData[StaticString.StatusMessage] = "บันทึกข้อมูลผู้ส่งอีเมล์เรียบร้อยแล้ว.";
+                    return RedirectToAction(nameof(AddEmailSender));
+  
+                }
+
+
+                //////edit existing
+
+                EmailSenderConfig editObj = new EmailSenderConfig();
+                editObj = _context.EmailSenderConfig.Where(x => x.Id.Equals(objs.Id)).FirstOrDefault();
+
+                if (editObj != null)
+                {
+
+                    editObj.MailServer = objs.MailServer;
+                    editObj.MailPort = objs.MailPort;
+                    editObj.SenderName = objs.SenderName;
+                    editObj.Email = objs.Email;
+                    editObj.Password = objs.Password;
+                    editObj.UpdatedBy = await _userManager.GetUserAsync(User);
+                    editObj.UpdatedAtUtc = DateTime.UtcNow;
+
+                    _context.Update(editObj);
+                    _context.SaveChanges();
+
+                    //    //dropdownlist 
+                    //    FillDropdownListForhospitalForm();
+                   TempData[StaticString.StatusMessage] = "บันทึกข้อมูลผู้ส่งอีเมล์เรียบร้อยแล้ว.";
+
+                    return RedirectToAction(nameof(AddEmailSender));
+
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
+                return RedirectToAction(nameof(AddEmailSender));
+            }
+
         }
     }
 }

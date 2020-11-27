@@ -21,7 +21,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-book-open"></i>@modelName</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">กำหนดค่าระบบ</a></li>
+            <li class="breadcrumb-item active">ปรับปรุงข้อมูลคำนำหน้าชื่อ</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-human-male-female"></i>คำนำหน้าชื่อ</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -30,13 +34,7 @@
         <div class="col-12">
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">ปรับปรุงข้อมูล-คำนำหน้าชื่อ</h4>
-                    </div>
-                </article>
-
+ 
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">คำนำหน้าชื่อ</h4>
@@ -157,21 +155,15 @@
 
                             </div>
 
-                            </div>
+                        </div>
 
                     </article>
 
                 </div>
 
+ 
 
-                @*<h2 class="demoHeaders">Dialog</h2>
-                    <p>
-                        <button id="dialog-link" class="ui-button ui-corner-all ui-widget">
-                            <span class="ui-icon ui-icon-newwin"></span>Open Dialog
-                        </button>
-                    </p>*@
-
-
+                <input type="hidden" id="hiddenId" />
 
                 <!-- ui-dialog -->
                 <div id="dialog" title="ลบข้อมูล">
@@ -180,48 +172,7 @@
 
             </div>
         </div>
-
-        @*@foreach (var item in Model.Cars)
-            {
-                var tm = "#myModal" + item.Id;
-                var mid = "myModal" + item.Id;
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@tm">
-                            Delete
-                        </button>
-
-                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure want to delete this item?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a asp-page-handler="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </td>
-                </tr>
-            }*@
+ 
 
     </div>
 </div>
@@ -382,7 +333,7 @@
                     click: function () {
 
                         $(this).dialog("close");
-                        window.location.href = "/settings/SubmitDeletePrefixType/?prefixTypeId=" + document.getElementById("hiddenPrefixTypeId").value;
+                        window.location.href = "/settings/SubmitDeletePrefixType/?prefixTypeId=" + document.getElementById("hiddenId").value;
                     }
                 },
                 {
@@ -416,7 +367,7 @@
 
         function deleteData(short, full, id) {
 
-            $("#hiddenPrefixTypeId").val(id);
+            $("#hiddenId").val(id);
             document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูลคำนำหน้าชื่อ " + short + "/" + full + " ใช่หรือไม่ ?";
             $("#dialog").dialog("open");
             event.preventDefault();

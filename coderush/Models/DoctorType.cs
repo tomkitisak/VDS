@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace vds.Models
 {
     public class DoctorType : Base
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]  
         public string DoctorTypeId { get; set; }
 
         [Required(ErrorMessage = "กรุณากรอกข้อมูลสาขาความเชี่ยวชาญ")]
         [Display(Name = "สาขาความเชี่ยวชาญ")]
         public string DoctorTypeName { get; set; }
 
-        [Required(ErrorMessage = "กรุณากรอกข้อมูลรายละเอียด")]
+      
         [Display(Name = "รายละเอียด")]
         public string Description { get; set; }
 

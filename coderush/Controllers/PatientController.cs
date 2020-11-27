@@ -53,8 +53,6 @@ namespace vds.Controllers
             ViewData["DiseaseType"] = _app.GetDiseaseTypeSelectList();
         }
 
-
-
         //consume db context service, display all employee
         public IActionResult Index()
         {

@@ -91,9 +91,12 @@ namespace vds.Data
 
         public DbSet<UserType> UserType { get; set; }
 
+        public DbSet<EmailSenderConfig> EmailSenderConfig { get; set; }
+
+
         // CAll Store Procedure
-        public  DbSet<HospitalViewRegionId> HospitalViewRegionId { get; set; }
-        public  DbSet<HospitalSummary> HospitalSummary { get; set; }
+        public virtual  DbSet<HospitalViewRegionId> HospitalViewRegionId { get; set; }
+        public virtual DbSet<HospitalSummary> HospitalSummary { get; set; }
 
         
     }

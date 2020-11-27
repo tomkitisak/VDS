@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Register";
     string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    bool sendemail = true;
 }
 
 <!-- Content Start -->
@@ -67,6 +68,16 @@
                             <input asp-for="ConfirmPassword" class="form-control" autocomplete="off" />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
+                        <div class="form-group">
+                            <label>ส่งอีเมล์อัตโนมัติ เพื่อแจ้งผู้ใช้ที่กำหนด</label>
+                            <div class="form-check">
+                                <label class="custom-checkbox variation3 mb-0">
+                                    <input asp-for="@sendemail" class="form-check-input" />
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="card-footer">
                         <a href="/Membership/Index" class="btn btn-default">ย้อนกลับ</a>

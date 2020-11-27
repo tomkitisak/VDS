@@ -13,8 +13,8 @@ using System.IO;
 using vds.Data;
 using vds.Models;
 using vds.Services.Security;
-  
-
+using Microsoft.AspNetCore.Identity.UI.Services;
+ 
 namespace vds
 {
 
@@ -104,10 +104,10 @@ namespace vds
             services.AddTransient<Services.Log.IRepository, Services.Log.Repository>();
             /// Add Custom common app service as transient service
             services.AddTransient<Services.App.ICommon, Services.App.Common>();
-
             /// scoped service 
             /// Add Custom Common Database servcie as scoped service
             services.AddScoped<Services.Database.ICommon, Services.Database.Common>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 

@@ -5,6 +5,8 @@
     <UserSecretsId>aspnet-coderush-39DF414A-300F-4A69-93C1-C9AB59AEA856</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <OutputType>Exe</OutputType>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +15,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
@@ -47,8 +50,6 @@
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\external\jquery\jquery.js" />
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\jquery-ui.js" />
     <None Include="wwwroot\assets\vendor\jquery-ui-1.12.1\jquery-ui.min.js" />
-    <None Include="wwwroot\myCustom\datepicker-th\jquery-1.4.4.min.js" />
-    <None Include="wwwroot\myCustom\datepicker-th\jquery-ui-1.8.10.offset.datepicker.min.js" />
   </ItemGroup>
 
 
@@ -90,5 +91,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>

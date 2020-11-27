@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vds.Data;
 
 namespace vds.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201127041754_iniemailsender")]
+    partial class iniemailsender
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1167,7 +1169,7 @@ namespace vds.Migrations
                     b.ToTable("DoctorType");
                 });
 
-            modelBuilder.Entity("vds.Models.EmailSenderConfig", b =>
+            modelBuilder.Entity("vds.Models.EmailSender", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -1210,7 +1212,7 @@ namespace vds.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("EmailSenderConfig");
+                    b.ToTable("EmailSender");
                 });
 
             modelBuilder.Entity("vds.Models.Employee", b =>
@@ -3552,7 +3554,7 @@ namespace vds.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("vds.Models.EmailSenderConfig", b =>
+            modelBuilder.Entity("vds.Models.EmailSender", b =>
                 {
                     b.HasOne("vds.Models.ApplicationUser", "CreatedBy")
                         .WithMany()

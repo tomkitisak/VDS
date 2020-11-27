@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,15 +56,71 @@ namespace vds.Controllers
             ViewData["BenefitTemplate"] = _app.GetBenefitTemplateSelectList();
         }
 
-        //consume db context service, display all hospital
-        public IActionResult Index()
-        {
 
-            var objs = _context.Doctor
-                .AsNoTracking()
-                .Include(x => x.DoctorType)
-                .Include(x => x.PrefixType)
-                .OrderByDescending(x => x.CreatedAtUtc).ToList();
+
+
+
+
+
+
+
+
+
+
+
+        //var InJobReady = _context.JobDoctor
+        //      .AsNoTracking()
+        //      .Where(x => x.JobId.Equals(id)).ToList();
+
+        //var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
+        //List<Doctor> doctors = new List<Doctor>();
+
+        //    if (userTypeId == "3")
+        //    {
+        //        doctors = _context.Doctor
+        //            .AsNoTracking()
+        //            .Include(x => x.DoctorType)
+        //            .Include(x => x.PrefixType)
+        //            .Where(x => !IdInJobReady.Contains(x.DoctorId))
+        //            .Where(x => x.DoctorId.Equals(doctorId))
+        //            .ToList();
+
+    
+
+
+    //consume db context service, display all hospital
+    public IActionResult Index()
+        {
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+            string doctorGroupId = TempData["doctorGroupId"] != null ? TempData["doctorGroupId"].ToString() : null;
+            TempData.Keep("userTypeId");
+            TempData.Keep("doctorGroupId");
+
+            List<Doctor> objs = new List<Doctor>();
+            if (userTypeId == "2")
+            {
+            var InJobReady = _context.DoctorGroupDoctor
+             .AsNoTracking()
+             .Where(x => x.DoctorGroupId.Equals(doctorGroupId))
+             .Select(x=>x.DoctorId)
+             .ToArray();
+
+
+            objs = _context.Doctor
+                    .AsNoTracking()
+                    .Include(x => x.DoctorType)
+                    .Include(x => x.PrefixType)
+                    .Where(x => InJobReady.Contains(x.DoctorId))
+                    .OrderByDescending(x => x.CreatedAtUtc).ToList();
+            }
+            else
+            {
+                objs = _context.Doctor
+               .AsNoTracking()
+               .Include(x => x.DoctorType)
+               .Include(x => x.PrefixType)
+               .OrderByDescending(x => x.CreatedAtUtc).ToList();
+            }
             return View(objs);
         }
 
@@ -85,6 +142,8 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult Form(string id)
         {
+            ViewBag.IsNew = false;
+
             //create new
             if (id == null)
             {
@@ -92,6 +151,8 @@ namespace vds.Controllers
                 FillDropdownListForhospitalForm();
 
                 Doctor newObj = new Doctor();
+                ViewBag.IsNew = true;
+
                 ViewBag.ImageDataUrl = "/assets/images/noimage.png";
                 return View(newObj);
 
@@ -136,6 +197,8 @@ namespace vds.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitForm([Bind] Doctor doctor, IFormFile file)
         {
+            string doctorGroupId = TempData["doctorGroupId"] != null ? TempData["doctorGroupId"].ToString() : null;
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
             try
             {
                 if (!ModelState.IsValid)
@@ -198,6 +261,20 @@ namespace vds.Controllers
                     _context.Doctor.Add(newdoctor);
                     _context.SaveChanges();
 
+                    if ((!string.IsNullOrEmpty(doctorGroupId)) && (userTypeId == "2"))
+                    {
+                        DoctorGroupDoctor newdoctorGroupDoctor = new DoctorGroupDoctor();
+                        newdoctorGroupDoctor.DoctorGroupDoctorId = Guid.NewGuid().ToString();
+                        newdoctorGroupDoctor.DoctorGroupId = doctorGroupId;
+                        newdoctorGroupDoctor.DoctorId = newdoctor.DoctorId;
+                        newdoctorGroupDoctor.CreatedBy = await _userManager.GetUserAsync(User);
+
+                        newdoctorGroupDoctor.CreatedAtUtc = DateTime.UtcNow;
+                        newdoctorGroupDoctor.UpdatedBy = newdoctorGroupDoctor.CreatedBy;
+                        newdoctorGroupDoctor.UpdatedAtUtc = newdoctorGroupDoctor.CreatedAtUtc;
+                        _context.DoctorGroupDoctor.Add(newdoctorGroupDoctor);
+                        _context.SaveChanges();
+                    }
                     //dropdownlist 
                     FillDropdownListForhospitalForm();
 

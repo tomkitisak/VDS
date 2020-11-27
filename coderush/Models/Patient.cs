@@ -45,10 +45,7 @@ namespace vds.Models
                 return age;
             }
 
-        }
-        
-
-
+        }     
     [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "กรอกข้อมูลรูปแบบหมายเลขโทรศัพท์ไม่ถูกต้อง")]
         [Required(ErrorMessage = "กรุณากรอกข้อมูลหมายเลขโทรศัพท์")]

@@ -20,7 +20,7 @@ using vds.ViewModels;
 
 namespace vds.Controllers
 {
-    [Authorize(Roles = Services.App.Pages.Hospital.RoleName)]
+    [Authorize(Roles = Services.App.Pages.Job.RoleName)]
 
     public class JobController : Controller
     {
@@ -347,7 +347,6 @@ namespace vds.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitSelectDoctors(string jobId, List<DoctorSelectedViewModel> doctor)
         {
-
             string OrgAction = TempData["OrgAction"].ToString();
             int countdoctor = doctor.Where(x => x.DoctorSelect.Selected).Count();
             try
@@ -379,7 +378,6 @@ namespace vds.Controllers
                         _context.Update(update);
                     }
 
-
                     _context.SaveChanges();
 
                     TempData[StaticString.StatusMessage] = "เพิ่มข้อมูลแพทย์เรียบร้อยแล้ว.";
@@ -397,25 +395,68 @@ namespace vds.Controllers
 
         }
 
-
-        [HttpGet]    
+        [HttpGet]
         public IActionResult SelectDoctorsPartial(string id)
         {
-             ViewBag.jobId = id;        
+            string hospitalId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+            string doctorId = TempData["doctorId"] != null ? TempData["doctorId"].ToString() : null;
+            string doctorGroupId = TempData["doctorGroupId"] != null ? TempData["doctorGroupId"].ToString() : null;
+            TempData.Keep("hospitalId");
+            TempData.Keep("userTypeId");
+            TempData.Keep("doctorId");
+            TempData.Keep("doctorGroupId");
+
+            ViewBag.jobId = id;
+
+
+            //    var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
+
+            List<Doctor> doctors = new List<Doctor>();
             var InJobReady = _context.JobDoctor
-               .AsNoTracking()
-               .Where(x => x.JobId.Equals(id)).ToList();
+            .AsNoTracking()
+            .Where(x => x.JobId.Equals(id))
+            .Select(x => x.DoctorId).ToArray();
 
-            var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
+            if (userTypeId == "2")
+            {
+                var InGroupReady = _context.DoctorGroupDoctor
+                   .AsNoTracking()
+                   .Where(x => x.DoctorGroupId.Equals(doctorGroupId))
+                   .Select(x => x.DoctorId)
+                   .ToArray();
 
-            ViewBag.GroupName = "";
+                doctors = _context.Doctor
+                    .AsNoTracking()
+                    .Include(x => x.DoctorType)
+                    .Include(x => x.PrefixType)
+                    .Where(x => !InJobReady.Contains(x.DoctorId))
+                    .Where(x => InGroupReady.Contains(x.DoctorId))
+                   .OrderByDescending(x => x.CreatedAtUtc).ToList();
+            }
+            else
+            if (userTypeId == "3")
+            {
+              
 
-            var doctors = _context.Doctor
-                     .AsNoTracking()
-                     .Include(x => x.DoctorType)
-                     .Include(x => x.PrefixType)
-                     .Where(x => !IdInJobReady.Contains(x.DoctorId))
-                     .ToList();
+                doctors = _context.Doctor
+                    .AsNoTracking()
+                    .Include(x => x.DoctorType)
+                    .Include(x => x.PrefixType)
+                    .Where(x => !InJobReady.Contains(x.DoctorId))
+                    .Where(x => x.DoctorId.Equals(doctorId))
+                    .ToList();
+
+            }
+            else
+            {
+                doctors = _context.Doctor
+                         .AsNoTracking()
+                         .Include(x => x.DoctorType)
+                         .Include(x => x.PrefixType)
+                         .Where(x => !InJobReady.Contains(x.DoctorId))
+                         .ToList();
+            }
 
             List<DoctorSelectedViewModel> ds = new List<DoctorSelectedViewModel>();
             foreach (var item in doctors)
@@ -483,6 +524,16 @@ namespace vds.Controllers
         public IActionResult SelectPatientsPartial(string id)
         {
             string hospitalId = TempData["hospitalId"] != null ? TempData["hospitalId"].ToString() : null;
+            string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+            string doctorId = TempData["doctorId"] != null ? TempData["doctorId"].ToString() : null;
+            TempData.Keep("hospitalId");
+            TempData.Keep("userTypeId");
+            TempData.Keep("doctorId");
+            //  TempData["hospitalId"] = hospitalId;
+            //  TempData["userTypeId"] = userTypeId;
+            //  TempData["doctorId"] = doctorId;
+
+
             ViewBag.jobId = id;
             var InReady = _context.JobPatient
                .AsNoTracking()
@@ -1231,7 +1282,7 @@ namespace vds.Controllers
         [ValidateAntiForgeryToken]
 
         public async Task<IActionResult> SubmitFormJobDoneEntry([Bind] Job job, bool IsChecked3)
-        {         
+        {
             try
             {
 
@@ -1244,7 +1295,7 @@ namespace vds.Controllers
                 ////edit existing
                 Job editjob = new Job();
                 editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
-  
+
                 if (editjob != null)
                 {
                     if (IsChecked3)
@@ -1286,7 +1337,7 @@ namespace vds.Controllers
             TempData["fromTab"] = 4;
 
             //edit object
-        
+
             List<PatientSelectViewModel> dt = new List<PatientSelectViewModel>();
 
             var patientReadyIn = _context.JobPatient
@@ -1422,13 +1473,9 @@ namespace vds.Controllers
         [HttpGet]
         public IActionResult FormJobAppointmentView(string id)
         {
-
             ViewBag.jobId = id;
-
             ViewBag.Status = 0;
             TempData["fromTab"] = 3;
-
-
             //edit object
             //ViewBag.Status = _context.Job.Where(x=>x.JobId.Equals(id)).Select(x=>x.JobStatus.Status).SingleOrDefault();
 
@@ -1755,7 +1802,7 @@ namespace vds.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData[StaticString.StatusMessage] = "Error: Model state not valid.";
-                    return RedirectToAction(nameof(FormJobPostEdit), new { id = job.JobId});
+                    return RedirectToAction(nameof(FormJobPostEdit), new { id = job.JobId });
                 }
 
                 ////edit existing
@@ -1768,7 +1815,7 @@ namespace vds.Controllers
                     editjob.Name = job.Name;
                     editjob.Description = job.Description;
                     string myDate = job.PostDate.ToString(dmyEN.ShortDatePattern);
-                   
+
                     if (IsChecked1)
                     {
                         editjob.JobStatusId = _context.JobStatus.Where(x => x.Status == 2).Select(x => x.JobStatusId).FirstOrDefault();
@@ -1815,12 +1862,9 @@ namespace vds.Controllers
 
             ViewBag.IsNew = false;
 
-            TempData["fromTab"] = 2;
-
-
             ViewBag.jobId = id;
             ViewBag.Status = 0;
-
+            TempData["fromTab"] = 2;
             //edit object
             //ViewBag.Status = _context.Job.Where(x=>x.JobId.Equals(id)).Select(x=>x.JobStatus.Status).SingleOrDefault();
             List<PatientSelectViewModel> dt = new List<PatientSelectViewModel>();
@@ -1953,7 +1997,7 @@ namespace vds.Controllers
                 ////edit existing
                 Job editjob = new Job();
                 editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
-               
+
                 if (editjob != null)
                 {
                     if (IsChecked2)
@@ -2185,13 +2229,13 @@ namespace vds.Controllers
                     return RedirectToAction(nameof(FormJobNew), new { id = job.JobId });
                 }
 
-                string jobStatusId = _context.JobStatus.Where(x => x.Status.Equals(2)).Select(x=>x.JobStatusId).FirstOrDefault();
+                string jobStatusId = _context.JobStatus.Where(x => x.Status.Equals(2)).Select(x => x.JobStatusId).FirstOrDefault();
                 ////edit existing
                 Job editjob = new Job();
                 editjob = _context.Job.Where(x => x.JobId.Equals(job.JobId)).FirstOrDefault();
                 if (editjob != null)
                 {
-                     
+
                     string myDate = job.PostDate.ToString(dmyEN.ShortDatePattern);
                     editjob.PostDate = Convert.ToDateTime(Convert.ToDateTime(myDate, dmyEN).ToString(dmyTH.ShortDatePattern));
                     editjob.IsPosted = true;

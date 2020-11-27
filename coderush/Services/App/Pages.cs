@@ -50,6 +50,7 @@
             public const string ControllerName = "DoctorGroup";
             public const string RoleName = "DoctorGroup";
             public const string UrlDefault = "/DoctorGroup/Index";
+            public const string UrlDefaultType2 = "/DoctorGroup/Form";
             public const string NavigationName = "กลุ่มแพทย์";
         }
 
@@ -79,6 +80,7 @@
             public const string ControllerName = "Doctor";
             public const string RoleName = "Doctor";
             public const string UrlDefault = "/Doctor/Index";
+            public const string UrlDefaultType3 = "/Doctor/Form";
             public const string NavigationName = "แพทย์";
         }
 

@@ -5,6 +5,9 @@
     string controller = this.ViewContext.RouteData.Values["controller"].ToString();
     int count = Model.Count;
     string css = count <= 0 ? "hidden" : "";
+    
+
+
 }
 
 <!-- Modal -->
@@ -13,7 +16,7 @@
         <div class="modal-content">
             <form asp-controller="@controller" asp-action="SubmitSelectDoctors" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addContactLabel">ข้อมูลผู้ป่วย</h5>
+                    <h5 class="modal-title" id="addContactLabel">ข้อมูลผแพทย์</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -29,10 +32,10 @@
                                         <table id="grid9" class="table table-striped" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr class="bg-primary text-white">
-                                                    <th width="10%">
-                                                        <input type="checkbox" name="allcheck" id="selectAll" style="margin-right:5px" />เลือก
+                                                    <th width="5%">
+                                                        <input type="checkbox"   name="allcheck" id="selectAll" style="margin-right:5px" />เลือก
                                                     </th>
-                                                    <th width="10%"></th>
+                                                    <th width="15%"></th>
                                                     <th width="25%">ชื่อ-สกุล</th>
                                                     <th width="15%">แพทย์เชี่ยวชาญ</th>
                                                     <th width="15%">เบอร์ไทร</th>
@@ -47,9 +50,10 @@
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <input type="hidden" asp-for="@Model[i].DoctorSelect.Value" />
-                                                                <input asp-for="@Model[i].DoctorSelect.Selected" />
+                                                                <input   type="hidden" asp-for="@Model[i].DoctorSelect.Value" />
+                                                                <input  asp-for="@Model[i].DoctorSelect.Selected"/>
                                                                 <input type="hidden" asp-for="@Model[i].DoctorId" />
+                                                                <input type="hidden" asp-for="@Model[i].DoctorGroupId" />
                                                                 <input type="hidden" asp-for="@jobId" />
                                                             </td>
                                                             <td>
@@ -90,7 +94,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
-                    <input type="submit" class="btn btn-primary" value="บันทึก" @css />
+                    <input id="btnSelect" type="submit" class="btn btn-primary" value="บันทึก" @css />
                 </div>
             </form>
 
@@ -100,7 +104,7 @@
 </div>
 <style>
     .modal-lg {
-        max-width: 60% !important;
+        max-width: 65% !important;
     }
 </style>
 <script>
@@ -121,14 +125,38 @@
     $(function () {
         $("#selectAll").click(function () {
             $("input[type=checkbox]").prop('checked', $(this).prop('checked'))
+
         });
 
         $("input[type=checkbox]").click(function () {
             if (!$(this).prop('checked')) {
-                $("#selectAll").prop("checked", false);
+                $("#selectAll").prop("checked", false);              
             }
+          //  tt();
         });
-    })
+
+        //var numberOfChecked = $('input:checkbox:checked').length;
+        //var totalCheckboxes = $('input:checkbox').length;
+        //var numberNotChecked = totalCheckboxes - numberOfChecked;
+    });
+
+    function tt() {
+        var aaa = document.getElementById("btnSelect");
+        var ccc = document.getElementsByName("foo");
+        var cnt = 0;
+        for (var i = 0; i < ccc.length; i++)
+        {
+            if (ccc[i].checked) {
+                cnt = cnt + 1;
+            }         
+        }
+        if (cnt > 0) {        
+            aaa.disabled = false;
+        }
+        else {           
+            aaa.disabled = true;
+        }
+    }
 
 </script>
 

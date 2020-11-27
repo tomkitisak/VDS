@@ -20,7 +20,11 @@
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-book-open"></i>@modelName</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">กำหนดค่าระบบ</a></li>
+            <li class="breadcrumb-item active">ปรับปรุงข้อมูลตำแหน่งงาน</li>
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-human"></i>ข้อมูลตำแหน่งงน</h2>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
@@ -30,11 +34,7 @@
 
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
 
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">ปรับปรุงข้อมูล-ตำแหน่งงาน</h4>
-                    </div>
-                </article>
+               
 
                 <article class="card mb-4">
                     <div class="card-header">

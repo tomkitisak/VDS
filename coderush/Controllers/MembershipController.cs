@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using vds.Data;
 using vds.Models;
+using vds.Services;
 using vds.Services.Security;
 using vds.ViewModels;
 
@@ -17,12 +19,14 @@ namespace vds.Controllers
     [Authorize(Roles = Services.App.Pages.Membership.RoleName)]
     public class MembershipController : Controller
     {
+        private readonly IWebHostEnvironment _env;
         private readonly Services.Security.ICommon _security;
         private readonly IdentityDefaultOptions _identityDefaultOptions;
         private readonly SuperAdminDefaultOptions _superAdminDefaultOptions;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Services.App.ICommon _app;
+        private IEmailSender _emailSender;
 
         //dependency injection through constructor, to directly access services
         public MembershipController(
@@ -31,7 +35,9 @@ namespace vds.Controllers
             IOptions<SuperAdminDefaultOptions> superAdminDefaultOptions,
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            Services.App.ICommon app
+            Services.App.ICommon app,
+              IWebHostEnvironment env
+             
             )
         {
             _security = security;
@@ -40,6 +46,10 @@ namespace vds.Controllers
             _context = context;
             _userManager = userManager;
             _app = app;
+            _env = env;
+        
+
+
         }
 
         //fill viewdata as dropdownlist datasource for hospital form
@@ -424,10 +434,12 @@ namespace vds.Controllers
             return View(reg);
         }
 
+
+
         //post submitted registration request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitRegister([Bind("EmailConfirmed,Email,PhoneNumber,Password,ConfirmPassword,UserTypeId")] Register register)
+        public async Task<IActionResult> SubmitRegister([Bind("EmailConfirmed,Email,PhoneNumber,Password,ConfirmPassword,UserTypeId")] Register register,bool sendemail)
         {
             try
             {
@@ -448,7 +460,7 @@ namespace vds.Controllers
                 // Add Role
                 ChangeRoles changeRoles = new ChangeRoles();
 
-                if (register.UserTypeId=="0")
+                if (register.UserTypeId == "0")
                 {
                     changeRoles.IsTodoRegistered = true;
                     changeRoles.IsEmployeeRegistered = true;
@@ -557,8 +569,6 @@ namespace vds.Controllers
                     await _userManager.RemoveFromRoleAsync(newMember, "Job");
                 }
 
-
-
                 //DoctorGroup role
                 if (changeRoles.IsDoctorGroupRegistered)
                 {
@@ -608,6 +618,18 @@ namespace vds.Controllers
                 else
                 {
                     await _userManager.RemoveFromRoleAsync(newMember, "Settings");
+                }
+                if (sendemail)
+                {
+                    _emailSender = new EmailSender(_app, _context, _env);
+                    var email = newMember.Email;
+                    var subject = "แจ้งรหัสผู้ใช้งาน";
+                    var message = "เรียน ผู้เกี่ยวข้อง</br>ตามที่ท่านได้สนใจเข้าร่วมโครงการแพทย์อาสาผ่าตัดในพ้นที่ขาดแคลนนั้น</br>ระบบได้ดำเนินการส่งรหัสผู้ใช้งาน และรหัสผ่านเบื้องต้นมาให้ท่านพร้อมนี้แล้ว</br>รหัสผู้ใช้งาน : <b>"
+                        + register.Email + "</b> </br>รหัสผ่านครั้งแรก :<b>" + register.Password + "</b></br>ท่านสามารถเข้าระบบได้จาก Link ต่อไปนี้ คลิก <p><a href=\"http://122.155.7.130:4520\">ศูนย์แพทย์อาสาผ่าตัดในพื้นที่ขาดแคลน</a></p></br>โครงการขอขอบคุณเป็นอย่างยิ่ง</br>กรณีต้องการสอบถามข้อมูลเพิ่มเติมกรุณาติดต่อ 02-123-4567"
+                    + " ในวันและเวลาราชการ</br></br><b>โครงการแพทย์อาสาผ่าตัดในพื้นที่ขาดแคลน</b>";
+                    await _emailSender.SendEmailAsync(email, subject, message);
+
+                  
                 }
 
                 TempData[StaticString.StatusMessage] = "ลงทะเบียนผู้ใช้ใหม่เรียบร้อย!";

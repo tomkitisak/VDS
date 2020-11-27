@@ -127,7 +127,7 @@ namespace vds.Services.App
                 .Select(x => new SelectListItem
                 {
                     Value = x.EmployeeId,
-                    Text =  x.FirstName + " " + x.LastName
+                    Text = x.FirstName + " " + x.LastName
                 }).ToList();
             SelectListItem blankOption = new SelectListItem()
             {
@@ -185,9 +185,9 @@ namespace vds.Services.App
                 {
                     Value = x.JobStatusId,
                     Text = x.Description
-                  
-                   
-                }).ToList(); 
+
+
+                }).ToList();
             SelectListItem blankOption = new SelectListItem()
             {
                 Value = "",
@@ -700,6 +700,27 @@ namespace vds.Services.App
             return hospitalsummary;
 
         }
+
+
+
+        public EmailSenderConfig GetEmailSenderConfig()
+        {
+            try
+            {
+                EmailSenderConfig result = new EmailSenderConfig();
+                result = _context.EmailSenderConfig.FirstOrDefault();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
         public EmployeeSummary GetEmployeeSummary()
         {
             try

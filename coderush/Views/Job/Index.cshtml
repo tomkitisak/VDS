@@ -4,7 +4,6 @@
 @using vds.ViewModels;
 @using Newtonsoft.Json;
 
-
 @{
 
     string controller = this.ViewContext.RouteData.Values["controller"].ToString();
@@ -13,12 +12,6 @@
 
     string uType = ViewBag.userTypeId;
     string hId = ViewBag.hospitalId;
-
-    if (TempData["fromTab"] == null)
-    {
-        TempData["fromTab"] = 1;
-    }
-    string fromTab = TempData["fromTab"].ToString();
 
     HospitalSummary summary = _app.GetHospitalSummary();
     ChartDoughnut donutChart = _app.GetHospitalDoughnut();
@@ -31,6 +24,28 @@
     var alertanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
     var confirmanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
     var promptanimation = new Syncfusion.EJ2.Popups.DialogAnimationSettings { Effect = Syncfusion.EJ2.Popups.DialogEffect.None };
+
+    string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : "";
+    string cssHidden = "";
+
+    if (TempData["fromTab"] == null)
+    {
+        TempData["fromTab"] = 1;
+
+        if ((userTypeId == "2") || (userTypeId == "3"))
+        {
+
+            TempData["fromTab"] = 2;
+        }
+
+    }
+
+    if ((userTypeId == "2") || (userTypeId == "3"))
+    {
+        cssHidden = "hidden";
+    }
+
+    string fromTab = TempData["fromTab"].ToString();
 
 }
 
@@ -49,7 +64,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-pills nav-justified" style="width:100%">
-                <li class="nav-item">
+                <li class="nav-item" @cssHidden>
                     <a id="atab1" class="nav-link" data-toggle="tab" href="#tab1">งานใหม่</a>
                 </li>
                 <li class="nav-item">
@@ -69,7 +84,7 @@
 
 
 
-        <div class="tab-pane " id="tab1" role="tabpanel">
+        <div class="tab-pane " id="tab1" role="tabpanel" @cssHidden>
 
 
             <div class="row mb-2">
@@ -175,7 +190,6 @@
         </div>
 
         <div class="tab-pane" id="tab2" role="tabpanel">
-
             <div class="row mb-2">
                 <div class="col-12">
                     <div class="dropdown d-inline">
@@ -208,8 +222,15 @@
                                 <table id="grid2" class="table table-striped" cellspacing="0" width="100%">
                                     <thead>
                                         <tr class="bg-primary text-white">
-                                            <th width="5%"></th>
-                                            <th width="5%"></th>
+                                            @if ((uType == "1") || (uType == "0"))
+                                            {
+                                                <th width="5%"></th>
+                                                <th width="5%"></th>
+                                            }
+                                            else
+                                            {
+                                                <th width="5%"></th>
+                                            }
                                             <th width="20%">ชื่องาน</th>
                                             <th width="20%">รายละเอียด</th>
                                             <th width="15%">โรงพยาบาล</th>
@@ -225,7 +246,7 @@
                                         {
                                             var mydate = item.PostDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
                                             <tr>
-                                                @if (uType == "1")
+                                                @if ((uType == "1") || (uType == "0"))
                                                 {
                                                     <td>
                                                         <a href="/@controller/FormJobPostEdit?id=@item.JobId" title="แก้ไขงานโพสต์"><i class="icon-note md-18"></i> </a>
@@ -236,9 +257,7 @@
                                                         <a href="/@controller/FormJobAddAppointment?id=@item.JobId" title="ลงนัดหมายผ่าตัด หลังจากเพิ่มแพทย์เข้างานโพสต์แล้ว"><i class="icon-calendar md-18"></i> </a>
 
                                                     </td>
-                                                    @*<td>
-                                                            <a href="/@controller/FormJobAddDoctor?id=@item.JobId" title="เพิ่มแพทย์ในงานโพสต์"><i class="icon-user-follow md-18"></i> </a>
-                                                        </td>*@
+
                                                 }
                                                 else
                                                 {
@@ -275,19 +294,11 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </article>
-
-
                 </div>
 
-
-
             </div>
-
-
-
         </div>
         <div class="tab-pane" id="tab3" role="tabpanel">
 
@@ -321,9 +332,20 @@
                                 <table id="grid3" class="table table-striped" cellspacing="0" width="100%">
                                     <thead>
                                         <tr class="bg-primary text-white">
-                                            <th width="5%"></th>
-                                            <th width="5%"></th>
-                                            <th width="20%">ชื่องาน</th>
+
+                                            @if ((uType == "1") || (uType == "0"))
+                                            {
+                                                <th width="5%"></th>
+                                                <th width="5%"></th>
+                                                <th width="20%">ชื่องาน</th>
+                                            }
+                                            else
+                                            {
+
+                                                <th width="5%"></th>
+                                                <th width="25%">ชื่องาน</th>
+                                            }
+
                                             <th width="20%">รายละเอียด</th>
                                             <th width="15%">โรงพยาบาล</th>
                                             <th width="10%">ผู้ป่วย(คน)</th>
@@ -336,17 +358,26 @@
                                         @foreach (var item in jobstatus3)
                                         {
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+
                                             <tr>
-                                                <td>
-                                                    <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
+                                                @if ((uType == "1") || (uType == "0"))
+                                                {
+                                                    <td>
+                                                        <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
 
-                                                </td>
-                                                <td>
-                                                    <a href="/@controller/FormJobDoneEntry/?id=@item.JobId" title="บันทึกผลปฏิบัติงาน"><i class="icon-note md-18"></i> </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/@controller/FormJobDoneEntry/?id=@item.JobId" title="บันทึกผลปฏิบัติงาน"><i class="icon-note md-18"></i> </a>
 
-                                                </td>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <a href="/@controller/FormJobAppointmentView/?id=@item.JobId" title="ดูรายละเอียด"><i class="icon-doc md-18"></i> </a>
 
-
+                                                    </td>
+                                                }
                                                 <td>
                                                     @item.Name
                                                 </td>
@@ -417,8 +448,15 @@
                                 <table id="grid3" class="table table-striped" cellspacing="0" width="100%">
                                     <thead>
                                         <tr class="bg-primary text-white">
-                                            <th width="5%"></th>
-                                            <th width="5%"></th>
+                                            @if ((uType == "1") || (uType == "0"))
+                                            {
+                                                <th width="5%"></th>
+                                                <th width="5%"></th>
+                                            }
+                                            else
+                                            {
+                                                <th width="5%"></th>
+                                            }
                                             <th width="24%">ชื่องาน</th>
                                             <th width="18%">รายละเอียด</th>
                                             <th width="18%">โรงพยาบาล</th>
@@ -433,14 +471,25 @@
                                         {
                                             var mydate = item.AppStartDate.Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
                                             <tr>
-                                                <td>
-                                                    <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
+                                                @if ((uType == "1") || (uType == "0"))
+                                                {
+                                                    <td>
+                                                        <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
 
-                                                </td>
-                                                <td>
-                                                    <a href="/@controller/FormJobDoneEdit/?id=@item.JobId" title="คลิกเพื่อแก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/@controller/FormJobDoneEdit/?id=@item.JobId" title="คลิกเพื่อแก้ไขรายละเอียดงาน"><i class="icon-note md-18"></i> </a>
 
-                                                </td>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <a href="/@controller/FormJobDoneView/?id=@item.JobId" title="คลิกเพื่อดูรายละเอียดงาน"><i class="icon-doc md-18"></i> </a>
+
+                                                    </td>
+                                                }
+
 
                                                 <td>
                                                     @item.Name
@@ -470,14 +519,9 @@
                         </div>
                     </article>
 
-
                 </div>
 
-
-
             </div>
-
-
 
         </div>
 

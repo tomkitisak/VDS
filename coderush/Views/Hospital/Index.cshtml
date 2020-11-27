@@ -1,4 +1,5 @@
 ﻿@model List<Hospital>
+
 @inject vds.Services.App.ICommon _app;
 @using vds.ViewModels;
 @using Newtonsoft.Json;
@@ -398,7 +399,7 @@
         function deleteData(name, id) {
 
             $("#hiddenId").val(id);
-            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + name + " ใช่หรือไม่ ?";
+            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + name + "และข้อมูลเกี่ยวข้อง ใช่หรือไม่ ?";
             $("#dialog").dialog("open");
             event.preventDefault();
 

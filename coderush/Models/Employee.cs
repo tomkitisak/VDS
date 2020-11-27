@@ -19,8 +19,7 @@ namespace vds.Models
         public string LastName { get; set; }
         [Required]
         public string Gender { get; set; }
-
-    
+         [Url]
         [EmailAddress(ErrorMessage = "กรอกข้อมูลรูปแบบอีเมล์ไม่ถูกต้อง")]
         [Required(ErrorMessage = "กรุณากรอกข้อมูลอีเมล์")]
         [Display(Name = "อีเมล์")]

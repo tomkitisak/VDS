@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace vds.Models
 {
     //type of asset
     public class PrefixType : Base
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string PrefixTypeId { get; set; }
         [Required]
         [Display(Name = "ลำดับการแสดงผล")]

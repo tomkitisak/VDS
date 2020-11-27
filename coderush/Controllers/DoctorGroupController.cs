@@ -98,11 +98,7 @@ namespace vds.Controllers
                     }
                 ).ToList();
 
-
-
             return View(objs);
-
-
 
         }
 
@@ -343,17 +339,13 @@ namespace vds.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitForm([Bind(Prefix = "DoctorGroup")] DoctorGroup doctorgroup, [Bind(Prefix = "GroupCoordinator")] GroupCoordinator groupcoordinator, IFormFile file)
         {
-
             try
             {
-
-
                 if (!ModelState.IsValid)
                 {
                     TempData[StaticString.StatusMessage] = "Error: Model state not valid.";
                     return RedirectToAction(nameof(Form), new { id = doctorgroup.DoctorGroupId ?? "" });
                 }
-
                 //  create new Group
                 if (doctorgroup.DoctorGroupId == null)
                 {
@@ -373,7 +365,6 @@ namespace vds.Controllers
 
                     //  Add GroupCo
                     GroupCoordinator newgroupco = new GroupCoordinator();
-
                     newgroupco.GroupCoordinatorId = Guid.NewGuid().ToString();
 
                     if (file != null)
@@ -423,44 +414,25 @@ namespace vds.Controllers
 
                     //  newdirector.HospitalId = newhospital.HospitalId;
                     _context.GroupCoordinator.Add(newgroupco);
-
                     //  Add Data to Database
                     _context.SaveChanges();
-
-
                     //  dropdownlist
                     FillDropdownListForhospitalForm();
-
                     TempData[StaticString.StatusMessage] = "บันทึกข้อมูล" + modelName + "เรียบร้อยแล้ว.";
-
                     return RedirectToAction(nameof(Form), new { id = newgroup.DoctorGroupId ?? "" });
                 }
-
-
-
-
                 ////edit existing
                 DoctorGroup editdoctorgroup = new DoctorGroup();
                 GroupCoordinator editgroupcoordinator = new GroupCoordinator();
-
-
-
                 editdoctorgroup = _context.DoctorGroup.Where(x => x.DoctorGroupId.Equals(doctorgroup.DoctorGroupId)).FirstOrDefault();
                 editgroupcoordinator = _context.GroupCoordinator.Where(x => x.DoctorGroupId.Equals(doctorgroup.DoctorGroupId)).FirstOrDefault();
-
-
                 if (editdoctorgroup != null)
                 {
-
                     editdoctorgroup.DoctorGroupName = doctorgroup.DoctorGroupName;
                     editdoctorgroup.DoctorTypeId = doctorgroup.DoctorTypeId;
-
                     editdoctorgroup.UpdatedBy = await _userManager.GetUserAsync(User);
                     editdoctorgroup.UpdatedAtUtc = DateTime.UtcNow;
-
                     _context.Update(editdoctorgroup);
-
-
                     // Update  Group Coordinator
                     if (file != null)
                     {
@@ -512,7 +484,7 @@ namespace vds.Controllers
                     FillDropdownListForhospitalForm();
 
                     TempData[StaticString.StatusMessage] = "ปรับปรุงข้อมูล" + modelName + "เรียบร้อยแล้ว.";
-                    return RedirectToAction(nameof(Form), new { id = editdoctorgroup.DoctorGroupId ?? "" });
+                    return RedirectToAction(nameof(Form), new { id = editdoctorgroup.DoctorGroupId  });
                 }
                 else
                 {
@@ -522,35 +494,52 @@ namespace vds.Controllers
             }
             catch (Exception ex)
             {
-
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
-                return RedirectToAction(nameof(Form), new { id = "1" ?? "" });
+                return RedirectToAction(nameof(Form), new { id = doctorgroup.DoctorGroupId });
             }
         }
 
 
-        public IActionResult SubmitDeleteDoctorGrooup(string id)
-        {
+        public async Task<IActionResult> DeleteDoctorgroup(string id)
+        { 
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                var del = _context.DoctorGroup.Where(x => x.DoctorGroupId.Equals(id)).FirstOrDefault();
+                List<DoctorGroupDoctor> delDoctors = _context.DoctorGroupDoctor.Where(x => x.DoctorGroupId.Equals(id)).ToList();
+                if (delDoctors == null)
+                {
+                    return NotFound();
+                }
+                _context.DoctorGroupDoctor.RemoveRange(delDoctors);
+                await _context.SaveChangesAsync();
+
+                var del = _context.GroupCoordinator.Where(x => x.DoctorGroupId.Equals(id)).FirstOrDefault();
                 if (del == null)
                 {
                     return NotFound();
                 }
+                _context.GroupCoordinator.Remove(del);
+                await _context.SaveChangesAsync();
 
-                _context.DoctorGroup.Remove(del);
-                _context.SaveChanges();
-
-                TempData[StaticString.StatusMessage] = "ลบข้อมูลกลุ่มแพทย์เรียบร้อยแล้ว!";
-                return RedirectToAction(nameof(Index));
+                var del1 = _context.DoctorGroup.Where(x => x.DoctorGroupId.Equals(id)).FirstOrDefault();
+                if (del1 == null)
+                {
+                    return NotFound();
+                }
+                _context.DoctorGroup.Remove(del1);
+                await _context.SaveChangesAsync();
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
-
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
                 return RedirectToAction(nameof(Index));
             }
+            TempData[StaticString.StatusMessage] = "ลบข้อมูลกลุ่มแพทย์และข้อมูลเกี่ยวข้องเรียบร้อยแล้ว!";
+            return RedirectToAction(nameof(Index));
         }
 
         //display hospital create edit form
@@ -604,12 +593,12 @@ namespace vds.Controllers
 
 
         [HttpGet]
-        public IActionResult SelectDoctorsPartial(string id)
+        public IActionResult SelectDoctorsPartial(string id)   // id is DoctorGroupId
         {
             ViewBag.jobId = id;
-            var InJobReady = _context.JobDoctor
+            var InJobReady = _context.DoctorGroupDoctor
                .AsNoTracking()
-               .Where(x => x.JobId.Equals(id)).ToList();
+               .Where(x => x.DoctorGroupId.Equals(id)).ToList();
 
             var IdInJobReady = InJobReady.Select(x => x.DoctorId).ToArray();
 
@@ -650,10 +639,12 @@ namespace vds.Controllers
         //post submitted hospital data. if hospitalId is null then create new, otherwise edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitSelectDoctors(string jobId, List<DoctorSelectedViewModel> doctor)
+        public async Task<IActionResult> SubmitSelectDoctors( List<DoctorSelectedViewModel> doctor)
         {
 
-            string OrgAction = TempData["OrgAction"].ToString();
+            string OrgAction = TempData["OrgAction"] != null ? TempData["OrgAction"].ToString() : null;
+            string doctorGroupId = doctor.Select(x => x.DoctorGroupId).FirstOrDefault();
+
             int countdoctor = doctor.Where(x => x.DoctorSelect.Selected).Count();
             try
             {
@@ -663,30 +654,19 @@ namespace vds.Controllers
                     {
                         if (item.DoctorSelect.Selected)
                         {
-                            JobDoctor newdoctor = new JobDoctor();
-                            newdoctor.JobDoctorId = Guid.NewGuid().ToString();
-                            newdoctor.JobId = jobId;
+                            DoctorGroupDoctor newdoctor = new DoctorGroupDoctor();
+                            newdoctor.DoctorGroupDoctorId = Guid.NewGuid().ToString();
+                            newdoctor.DoctorGroupId = item.DoctorGroupId;
                             newdoctor.DoctorId = item.DoctorId;
                             newdoctor.CreatedBy = await _userManager.GetUserAsync(User);
                             newdoctor.CreatedAtUtc = DateTime.UtcNow;
                             newdoctor.UpdatedBy = newdoctor.CreatedBy;
                             newdoctor.UpdatedAtUtc = newdoctor.CreatedAtUtc;
-                            _context.JobDoctor.Add(newdoctor);
+                            _context.DoctorGroupDoctor.Add(newdoctor);
                         }
                     }
                     _context.SaveChanges();
-
-                    int mycount = _context.JobDoctor.Where(x => x.JobId.Equals(jobId)).Count();
-                    var update = _context.Job.Where(o => o.JobId == jobId).FirstOrDefault();
-                    if (update != null)
-                    {
-                        update.TotalDoctors = mycount;
-                        _context.Update(update);
-                    }
-
-
-                    _context.SaveChanges();
-
+ 
                     TempData[StaticString.StatusMessage] = "เพิ่มข้อมูลแพทย์เรียบร้อยแล้ว.";
                 }
             }
@@ -695,12 +675,43 @@ namespace vds.Controllers
             {
 
                 TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
-                return RedirectToAction(OrgAction, new { id = jobId });
+                return RedirectToAction(OrgAction, new { id = doctorGroupId });
             }
 
-            return RedirectToAction(OrgAction, new { id = jobId });
+            return RedirectToAction(OrgAction, new { id = doctorGroupId });
 
         }
+
+   
+        public IActionResult DeleteDoctorInGroup(string id,string doctorGroupId)
+        {
+            string OrgAction = TempData["OrgAction"] != null ? TempData["OrgAction"].ToString() : "";
+            try
+            {
+                var del = _context.DoctorGroupDoctor
+                    .Where(x => x.DoctorGroupId.Equals(doctorGroupId))
+                    .Where(x => x.DoctorId.Equals(id))
+                    .FirstOrDefault();
+
+                if (del == null)
+                {
+                    return NotFound();
+                }
+
+                _context.DoctorGroupDoctor.Remove(del);
+                _context.SaveChanges();
+
+                TempData[StaticString.StatusMessage] = "ลบข้อมูลแพทย์ ออกจากกลุ่มเรียบร้อยแล้ว!";
+                return RedirectToAction(OrgAction, new { id = doctorGroupId });
+            }
+            catch (Exception ex)
+            {
+
+                TempData[StaticString.StatusMessage] = "Error: " + ex.Message;
+                return RedirectToAction(OrgAction, new { id = doctorGroupId });
+            }
+        }
+
 
     }
 }

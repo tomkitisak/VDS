@@ -3,12 +3,15 @@
 @inject vds.Data.ApplicationDbContext _context;
 @{
     var email = "";
+    var doctorId = "";
     var usertype = "";
     var usertypeDesc = "";
     var username = "";
     var hospitalId = "";
     var hospitalName = "";
     var coordinatorId = "";
+    var doctorGroupId = "";
+    var groupCoordinatorId = "";
     var userid = "";
     var user1 = await _userManager.GetUserAsync(User);
 
@@ -18,6 +21,7 @@
         username = user1.UserName;
         usertype = user1.UserTypeId;
         usertypeDesc = _context.UserType.Where(x => x.UserTypeId.Equals(usertype)).Select(x => x.Name).FirstOrDefault();
+
         if (usertype == "1")
         {
             userid = _userManager.GetUserId(User);
@@ -25,11 +29,26 @@
             hospitalName = _context.Hospital.Where(x => x.HospitalId.Equals(hospitalId)).Select(x => x.HospitalName).FirstOrDefault();
             coordinatorId = _context.Coordinator.Where(x => x.CreatedById.Equals(userid)).Select(x => x.CoordinatorId).FirstOrDefault();
         }
+        else if (usertype == "2")
+        {
+            userid = _userManager.GetUserId(User);
+            doctorGroupId = _context.DoctorGroup.Where(x => x.CreatedById.Equals(userid)).Select(x => x.DoctorGroupId).FirstOrDefault();
+            groupCoordinatorId = _context.GroupCoordinator.Where(x => x.CreatedById.Equals(userid)).Select(x => x.GroupCoordinatorId).FirstOrDefault();
+        }
+        else if (usertype == "3")
+        {
+            userid = _userManager.GetUserId(User);
+            doctorId = _context.Doctor.Where(x => x.CreatedById.Equals(userid)).Select(x => x.DoctorId).FirstOrDefault();
+        }
+
 
         TempData["userTypeId"] = usertype;
         TempData["hospitalId"] = hospitalId;
         TempData["hospitalName"] = hospitalName;
         TempData["coordinatorId"] = coordinatorId;
+        TempData["doctorId"] = doctorId;
+        TempData["doctorGroupId"] = doctorGroupId;
+        TempData["groupCoordinatorId"] = groupCoordinatorId;
 
     }
 
@@ -40,7 +59,7 @@
 <aside class="main-header">
     <nav class="navbar">
         <ul class="navbar-nav">
-            <li class="nav-heading" style="color:black">             
+            <li class="nav-heading" style="color:black">
                 @hospitalName
             </li>
 
@@ -60,28 +79,115 @@
             <!-- Job  -->
             @if (User.IsInRole(Pages.Job.RoleName))
             {
+                if (usertype == "2")
+                {
+                    @if (string.IsNullOrEmpty(doctorGroupId))
+                    {
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route" hidden>
+                            <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                                <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Job.NavigationName</span>
+                            </a>
+                        </li>
 
+                    }
+                    else
+                    {
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route">
+                            <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                                <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Job.NavigationName</span>
+                            </a>
+                        </li>
 
-                <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route">
-                    <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
-                        <i class="mdi mdi-ambulance md-24 mr-2"></i>
-                        <span class="menu-title">@Pages.Job.NavigationName</span>
-                    </a>
-                </li>
+                    }
+                }
+                else if (usertype == "3")
+                {
+                    @if (string.IsNullOrEmpty(doctorId))
+                    {
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route" hidden>
+                            <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                                <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Job.NavigationName</span>
+                            </a>
+                        </li>
 
+                    }
+                    else
+                    {
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route">
+                            <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                                <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Job.NavigationName</span>
+                            </a>
+                        </li>
+
+                    }
+                }
+                else
+                {
+                    <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route">
+                        <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                            <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                            <span class="menu-title">@Pages.Job.NavigationName</span>
+                        </a>
+                    </li>
+
+                }
             }
 
             <!--Doctor-->
 
             @if (User.IsInRole(Pages.Doctor.RoleName))
             {
+                if (usertype == "2")
+                {
+                    @if (string.IsNullOrEmpty(doctorGroupId))
+                    {
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Job.ControllerName)Route" hidden>
+                            <a class="nav-link waves-effect" title="@Pages.Job.NavigationName" href="@Pages.Job.UrlDefault">
+                                <i class="mdi mdi-ambulance md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Job.NavigationName</span>
+                            </a>
+                        </li>
 
-                <li class="nav-item @Html.IsSelected(controller: Pages.Doctor.ControllerName)Route">
-                    <a class="nav-link waves-effect" title="@Pages.Doctor.NavigationName" href="@Pages.Doctor.UrlDefault">
-                        <i class="mdi mdi-account-card-details md-24 mr-2"></i>
-                        <span class="menu-title">@Pages.Doctor.NavigationName</span>
-                    </a>
-                </li>
+                    }
+                    else
+                    {
+
+                        <li class="nav-item @Html.IsSelected(controller: Pages.Doctor.ControllerName)Route">
+                            <a class="nav-link waves-effect" title="@Pages.Doctor.NavigationName" href="@Pages.Doctor.UrlDefault">
+                                <i class="mdi mdi-account-card-details md-24 mr-2"></i>
+                                <span class="menu-title">@Pages.Doctor.NavigationName</span>
+                            </a>
+                        </li>
+
+                    }
+                }
+                else if (usertype == "3")
+                {
+                    <li class="nav-item @Html.IsSelected(controller: Pages.Doctor.ControllerName)Route">
+                        <a class="nav-link waves-effect" title="@Pages.Doctor.NavigationName" href="@Pages.Doctor.UrlDefaultType3/@doctorId">
+                            <i class="mdi mdi-account-card-details md-24 mr-2"></i>
+                            <span class="menu-title">@Pages.Doctor.NavigationName</span>
+                        </a>
+                    </li>
+
+                }
+                else
+                {
+
+                    <li class="nav-item @Html.IsSelected(controller: Pages.Doctor.ControllerName)Route">
+                        <a class="nav-link waves-effect" title="@Pages.Doctor.NavigationName" href="@Pages.Doctor.UrlDefault">
+                            <i class="mdi mdi-account-card-details md-24 mr-2"></i>
+                            <span class="menu-title">@Pages.Doctor.NavigationName</span>
+                        </a>
+                    </li>
+
+
+                }
+
             }
 
 
@@ -89,12 +195,24 @@
 
             @if (User.IsInRole(Pages.DoctorGroup.RoleName))
             {
-                <li class="nav-item @Html.IsSelected(controller: Pages.DoctorGroup.ControllerName)Route">
-                    <a class="nav-link waves-effect" title="@Pages.DoctorGroup.NavigationName" href="@Pages.DoctorGroup.UrlDefault">
-                        <i class="mdi mdi-account-switch md-24 mr-2"></i>
-                        <span class="menu-title">@Pages.DoctorGroup.NavigationName</span>
-                    </a>
-                </li>
+                if (usertype == "2")
+                {
+                    <li class="nav-item @Html.IsSelected(controller: Pages.DoctorGroup.ControllerName)Route">
+                        <a class="nav-link waves-effect" title="@Pages.DoctorGroup.NavigationName" href="@Pages.DoctorGroup.UrlDefaultType2/@doctorGroupId">
+                            <i class="mdi mdi-account-card-details md-24 mr-2"></i>
+                            <span class="menu-title">@Pages.DoctorGroup.NavigationName</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item @Html.IsSelected(controller: Pages.DoctorGroup.ControllerName)Route">
+                        <a class="nav-link waves-effect" title="@Pages.DoctorGroup.NavigationName" href="@Pages.DoctorGroup.UrlDefault">
+                            <i class="mdi mdi-account-switch md-24 mr-2"></i>
+                            <span class="menu-title">@Pages.DoctorGroup.NavigationName</span>
+                        </a>
+                    </li>
+                }
             }
 
 
@@ -132,7 +250,7 @@
                 else
                 {
                     <li class="disabled  nav-item @Html.IsSelected(controller: Pages.Patient.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Patient.NavigationName" href="@Pages.Patient.UrlDefault?period=@(DateTime.Now.ToString("MM-yyyy"))">
+                        <a class="nav-link waves-effect" title="@Pages.Patient.NavigationName" href="@Pages.Patient.UrlDefault">
                             <i class="mdi mdi-human-male-female md-24 mr-2"></i>
                             <span class="menu-title">@Pages.Patient.NavigationName</span>
                         </a>
@@ -161,7 +279,7 @@
 
 
                     <li class="nav-item @Html.IsSelected(controller: Pages.Hospital.ControllerName)Route">
-                        <a class="nav-link waves-effect" title="@Pages.Hospital.NavigationName" href="@Pages.Hospital.UrlDefault?period=@(DateTime.Now.ToString("MM-yyyy"))">
+                        <a class="nav-link waves-effect" title="@Pages.Hospital.NavigationName" href="@Pages.Hospital.UrlDefault">
                             <i class="mdi  mdi-hospital-building md-24 mr-2"></i>
                             <span class="menu-title">@Pages.Hospital.NavigationName</span>
                         </a>
@@ -215,6 +333,7 @@
             <!--Membership-->
             @if (User.IsInRole(Pages.Membership.RoleName))
             {
+                <li class="dropdown-divider"></li>
                 <li class="nav-item @Html.IsSelected(controller: Pages.Membership.ControllerName)Route">
                     <a class="nav-link waves-effect" title="@Pages.Membership.NavigationName" href="@Pages.Membership.UrlDefault">
                         <i class="mdi mdi-account-settings-variant md-24 mr-2"></i>
@@ -240,34 +359,29 @@
             <!--Setting-->
             @if (User.IsInRole(Pages.Settings.RoleName))
             {
-        <li class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route" hidden>
-            <a class="nav-link waves-effect" title="@Pages.Settings.NavigationName" href="javascript:void(0)">
-                <i class="mdi mdi-apps md-24 mr-2"></i>
-                <span class="menu-title">Setting</span>
-            </a>
 
-            <div class="dropdown d-inline">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    เพิ่มเติมข้อมูลระบบ
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
-                     style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
+                <li class="nav-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route">
+                    <a class="nav-link waves-effect  dropdown-toggle" title="@Pages.Settings.NavigationName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
+                        <i class="mdi mdi-apps md-24 mr-2"></i>
+                        <span class="menu-title">กำหนดค่าระบบ</span>
+                    </a>
+                    <ul class="dropdown-menu @Html.IsSelected(controller: Pages.Settings.ControllerName)Route">
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a  aria-expanded="true"class="nav-link waves-effect" href="/settings/addemailsender"><i class="mdi mdi-email-secure md-24 mr-2"></i> <span class="menu-title">ข้อมูลผู้ส่งอีเมล์</span></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a class="nav-link waves-effect" href="/settings/addprefixtype"><i class="mdi mdi-human-male-female md-24 mr-2"></i> <span class="menu-title">ข้อมูลคำนำหน้าชื่อ</span></a></li>
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a class="nav-link waves-effect" href="/settings/adddepartment"><i class="mdi mdi-office-building md-24 mr-2"></i> <span class="menu-title">ข้อมูลหน่วยงาน</span></a></li>
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a class="nav-link waves-effect" href="/settings/adddesignation"><i class="mdi mdi-human md-24 mr-2"></i> <span class="menu-title">ข้อมูลตำแหน่งงาน</span></a></li>
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a class="nav-link waves-effect" href="/settings/adddiseasetype"><i class="mdi mdi-hospital-marker md-24 mr-2"></i> <span class="menu-title">ข้อมูลโรค</span></a></li>
+                        <li class="dropdown-item @Html.IsSelected(controller: Pages.Settings.ControllerName)Route"><a class="nav-link waves-effect" href="/settings/adddoctortype"><i class="mdi mdi-hospital md-24 mr-2"></i> <span class="menu-title">ข้อมูลความเชี่ยวชาญ</span></a></li>
+                    </ul>
+                </li>
                 
-                    <a class="dropdown-item" href="~/hospital/index">ข้อมูลโรงพยาบาล</a>
-                    <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
-                    <a class="dropdown-item" href="~/settings/AddDiseaseType">ข้อมูลโรค</a>
-
-                </div>
-            </div>
-
-
-        </li>
             }
 
         </ul>
     </nav>
-   @*gdfgfg*@
+    @*gdfgfg*@
 
 </aside>
 <!-- Left Navigation End -->

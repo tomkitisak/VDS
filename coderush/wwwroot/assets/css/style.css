@@ -10530,9 +10530,10 @@ strong {
 .nav-link {
   padding: 7px 13px;
 }
+
 /* line 104, ../sass/base/_reset.scss */
 .nav-link.active {
-  color: #269bff;
+    color: #269bff;
 }
 
 /* line 111, ../sass/base/_reset.scss */

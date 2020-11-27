@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace vds.Migrations
 {
-    public partial class inidb : Migration
+    public partial class iniDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +11,10 @@ namespace vds.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,23 +25,24 @@ namespace vds.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    isSuperAdmin = table.Column<bool>(nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isSuperAdmin = table.Column<bool>(type: "bit", nullable: true),
+                    UserTypeId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,17 +50,49 @@ namespace vds.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HospitalSummary",
+                columns: table => new
+                {
+                    central = table.Column<int>(type: "int", nullable: false),
+                    east = table.Column<int>(type: "int", nullable: false),
+                    west = table.Column<int>(type: "int", nullable: false),
+                    north = table.Column<int>(type: "int", nullable: false),
+                    south = table.Column<int>(type: "int", nullable: false),
+                    northeast = table.Column<int>(type: "int", nullable: false),
+                    centralPct = table.Column<int>(type: "int", nullable: false),
+                    eastPct = table.Column<int>(type: "int", nullable: false),
+                    westPct = table.Column<int>(type: "int", nullable: false),
+                    northPct = table.Column<int>(type: "int", nullable: false),
+                    southPct = table.Column<int>(type: "int", nullable: false),
+                    northeastPct = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HospitalViewRegionId",
+                columns: table => new
+                {
+                    HospitalId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegionId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Log",
                 columns: table => new
                 {
-                    LogId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    OperationType = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Controller = table.Column<string>(nullable: true),
-                    Action = table.Column<string>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false)
+                    LogId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OperationType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Controller = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Action = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,11 +103,11 @@ namespace vds.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,13 +124,13 @@ namespace vds.Migrations
                 name: "AllowanceType",
                 columns: table => new
                 {
-                    AllowanceTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    AllowanceTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,13 +153,13 @@ namespace vds.Migrations
                 name: "Applicant",
                 columns: table => new
                 {
-                    ApplicantId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    ApplicantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,13 +182,13 @@ namespace vds.Migrations
                 name: "AppraisalType",
                 columns: table => new
                 {
-                    AppraisalTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    AppraisalTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,11 +211,11 @@ namespace vds.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,10 +232,10 @@ namespace vds.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -220,8 +252,8 @@ namespace vds.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -244,10 +276,10 @@ namespace vds.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -264,13 +296,13 @@ namespace vds.Migrations
                 name: "AssetType",
                 columns: table => new
                 {
-                    AssetTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    AssetTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -293,13 +325,13 @@ namespace vds.Migrations
                 name: "AwardType",
                 columns: table => new
                 {
-                    AwardTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    AwardTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,13 +354,13 @@ namespace vds.Migrations
                 name: "BenefitTemplate",
                 columns: table => new
                 {
-                    BenefitTemplateId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    BenefitTemplateId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -351,13 +383,13 @@ namespace vds.Migrations
                 name: "DeductionType",
                 columns: table => new
                 {
-                    DeductionTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    DeductionTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -380,13 +412,14 @@ namespace vds.Migrations
                 name: "Department",
                 columns: table => new
                 {
-                    DepartmentId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -409,13 +442,14 @@ namespace vds.Migrations
                 name: "Designation",
                 columns: table => new
                 {
-                    DesignationId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    DesignationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -438,13 +472,14 @@ namespace vds.Migrations
                 name: "DiseaseType",
                 columns: table => new
                 {
-                    DiseaseTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    DiseaseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -467,13 +502,14 @@ namespace vds.Migrations
                 name: "DoctorType",
                 columns: table => new
                 {
-                    DoctorTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    DoctorTypeName = table.Column<string>(nullable: false),
-                    SubTypeName = table.Column<string>(nullable: true)
+                    DoctorTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoctorTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,13 +532,13 @@ namespace vds.Migrations
                 name: "ExpenseType",
                 columns: table => new
                 {
-                    ExpenseTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    ExpenseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -522,25 +558,55 @@ namespace vds.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Gender",
+                columns: table => new
+                {
+                    GenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gender", x => x.GenderId);
+                    table.ForeignKey(
+                        name: "FK_Gender_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Gender_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hospital",
                 columns: table => new
                 {
-                    HospitalId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    HospitalName = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    Size = table.Column<int>(nullable: false),
-                    OperatingRoom = table.Column<int>(nullable: false),
-                    Service = table.Column<string>(nullable: true),
-                    Lat = table.Column<string>(nullable: true),
-                    Long = table.Column<string>(nullable: true)
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HospitalName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    OperatingRoom = table.Column<int>(type: "int", nullable: false),
+                    Service = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Long = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -563,13 +629,13 @@ namespace vds.Migrations
                 name: "InformationType",
                 columns: table => new
                 {
-                    InformationTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    InformationTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -592,15 +658,15 @@ namespace vds.Migrations
                 name: "JobStatus",
                 columns: table => new
                 {
-                    JobStatusId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    AllowAddDoctor = table.Column<bool>(nullable: false),
-                    AllowAddPatient = table.Column<bool>(nullable: false)
+                    JobStatusId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AllowAddDoctor = table.Column<bool>(type: "bit", nullable: false),
+                    AllowAddPatient = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -623,13 +689,13 @@ namespace vds.Migrations
                 name: "JobVacancy",
                 columns: table => new
                 {
-                    JobVacancyId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    JobVacancyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -652,13 +718,13 @@ namespace vds.Migrations
                 name: "Layoff",
                 columns: table => new
                 {
-                    LayoffId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    LayoffId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -681,13 +747,13 @@ namespace vds.Migrations
                 name: "LeaveType",
                 columns: table => new
                 {
-                    LeaveTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    LeaveTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -710,13 +776,13 @@ namespace vds.Migrations
                 name: "OnBoarding",
                 columns: table => new
                 {
-                    OnBoardingId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    OnBoardingId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -739,13 +805,14 @@ namespace vds.Migrations
                 name: "PrefixType",
                 columns: table => new
                 {
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -768,13 +835,13 @@ namespace vds.Migrations
                 name: "PublicHoliday",
                 columns: table => new
                 {
-                    PublicHolidayId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    PublicHolidayId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -797,12 +864,12 @@ namespace vds.Migrations
                 name: "Region",
                 columns: table => new
                 {
-                    RegionId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    RegionName = table.Column<string>(nullable: true)
+                    RegionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RegionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -825,13 +892,13 @@ namespace vds.Migrations
                 name: "Resignation",
                 columns: table => new
                 {
-                    ResignationId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    ResignationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -854,13 +921,13 @@ namespace vds.Migrations
                 name: "ThirdParty",
                 columns: table => new
                 {
-                    ThirdPartyId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    ThirdPartyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -883,13 +950,13 @@ namespace vds.Migrations
                 name: "TicketType",
                 columns: table => new
                 {
-                    TicketTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    TicketTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -912,13 +979,13 @@ namespace vds.Migrations
                 name: "TodoType",
                 columns: table => new
                 {
-                    TodoTypeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    TodoTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -938,19 +1005,51 @@ namespace vds.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserType",
+                columns: table => new
+                {
+                    UserTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserLevel = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedById1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserType", x => x.UserTypeId);
+                    table.ForeignKey(
+                        name: "FK_UserType_AspNetUsers_CreatedById1",
+                        column: x => x.CreatedById1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserType_AspNetUsers_UpdatedById1",
+                        column: x => x.UpdatedById1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BenefitTemplateLine",
                 columns: table => new
                 {
-                    BenefitTemplateLineId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    BenefitTemplateId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    AllowanceTypeId = table.Column<string>(nullable: true),
-                    DeductionTypeId = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false)
+                    BenefitTemplateLineId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BenefitTemplateId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AllowanceTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DeductionTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -962,22 +1061,10 @@ namespace vds.Migrations
                         principalColumn: "AllowanceTypeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BenefitTemplateLine_BenefitTemplate_BenefitTemplateId",
-                        column: x => x.BenefitTemplateId,
-                        principalTable: "BenefitTemplate",
-                        principalColumn: "BenefitTemplateId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_BenefitTemplateLine_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BenefitTemplateLine_DeductionType_DeductionTypeId",
-                        column: x => x.DeductionTypeId,
-                        principalTable: "DeductionType",
-                        principalColumn: "DeductionTypeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BenefitTemplateLine_AspNetUsers_UpdatedById",
@@ -985,19 +1072,31 @@ namespace vds.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BenefitTemplateLine_BenefitTemplate_BenefitTemplateId",
+                        column: x => x.BenefitTemplateId,
+                        principalTable: "BenefitTemplate",
+                        principalColumn: "BenefitTemplateId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BenefitTemplateLine_DeductionType_DeductionTypeId",
+                        column: x => x.DeductionTypeId,
+                        principalTable: "DeductionType",
+                        principalColumn: "DeductionTypeId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DoctorGroup",
                 columns: table => new
                 {
-                    DoctorGroupId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    DoctorGroupName = table.Column<string>(nullable: false),
-                    DoctorTypeId = table.Column<string>(nullable: false)
+                    DoctorGroupId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoctorGroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1009,34 +1108,34 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_DoctorGroup_DoctorType_DoctorTypeId",
-                        column: x => x.DoctorTypeId,
-                        principalTable: "DoctorType",
-                        principalColumn: "DoctorTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_DoctorGroup_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DoctorGroup_DoctorType_DoctorTypeId",
+                        column: x => x.DoctorTypeId,
+                        principalTable: "DoctorType",
+                        principalColumn: "DoctorTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Information",
                 columns: table => new
                 {
-                    InformationId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    InformationName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    InformationTypeId = table.Column<string>(nullable: false),
-                    ReleaseDate = table.Column<DateTimeOffset>(nullable: false),
-                    ExternalLink = table.Column<string>(nullable: true)
+                    InformationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    InformationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    InformationTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ReleaseDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ExternalLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1048,35 +1147,47 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Information_InformationType_InformationTypeId",
-                        column: x => x.InformationTypeId,
-                        principalTable: "InformationType",
-                        principalColumn: "InformationTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Information_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Information_InformationType_InformationTypeId",
+                        column: x => x.InformationTypeId,
+                        principalTable: "InformationType",
+                        principalColumn: "InformationTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Job",
                 columns: table => new
                 {
-                    JobId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    TransDate = table.Column<DateTime>(nullable: false),
-                    WorkDate = table.Column<DateTime>(nullable: false),
-                    Comment = table.Column<string>(nullable: true),
-                    JobStatusId = table.Column<string>(nullable: true),
-                    HospitalId = table.Column<string>(nullable: false)
+                    JobId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PostDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPosted = table.Column<bool>(type: "bit", nullable: false),
+                    AppEntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsAppointed = table.Column<bool>(type: "bit", nullable: false),
+                    AppStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JobEndEntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDone = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Remark1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Remark2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalPatients = table.Column<int>(type: "int", nullable: false),
+                    TotalDoctors = table.Column<int>(type: "int", nullable: false),
+                    JobStatusId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1084,6 +1195,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_Job_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Job_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1099,38 +1216,32 @@ namespace vds.Migrations
                         principalTable: "JobStatus",
                         principalColumn: "JobStatusId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Job_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Coordinator",
                 columns: table => new
                 {
-                    CoordinatorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    LineId = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    HospitalId = table.Column<string>(nullable: true),
-                    DesignationId = table.Column<string>(nullable: true),
-                    DepartmentId = table.Column<string>(nullable: true),
-                    ImageData = table.Column<byte[]>(nullable: true)
+                    CoordinatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LineId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DesignationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1142,17 +1253,23 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Coordinator_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Coordinator_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Coordinator_Designation_DesignationId",
                         column: x => x.DesignationId,
                         principalTable: "Designation",
                         principalColumn: "DesignationId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Coordinator_Hospital_HospitalId",
                         column: x => x.HospitalId,
@@ -1165,35 +1282,29 @@ namespace vds.Migrations
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Coordinator_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Director",
                 columns: table => new
                 {
-                    DirectorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    LineId = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    HospitalId = table.Column<string>(nullable: true)
+                    DirectorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LineId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1201,6 +1312,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_Director_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Director_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1216,37 +1333,31 @@ namespace vds.Migrations
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Director_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Doctor",
                 columns: table => new
                 {
-                    DoctorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: false),
-                    LineId = table.Column<string>(nullable: true),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    MDLicense = table.Column<string>(nullable: true),
-                    ImageData = table.Column<byte[]>(nullable: true),
-                    DoctorTypeId = table.Column<string>(nullable: true)
+                    DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LineId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MDLicense = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    DoctorTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1258,51 +1369,49 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Doctor_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Doctor_DoctorType_DoctorTypeId",
                         column: x => x.DoctorTypeId,
                         principalTable: "DoctorType",
                         principalColumn: "DoctorTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Doctor_PrefixType_PrefixTypeId",
                         column: x => x.PrefixTypeId,
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Doctor_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employee",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    EmployeeIDNumber = table.Column<string>(nullable: true),
-                    HospitalId = table.Column<string>(nullable: false),
-                    DesignationId = table.Column<string>(nullable: false),
-                    DepartmentId = table.Column<string>(nullable: false),
-                    ImageData = table.Column<byte[]>(nullable: true)
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DesignationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1310,6 +1419,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_Employee_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employee_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1337,38 +1452,32 @@ namespace vds.Migrations
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Employee_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Patient",
                 columns: table => new
                 {
-                    PatientId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    Phone = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: false),
-                    Problem = table.Column<string>(nullable: false),
-                    DiseaseTypeId = table.Column<string>(nullable: false),
-                    HospitalId = table.Column<string>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    PatientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Problem = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DiseaseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HospitalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1376,6 +1485,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_Patient_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Patient_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1397,27 +1512,21 @@ namespace vds.Migrations
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Patient_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PublicHolidayLine",
                 columns: table => new
                 {
-                    PublicHolidayLineId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PublicHolidayId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    PublicHolidayDate = table.Column<DateTime>(nullable: false),
-                    PublicHolidayYear = table.Column<int>(nullable: false)
+                    PublicHolidayLineId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PublicHolidayId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicHolidayDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PublicHolidayYear = table.Column<int>(type: "int", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1429,31 +1538,31 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PublicHolidayLine_PublicHoliday_PublicHolidayId",
-                        column: x => x.PublicHolidayId,
-                        principalTable: "PublicHoliday",
-                        principalColumn: "PublicHolidayId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_PublicHolidayLine_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PublicHolidayLine_PublicHoliday_PublicHolidayId",
+                        column: x => x.PublicHolidayId,
+                        principalTable: "PublicHoliday",
+                        principalColumn: "PublicHolidayId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Province",
                 columns: table => new
                 {
-                    ProvinceId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    ProvinceThai = table.Column<string>(nullable: true),
-                    ProvinceEng = table.Column<string>(nullable: true),
-                    RegionId = table.Column<string>(nullable: true)
+                    ProvinceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProvinceThai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProvinceEng = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1465,16 +1574,16 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Province_Region_RegionId",
-                        column: x => x.RegionId,
-                        principalTable: "Region",
-                        principalColumn: "RegionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Province_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Province_Region_RegionId",
+                        column: x => x.RegionId,
+                        principalTable: "Region",
+                        principalColumn: "RegionId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -1482,24 +1591,24 @@ namespace vds.Migrations
                 name: "GroupCoordinator",
                 columns: table => new
                 {
-                    GroupCoordinatorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PrefixTypeId = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    LineId = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: false),
-                    Address1 = table.Column<string>(nullable: false),
-                    SubDistrict = table.Column<string>(nullable: false),
-                    District = table.Column<string>(nullable: false),
-                    Province = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<string>(nullable: true),
-                    ImageData = table.Column<byte[]>(nullable: true),
-                    DoctorGroupId = table.Column<string>(nullable: true)
+                    GroupCoordinatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrefixTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LineId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubDistrict = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    DoctorGroupId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1507,6 +1616,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_GroupCoordinator_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GroupCoordinator_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1522,25 +1637,19 @@ namespace vds.Migrations
                         principalTable: "PrefixType",
                         principalColumn: "PrefixTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GroupCoordinator_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DoctorGroupDoctor",
                 columns: table => new
                 {
-                    DoctorGroupDoctorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    DoctorGroupId = table.Column<string>(nullable: true),
-                    DoctorId = table.Column<string>(nullable: true)
+                    DoctorGroupDoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoctorGroupId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1552,10 +1661,10 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_DoctorGroupDoctor_DoctorGroup_DoctorGroupId",
-                        column: x => x.DoctorGroupId,
-                        principalTable: "DoctorGroup",
-                        principalColumn: "DoctorGroupId",
+                        name: "FK_DoctorGroupDoctor_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DoctorGroupDoctor_Doctor_DoctorId",
@@ -1564,10 +1673,10 @@ namespace vds.Migrations
                         principalColumn: "DoctorId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_DoctorGroupDoctor_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        name: "FK_DoctorGroupDoctor_DoctorGroup_DoctorGroupId",
+                        column: x => x.DoctorGroupId,
+                        principalTable: "DoctorGroup",
+                        principalColumn: "DoctorGroupId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -1575,13 +1684,13 @@ namespace vds.Migrations
                 name: "JobDoctor",
                 columns: table => new
                 {
-                    JobDoctorId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    JobId = table.Column<string>(nullable: false),
-                    DoctorId = table.Column<string>(nullable: false)
+                    JobDoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoctorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1589,6 +1698,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_JobDoctor_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobDoctor_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1604,29 +1719,23 @@ namespace vds.Migrations
                         principalTable: "Job",
                         principalColumn: "JobId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_JobDoctor_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Appraisal",
                 columns: table => new
                 {
-                    AppraisalId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    AppraisalName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsApproved = table.Column<bool>(nullable: false),
-                    AppraisalTypeId = table.Column<string>(nullable: false),
-                    SubmitDate = table.Column<DateTimeOffset>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false)
+                    AppraisalId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppraisalName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    AppraisalTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SubmitDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1644,45 +1753,39 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Appraisal_Employee_OnBehalfId",
-                        column: x => x.OnBehalfId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Appraisal_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Appraisal_Employee_OnBehalfId",
+                        column: x => x.OnBehalfId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Asset",
                 columns: table => new
                 {
-                    AssetId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    AssetName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    AssetTypeId = table.Column<string>(nullable: false),
-                    PurchaseDate = table.Column<DateTimeOffset>(nullable: false),
-                    PurchasePrice = table.Column<decimal>(nullable: false),
-                    UsedById = table.Column<string>(nullable: true)
+                    AssetId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AssetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    AssetTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PurchaseDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UsedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Asset", x => x.AssetId);
-                    table.ForeignKey(
-                        name: "FK_Asset_AssetType_AssetTypeId",
-                        column: x => x.AssetTypeId,
-                        principalTable: "AssetType",
-                        principalColumn: "AssetTypeId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Asset_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -1696,6 +1799,12 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Asset_AssetType_AssetTypeId",
+                        column: x => x.AssetTypeId,
+                        principalTable: "AssetType",
+                        principalColumn: "AssetTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Asset_Employee_UsedById",
                         column: x => x.UsedById,
                         principalTable: "Employee",
@@ -1707,15 +1816,15 @@ namespace vds.Migrations
                 name: "Attendance",
                 columns: table => new
                 {
-                    AttendanceId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    AttendanceName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    OnBehalfId = table.Column<string>(nullable: false),
-                    Clock = table.Column<DateTimeOffset>(nullable: false)
+                    AttendanceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AttendanceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Clock = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1727,50 +1836,38 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Attendance_Employee_OnBehalfId",
-                        column: x => x.OnBehalfId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Attendance_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Employee_OnBehalfId",
+                        column: x => x.OnBehalfId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Award",
                 columns: table => new
                 {
-                    AwardId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    AwardName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsApproved = table.Column<bool>(nullable: false),
-                    AwardTypeId = table.Column<string>(nullable: false),
-                    ReleaseDate = table.Column<DateTimeOffset>(nullable: false),
-                    AwardRecipientId = table.Column<string>(nullable: false)
+                    AwardId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AwardName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    AwardTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ReleaseDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AwardRecipientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Award", x => x.AwardId);
-                    table.ForeignKey(
-                        name: "FK_Award_Employee_AwardRecipientId",
-                        column: x => x.AwardRecipientId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Award_AwardType_AwardTypeId",
-                        column: x => x.AwardTypeId,
-                        principalTable: "AwardType",
-                        principalColumn: "AwardTypeId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Award_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -1783,26 +1880,38 @@ namespace vds.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Award_AwardType_AwardTypeId",
+                        column: x => x.AwardTypeId,
+                        principalTable: "AwardType",
+                        principalColumn: "AwardTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Award_Employee_AwardRecipientId",
+                        column: x => x.AwardRecipientId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Expense",
                 columns: table => new
                 {
-                    ExpenseId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    ExpenseName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsApproved = table.Column<bool>(nullable: false),
-                    ExpenseTypeId = table.Column<string>(nullable: false),
-                    FromDate = table.Column<DateTimeOffset>(nullable: false),
-                    ToDate = table.Column<DateTimeOffset>(nullable: false),
-                    ExpenseAmount = table.Column<decimal>(nullable: false),
-                    IsCashAdvance = table.Column<bool>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false)
+                    ExpenseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExpenseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    ExpenseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ToDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ExpenseAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsCashAdvance = table.Column<bool>(type: "bit", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1814,11 +1923,11 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Expense_ExpenseType_ExpenseTypeId",
-                        column: x => x.ExpenseTypeId,
-                        principalTable: "ExpenseType",
-                        principalColumn: "ExpenseTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Expense_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Expense_Employee_OnBehalfId",
                         column: x => x.OnBehalfId,
@@ -1826,31 +1935,31 @@ namespace vds.Migrations
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Expense_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Expense_ExpenseType_ExpenseTypeId",
+                        column: x => x.ExpenseTypeId,
+                        principalTable: "ExpenseType",
+                        principalColumn: "ExpenseTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Leave",
                 columns: table => new
                 {
-                    LeaveId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    LeaveName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    EmergencyCall = table.Column<string>(nullable: false),
-                    IsApproved = table.Column<bool>(nullable: false),
-                    LeaveTypeId = table.Column<string>(nullable: false),
-                    FromDate = table.Column<DateTimeOffset>(nullable: false),
-                    ToDate = table.Column<DateTimeOffset>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false),
-                    IsPaidLeave = table.Column<bool>(nullable: false)
+                    LeaveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LeaveName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmergencyCall = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    LeaveTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FromDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ToDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsPaidLeave = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1862,11 +1971,11 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Leave_LeaveType_LeaveTypeId",
-                        column: x => x.LeaveTypeId,
-                        principalTable: "LeaveType",
-                        principalColumn: "LeaveTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Leave_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Leave_Employee_OnBehalfId",
                         column: x => x.OnBehalfId,
@@ -1874,28 +1983,28 @@ namespace vds.Migrations
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Leave_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Leave_LeaveType_LeaveTypeId",
+                        column: x => x.LeaveTypeId,
+                        principalTable: "LeaveType",
+                        principalColumn: "LeaveTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Payroll",
                 columns: table => new
                 {
-                    PayrollId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsApproved = table.Column<bool>(nullable: false),
-                    IsPaid = table.Column<bool>(nullable: false),
-                    Periode = table.Column<DateTimeOffset>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false)
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    Periode = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1907,52 +2016,58 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Payroll_Employee_OnBehalfId",
-                        column: x => x.OnBehalfId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Payroll_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Payroll_Employee_OnBehalfId",
+                        column: x => x.OnBehalfId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Ticket",
                 columns: table => new
                 {
-                    TicketId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    TicketName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsSolve = table.Column<bool>(nullable: false),
-                    SolutionNote = table.Column<string>(nullable: true),
-                    TicketTypeId = table.Column<string>(nullable: false),
-                    SubmitDate = table.Column<DateTimeOffset>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false),
-                    AgentId = table.Column<string>(nullable: true),
-                    ParentTicketThreadId = table.Column<string>(nullable: true)
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TicketName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsSolve = table.Column<bool>(type: "bit", nullable: false),
+                    SolutionNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TicketTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SubmitDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AgentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ParentTicketThreadId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ticket", x => x.TicketId);
                     table.ForeignKey(
-                        name: "FK_Ticket_Employee_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Ticket_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ticket_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ticket_Employee_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ticket_Employee_OnBehalfId",
@@ -1972,30 +2087,24 @@ namespace vds.Migrations
                         principalTable: "TicketType",
                         principalColumn: "TicketTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Ticket_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Todo",
                 columns: table => new
                 {
-                    TodoId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    TodoItem = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    IsDone = table.Column<bool>(nullable: false),
-                    TodoTypeId = table.Column<string>(nullable: false),
-                    StartDate = table.Column<DateTimeOffset>(nullable: false),
-                    EndDate = table.Column<DateTimeOffset>(nullable: false),
-                    OnBehalfId = table.Column<string>(nullable: false)
+                    TodoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TodoItem = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDone = table.Column<bool>(type: "bit", nullable: false),
+                    TodoTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    EndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OnBehalfId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2003,6 +2112,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_Todo_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Todo_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2018,25 +2133,19 @@ namespace vds.Migrations
                         principalTable: "TodoType",
                         principalColumn: "TodoTypeId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Todo_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "JobPatient",
                 columns: table => new
                 {
-                    JobPatientId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    JobId = table.Column<string>(nullable: false),
-                    PatientId = table.Column<string>(nullable: false)
+                    JobPatientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PatientId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2044,6 +2153,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_JobPatient_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobPatient_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2059,27 +2174,21 @@ namespace vds.Migrations
                         principalTable: "Patient",
                         principalColumn: "PatientId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_JobPatient_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineAllowance",
                 columns: table => new
                 {
-                    PayrollLineAllowanceId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    AllowanceTypeId = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineAllowanceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AllowanceTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2097,31 +2206,31 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PayrollLineAllowance_Payroll_PayrollId",
-                        column: x => x.PayrollId,
-                        principalTable: "Payroll",
-                        principalColumn: "PayrollId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_PayrollLineAllowance_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineAllowance_Payroll_PayrollId",
+                        column: x => x.PayrollId,
+                        principalTable: "Payroll",
+                        principalColumn: "PayrollId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineBasic",
                 columns: table => new
                 {
-                    PayrollLineBasicId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineBasicId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2133,32 +2242,32 @@ namespace vds.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PayrollLineBasic_Payroll_PayrollId",
-                        column: x => x.PayrollId,
-                        principalTable: "Payroll",
-                        principalColumn: "PayrollId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_PayrollLineBasic_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineBasic_Payroll_PayrollId",
+                        column: x => x.PayrollId,
+                        principalTable: "Payroll",
+                        principalColumn: "PayrollId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineCashAdvance",
                 columns: table => new
                 {
-                    PayrollLineCashAdvanceId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ExpenseTypeId = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineCashAdvanceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpenseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2166,6 +2275,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_PayrollLineCashAdvance_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineCashAdvance_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2181,27 +2296,21 @@ namespace vds.Migrations
                         principalTable: "Payroll",
                         principalColumn: "PayrollId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PayrollLineCashAdvance_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineDeduction",
                 columns: table => new
                 {
-                    PayrollLineDeductionId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    DeductionTypeId = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineDeductionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeductionTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2209,6 +2318,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_PayrollLineDeduction_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineDeduction_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2224,27 +2339,21 @@ namespace vds.Migrations
                         principalTable: "Payroll",
                         principalColumn: "PayrollId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PayrollLineDeduction_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineReimburse",
                 columns: table => new
                 {
-                    PayrollLineReimburseId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ExpenseTypeId = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineReimburseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpenseTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2252,6 +2361,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_PayrollLineReimburse_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineReimburse_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2267,29 +2382,23 @@ namespace vds.Migrations
                         principalTable: "Payroll",
                         principalColumn: "PayrollId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PayrollLineReimburse_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PayrollLineUnpaidLeave",
                 columns: table => new
                 {
-                    PayrollLineUnpaidLeaveId = table.Column<string>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(nullable: false),
-                    UpdatedById = table.Column<string>(nullable: true),
-                    UpdatedAtUtc = table.Column<DateTime>(nullable: false),
-                    PayrollId = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: false),
-                    LeaveId = table.Column<string>(nullable: false),
-                    Days = table.Column<int>(nullable: false),
-                    UnpaidPerDay = table.Column<decimal>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false)
+                    PayrollLineUnpaidLeaveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayrollId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LeaveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Days = table.Column<int>(type: "int", nullable: false),
+                    UnpaidPerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2297,6 +2406,12 @@ namespace vds.Migrations
                     table.ForeignKey(
                         name: "FK_PayrollLineUnpaidLeave_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PayrollLineUnpaidLeave_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -2311,12 +2426,6 @@ namespace vds.Migrations
                         column: x => x.PayrollId,
                         principalTable: "Payroll",
                         principalColumn: "PayrollId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PayrollLineUnpaidLeave_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -2732,6 +2841,16 @@ namespace vds.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseType_UpdatedById",
                 table: "ExpenseType",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gender_CreatedById",
+                table: "Gender",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gender_UpdatedById",
+                table: "Gender",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -3223,6 +3342,16 @@ namespace vds.Migrations
                 name: "IX_TodoType_UpdatedById",
                 table: "TodoType",
                 column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserType_CreatedById1",
+                table: "UserType",
+                column: "CreatedById1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserType_UpdatedById1",
+                table: "UserType",
+                column: "UpdatedById1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -3273,7 +3402,16 @@ namespace vds.Migrations
                 name: "Expense");
 
             migrationBuilder.DropTable(
+                name: "Gender");
+
+            migrationBuilder.DropTable(
                 name: "GroupCoordinator");
+
+            migrationBuilder.DropTable(
+                name: "HospitalSummary");
+
+            migrationBuilder.DropTable(
+                name: "HospitalViewRegionId");
 
             migrationBuilder.DropTable(
                 name: "Information");
@@ -3331,6 +3469,9 @@ namespace vds.Migrations
 
             migrationBuilder.DropTable(
                 name: "Todo");
+
+            migrationBuilder.DropTable(
+                name: "UserType");
 
             migrationBuilder.DropTable(
                 name: "AppraisalType");

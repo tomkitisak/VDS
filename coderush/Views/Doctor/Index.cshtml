@@ -5,14 +5,17 @@
 @{
 
     string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
     string strmodelName = "แพทย์";
     string modelName = "Doctor";
     ViewData["Title"] = "แพทย์";
 
+    string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+    TempData.Keep("userTypeId");
+
+
     EmployeeSummary summary = _app.GetEmployeeSummary();
     ChartDoughnut donutChart = _app.GetDoctorDoughnut();
-
-
 
 }
 
@@ -132,11 +135,11 @@
             <div class="dropdown d-inline">
                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ข้อมูลระบบ
+                    เพิ่มเติมข้อมูลระบบ
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1" x-placement="top-start"
                      style="position: absolute; transform: translate3d(0px, -185px, 0px); top: 0px; left: 0px; will-change: transform;">
-                    <h6 class="dropdown-header"><b>เพิ่มข้อมูลใหม่</b></h6>
+                     
                     <a class="dropdown-item" href="~/settings/AddPrefixType">ข้อมูลคำนำหน้าชื่อ</a>
                     <a class="dropdown-item" href="~/settings/AddDoctorType">สาขาความเชี่ยวชาญ</a>
 
@@ -163,9 +166,18 @@
                         <table id="grid" class="table table-striped" cellspacing="0" width="100%">
                             <thead>
                                 <tr class="bg-primary text-white">
-                                    <th width="5%"></th>
-                                    <th width="5%"></th>
-                                    <th width="10%"></th>
+                                    @if ((userTypeId == "2") || (userTypeId == "3"))
+                                    {
+                                        <th width="5%"></th>
+                                        <th width="10%"></th>
+                                         
+                                    }
+                                    else
+                                    {
+                                        <th width="5%"></th>
+                                        <th width="5%"></th>
+                                        <th width="10%"></th>
+                                    }                                  
                                     <th width="25%">ชื่อ-สกุล</th>
                                     <th width="15%">แพทย์เชี่ยวชาญ</th>
                                     <th width="15%">เบอร์ไทร</th>
@@ -176,44 +188,54 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
+                                <tr>
+
+                                    @if ((userTypeId == "2") || (userTypeId == "3"))
+                                    {
+                                        <td>
+                                            <a href="/@controller/Form/@item.DoctorId" title="ปรับปรุงข้อมูล"><i class="icon-note md-18"></i></a>
+
+                                        </td>
+
+                                    }
+                                    else
+                                    {
                                         <td>
                                             <a href="/@controller/Form/@item.DoctorId" title="ปรับปรุงข้อมูล"><i class="icon-note md-18"></i></a>
 
                                         </td>
                                         <td>
-
                                             <a href="#" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
+                                        </td>
+                                    }
+
+                                    <td>
 
 
-                                        </td>
-                                        <td>
+                                        <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
+                                             class="thumb rounded-circle" title="คลิกเพื่อขยายภาพ"
+                                             height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
+                                             asp-append-version="true" onclick="myClick(this)" />
 
+                                    </td>
+                                    <td>
+                                        @*@(item.PrefixType.Name +  item.FirstName + "  " + item.LastName)*@
+                                        @item.FullName
+                                    </td>
+                                    <td>
+                                        @item.DoctorType.DoctorTypeName
+                                    </td>
 
-                                            <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
-                                                 class="thumb rounded-circle" title="คลิกเพื่อขยายภาพ"
-                                                 height="40" width="40" alt="@(item.PrefixType.Name + item.FirstName + ' ' + item.LastName)"
-                                                 asp-append-version="true" onclick="myClick(this)" />
-
-                                        </td>
-                                        <td>
-                                            @*@(item.PrefixType.Name +  item.FirstName + "  " + item.LastName)*@
-                                            @item.FullName
-                                        </td>
-                                        <td>
-                                            @item.DoctorType.DoctorTypeName
-                                        </td>
-
-                                        <td>
-                                            @item.Phone
-                                        </td>
-                                        <td>
-                                            @item.LineId
-                                        </td>
-                                        <td>
-                                            @item.Province
-                                        </td>
-                                    </tr>
+                                    <td>
+                                        @item.Phone
+                                    </td>
+                                    <td>
+                                        @item.LineId
+                                    </td>
+                                    <td>
+                                        @item.Province
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -427,7 +449,7 @@
         function deleteData(short, full, id) {
 
             $("#hiddenId").val(id);
-            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + short + "/" + full + " ใช่หรือไม่ ?";
+            document.getElementById("txtDialog").innerHTML = " คุณต้องการลบข้อมูล " + short + " " + full + " ใช่หรือไม่ ?";
             $("#dialog").dialog("open");
             event.preventDefault();
 

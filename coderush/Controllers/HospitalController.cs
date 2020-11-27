@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,6 +68,7 @@ namespace vds.Controllers
             var objs = _context.Hospital
                 .AsNoTracking()
                 .OrderByDescending(x => x.CreatedAtUtc).ToList();
+
             return View(objs);
         }
 
@@ -160,33 +162,18 @@ namespace vds.Controllers
                 return RedirectToAction(nameof(Index));
             }
  
-
-            //if (editObj.Hospital == null)
-            //{
-            //    return NotFound();
-            //}
            if (editObj.Coordinator.ImageData != null)
             {
                 string imageBase64Data = Convert.ToBase64String(editObj.Coordinator.ImageData);
                 string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
                 ViewBag.ImageDataUrl = imageDataURL;
                
-            }
- 
+            } 
             //dropdownlist 
             FillDropdownListForhospitalForm();
 
             return View(editObj);
-
         }
-
-        //   public async Task<IActionResult> SubmitForm([Bind(Prefix = "Hospital")] Hospital hospital1, [Bind(Prefix = "Director")] Director director, [Bind(Prefix = "Coordinator")] Coordinator coordinator)
-
-        //  public async Task<IActionResult> SubmitForm(HospitalView hospital1)
-
-        //   public async Task<IActionResult> SubmitForm([Bind(nameof(Director.FirstName), Prefix = "Director")] Director md1)
-
-
 
         //post submitted hospital data. if hospitalId is null then create new, otherwise edit
         [HttpPost]
@@ -295,7 +282,7 @@ namespace vds.Controllers
 
                     newcoordinator.Address1 = coordinator.Address1;
                     newcoordinator.SubDistrict = coordinator.SubDistrict;
-                    newcoordinator.District = director.District;
+                    newcoordinator.District = coordinator.District;
                     newcoordinator.Province = coordinator.Province;
                     newcoordinator.ZipCode = coordinator.ZipCode;
 
@@ -415,7 +402,7 @@ namespace vds.Controllers
 
                     editcoordinator.Address1 = coordinator.Address1;
                     editcoordinator.SubDistrict = coordinator.SubDistrict;
-                    editcoordinator.District = director.District;
+                    editcoordinator.District = coordinator.District;
                     editcoordinator.Province = coordinator.Province;
                     editcoordinator.ZipCode = coordinator.ZipCode;
 
@@ -476,23 +463,33 @@ namespace vds.Controllers
             return View(del);
         }
 
-
-
-        public IActionResult SubmitDeleteHospital(string id)
+        public async Task<IActionResult> SubmitDeleteHospital(string id)
         {
+
+             await using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                var del = _context.Hospital
-                              .AsNoTracking()
-                              .Where(x => x.HospitalId.Equals(id)).FirstOrDefault();
-                if (del == null)
-                {
-                    return NotFound();
-                }
+                var delCoordinator = _context.Coordinator.AsNoTracking().Where(x => x.HospitalId.Equals(id)).FirstOrDefault();
+                 _context.Coordinator.Remove(delCoordinator);          
+                await _context.SaveChangesAsync();
 
-                _context.Hospital.Remove(del);
-                _context.SaveChanges();
+                var delDirector = _context.Director.AsNoTracking().Where(x =>x.HospitalId.Equals(id)).FirstOrDefault();
+                _context.Director.Remove(delDirector);
+                await _context.SaveChangesAsync();
 
+                List<Patient> delPatient = await _context.Patient.AsNoTracking().Where(x => x.HospitalId.Equals(id)).ToListAsync();
+                _context.Patient.RemoveRange(delPatient);
+                await _context.SaveChangesAsync();
+
+                var delHospital = _context.Hospital.AsNoTracking().Where(x => x.HospitalId.Equals(id)).FirstOrDefault();
+                _context.Hospital.Remove(delHospital);
+                await _context.SaveChangesAsync();
+
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                await transaction.CommitAsync();
+          
                 TempData[StaticString.StatusMessage] = "ลบข้อมูลโรงพยาบาลเรียบร้อยแล้ว!";
                 return RedirectToAction(nameof(Index));
             }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using vds.Models;
 using vds.ViewModels;
 
 namespace vds.Services.App
@@ -63,6 +64,8 @@ namespace vds.Services.App
 
         IEnumerable<SelectListItem> GetBenefitTemplateSelectList();
 
+        EmailSenderConfig GetEmailSenderConfig();
+         
         TodoSummary GetTodoSummaryByPeriod(string period);
 
         EmployeeSummary GetEmployeeSummary();

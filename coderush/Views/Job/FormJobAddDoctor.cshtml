@@ -11,7 +11,9 @@
     bool IsNew = ViewBag.IsNew;
 
     string strJobId = ViewBag.jobId;
-    string userTypeId = TempData["userTypeId"].ToString();
+
+    string userTypeId = TempData["userTypeId"] != null ? TempData["userTypeId"].ToString() : null;
+    TempData.Keep("userTypeId");
 
     bool HasPatient = Model.Job.TotalPatients > 0 ? true : false;
     bool IsChecked1 = false;
@@ -47,9 +49,14 @@
     }
     string cssClass = ViewBag.Status < 1 ? "hidden" : "";
     string cssClass1 = ViewBag.Status < 2 ? "hidden" : "";
+
+string cssHidden="";
+    if ((userTypeId=="2") || (userTypeId=="3"))
+       {
+cssHidden ="hidden";
+        }
+
 }
-
-
 
 <link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
 
@@ -73,7 +80,6 @@
                         <input id="chbEdit" name="chbEdit" onclick="ChangeMode(this)" type="checkbox" checked>
                         <span class="slider round"></span>
                     </label>
-
                 </div>
                 <label for="chbEdit">เพิ่มแพทย์</label>
             </div>
@@ -97,15 +103,15 @@
                                 <div class="form-group">
                                     <label asp-for="@Model.Job.HospitalId"></label>
                                     <div class="input-group">
-                                        @if (userTypeId == "1")
+                                        @if ((userTypeId == "1") || (userTypeId == "2") || (userTypeId == "3"))
                                         {
                                             <input asp-for="@Model.Job.HospitalId" class="form-control" type="hidden" />
-                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
+                                            <select id="hospitalid1" asp-for="@Model.Job.HospitalId" class="select2 form-control" asp-items="ViewBag.Hospital" disabled></select>
 
                                         }
                                         else
                                         {
-                                            <select asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
+                                            <select id="hospitalid2" asp-for="@Model.Job.HospitalId" class="select2 form-control x" asp-items="ViewBag.Hospital"></select>
                                         }
 
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
@@ -355,7 +361,7 @@
                                                     <a href="javascript:void(0)" onclick="rundoctor('@item.DoctorId')" title="ดูรายละเอียดแพทย์"><i class="icon-doc md-18"></i></a>
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0)" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18"></i> </a>
+                                                    <a href="javascript:void(0)" title="คลิกเพื่อลบข้อมูล"><i onclick="deleteData('@(item.PrefixType.Name +  item.FirstName)','@item.LastName','@item.DoctorId');" class="icon-trash md-18" @cssHidden></i> </a>
                                                 </td>
                                                 <td>
                                                     <img src=@(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData)))
@@ -565,9 +571,6 @@
 
 
         $(document).ready(function () {
-
-
-
             var mainTable = $('#grid').DataTable({
                 lengthChange: false,
                 info: false,

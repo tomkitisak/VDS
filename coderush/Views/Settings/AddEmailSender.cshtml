@@ -1,0 +1,168 @@
+﻿@model EmailSenderConfig
+
+@{
+
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string modelName = "กำหนดค่าระบบ";
+    ViewData["Title"] = "เพิ่มข้อมูล " + modelName + "";
+ 
+}
+
+<link rel="stylesheet" href="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.css" />
+
+<!-- Content Start -->
+<div class="content-wrapper">
+    <!-- Heading Start -->
+    <section class="heading">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">กำหนดค่าระบบ</a></li>
+            <li class="breadcrumb-item active">ปรับปรุงข้อมูลผู้ส่งอีเมล์</li>            
+        </ul>
+        <h2 class="mb-2"><i class="mdi mdi-hospital-marker"></i>ข้อมูลผู้ส่งอีเมล์</h2>
+        <div class="titles">
+            @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
+        </div>
+    </section><!-- Heading End -->
+    <div class="row">
+        <div class="col-12">
+
+            <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
+
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0"></h4>
+                    </div>
+
+                    <div class="card-body">
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.MailServer"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.MailServer" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.MailServer" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.MailPort"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.MailPort" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.MailPort" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.SenderName"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.SenderName" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.SenderName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.Email"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Email" class="form-control" autocomplete="off" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.Password"></label>
+                                    <div class="input-group">
+                                        <input asp-for="@Model.Password" class="form-control" autocomplete="new-password" />
+                                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    </div>
+                                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </article>
+
+                <article class="card mb-4">
+                    <div class="card-header">
+                        <a href="/@ViewBag.SenderController/Index" class="btn btn-default">ย้อนกลับ</a>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </article>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+<!-- Content End -->
+
+@section Styles{
+
+    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
+    <link href="~/assets/vendor/data-table/css/jquery.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/buttons.dataTables.min.css" />
+    <link href="~/assets/vendor/data-table/css/dataTables.bootstrap.min.css" />
+ 
+
+
+}
+
+@section Scripts {
+
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+
+    <script src="~/assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+
+    <script src="~/assets/vendor/data-table/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.flash.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/jszip.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/pdfmake.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/vfs_fonts.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.html5.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/buttons.print.min.js"></script>
+    <script src="~/assets/vendor/data-table/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/assets/vendor/chartjs/js/Chart.bundle.min.js"></script>
+
+
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+    <partial name="_ValidationScriptsPartial" />
+
+   
+ 
+     
+}
+
+

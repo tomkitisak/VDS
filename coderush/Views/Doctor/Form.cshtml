@@ -4,40 +4,50 @@
     string action = this.ViewContext.RouteData.Values["action"].ToString();
     string modelName = "แพทย์";
     ViewData["Title"] = modelName + " Form";
+    bool IsNew = ViewBag.IsNew;
+
+    string strCaption = IsNew ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล";
+
+    string cssChecked = IsNew ? "checked" : "";
+    
 }
 
 <!-- Content Start -->
 <div class="content-wrapper">
     <!-- Heading Start -->
     <section class="heading">
-        <h2 class="mb-2"><i class="mdi mdi-account-card-details"></i> @modelName</h2>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/@controller/index/">แพทย์</a></li>
+            <li class="breadcrumb-item active">รายละเอียด</li>
+        </ul>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-2"><i class="mdi mdi-account-switch"></i>แพทย์</h2>
+            <div class="btn-toolbar mb-0 d-none d-sm-block" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-3" role="group" aria-label="First group">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input id="chbEdit" name="chbEdit" onclick="ChangeMode()" type="checkbox" @cssChecked>
+                        <span class="slider round"></span>
+                    </label>
+
+                </div>
+                <label for="chbEdit">@strCaption</label>
+            </div>
+        </div>
         <div class="titles">
             @await Html.PartialAsync(PartialView.StatusMessage, TempData[StaticString.StatusMessage])
         </div>
     </section><!-- Heading End -->
     <div class="row">
         <div class="col-12">
-
-
             <form asp-controller="@controller" asp-action="Submit@(action)" method="post" enctype="multipart/form-data">
-
-                <article class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">เพิ่ม / ปรับปรุงข้อมูล-@modelName</h4>
-                    </div>
-                </article>
-
                 <article class="card mb-4">
                     <div class="card-header">
                         <h4 class="card-title mb-0">ข้อมูลบุคคล</h4>
                     </div>
-
                     <div class="card-body">
-
-
-
                         <input type="hidden" asp-for="DoctorId" />
-
                         <div class="row">
                             <div class="col-4">
                                 <label asp-for="ImageData"></label>
@@ -47,9 +57,9 @@
 
                                     <div>
                                         <input type="file" id="real-file" name="file" accept="image/png, image/jpeg" hidden />
-                                        <button type="button" class="btn btn-primary" style="width:50%" id="custom-button">เลือกไฟล์รูปภาพ</button>
-                                        <span id="custom-text"hidden >-ชื่อไฟล์รูปภาพ-</span>
-                                        <input type="hidden" asp-for="ImageData"/>
+                                        <button type="button" class="btn btn-primary x" style="width:50%" id="custom-button">เลือกไฟล์รูปภาพ</button>
+                                        <span id="custom-text" hidden>-ชื่อไฟล์รูปภาพ-</span>
+                                        <input type="hidden" asp-for="ImageData" />
 
                                     </div>
 
@@ -63,7 +73,7 @@
                                 <div class="form-group">
                                     <label asp-for="PrefixTypeId"></label>
                                     <div class="input-group">
-                                        <select asp-for="PrefixTypeId" class="select2 form-control" asp-items="ViewBag.PrefixType"></select>
+                                        <select asp-for="PrefixTypeId" class="select2 form-control x" asp-items="ViewBag.PrefixType"></select>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="PrefixTypeId" class="text-danger"></span>
@@ -74,7 +84,7 @@
                                 <div class="form-group">
                                     <label asp-for="FirstName"></label>
                                     <div class="input-group">
-                                        <input asp-for="FirstName" class="form-control" />
+                                        <input asp-for="FirstName" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="FirstName" class="text-danger"></span>
@@ -84,7 +94,7 @@
                                 <div class="form-group">
                                     <label asp-for="LastName"></label>
                                     <div class="input-group">
-                                        <input asp-for="LastName" class="form-control" />
+                                        <input asp-for="LastName" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="LastName" class="text-danger"></span>
@@ -94,7 +104,7 @@
                                 <div class="form-group">
                                     <label asp-for="MDLicense"></label>
                                     <div class="input-group">
-                                        <input asp-for="MDLicense" class="form-control" />
+                                        <input asp-for="MDLicense" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="MDLicense" class="text-danger"></span>
@@ -109,7 +119,7 @@
                                 <div class="form-group">
                                     <label asp-for="Email"></label>
                                     <div class="input-group">
-                                        <input asp-for="Email" class="form-control" />
+                                        <input asp-for="Email" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Email" class="text-danger"></span>
@@ -119,7 +129,7 @@
                                 <div class="form-group">
                                     <label asp-for="Phone"></label>
                                     <div class="input-group">
-                                        <input asp-for="Phone" class="form-control" />
+                                        <input asp-for="Phone" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Phone" class="text-danger"></span>
@@ -129,7 +139,7 @@
                                 <div class="form-group">
                                     <label asp-for="LineId"></label>
                                     <div class="input-group">
-                                        <input asp-for="LineId" class="form-control" />
+                                        <input asp-for="LineId" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="LineId" class="text-danger"></span>
@@ -140,7 +150,7 @@
                         <div class="form-group">
                             <label asp-for="Address1"></label>
                             <div class="input-group">
-                                <input asp-for="Address1" class="form-control" />
+                                <input asp-for="Address1" class="form-control x" />
                                 <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                             </div>
                             <span asp-validation-for="Address1" class="text-danger"></span>
@@ -152,7 +162,7 @@
                                 <div class="form-group">
                                     <label asp-for="SubDistrict"></label>
                                     <div class="input-group">
-                                        <input id="subdistrict" asp-for="SubDistrict" class="form-control" />
+                                        <input id="subdistrict" asp-for="SubDistrict" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="SubDistrict" class="text-danger"></span>
@@ -164,7 +174,7 @@
                                 <div class="form-group">
                                     <label asp-for="District"></label>
                                     <div class="input-group">
-                                        <input id="district" asp-for="District" class="form-control" />
+                                        <input id="district" asp-for="District" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="District" class="text-danger"></span>
@@ -174,7 +184,7 @@
                                 <div class="form-group">
                                     <label asp-for="Province"></label>
                                     <div class="input-group">
-                                        <input id="province" asp-for="Province" class="form-control" />
+                                        <input id="province" asp-for="Province" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="Province" class="text-danger"></span>
@@ -187,7 +197,7 @@
                                 <div class="form-group">
                                     <label asp-for="ZipCode"></label>
                                     <div class="input-group">
-                                        <input id="zipcode" asp-for="ZipCode" class="form-control" />
+                                        <input id="zipcode" asp-for="ZipCode" class="form-control x" />
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="ZipCode" class="text-danger"></span>
@@ -199,7 +209,7 @@
                                 <div class="form-group">
                                     <label asp-for="DoctorTypeId"></label>
                                     <div class="input-group">
-                                        <select asp-for="DoctorTypeId" class="select2 form-control" asp-items="ViewBag.DoctorType"></select>
+                                        <select asp-for="DoctorTypeId" class="select2 form-control x" asp-items="ViewBag.DoctorType"></select>
                                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                                     </div>
                                     <span asp-validation-for="DoctorTypeId" class="text-danger"></span>
@@ -228,7 +238,7 @@
                 <article class="card mb-4">
                     <div class="card-header">
                         <a href="/@controller/Index" class="btn btn-default">ย้อนกลับ</a>
-                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                        <button type="submit" class="btn btn-primary x">บันทึก</button>
                     </div>
                 </article>
 
@@ -270,6 +280,71 @@
             margin-top: 0px;
             margin-bottom: 10px;
         }
+    </style>
+
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
     </style>
 
 }
@@ -324,6 +399,21 @@
 
 
 
+        var chkEdit = document.getElementById("chbEdit");
+        ChangeMode();
+
+        function ChangeMode() {
+
+            if (chkEdit.checked) {
+
+                $('.x').prop('disabled', false);
+
+            }
+            else {
+                $('.x').prop('disabled', true);
+
+            }
+        }
 
     </script>
 

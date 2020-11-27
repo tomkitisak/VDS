@@ -68,37 +68,86 @@ namespace vds.Services.Database
                 superAdmin = await _userManager.FindByEmailAsync(_superAdminDefaultOptions.Email);
 
 
+                // Insert UserType
+                UserType ut1 = new UserType()
+                {
+                    UserTypeId = "0",
+                    UserLevel = 0,
+                    Name = "ผู้บริหารระบบ",
+                    Description = "ผู้บริหารระบบ"
+                };
+                // Insert UserType
+                UserType ut2 = new UserType()
+                {
+                    UserTypeId = "1",
+                    UserLevel = 1,
+                    Name = "ผู้ประสานงาน รพ.",
+                    Description = "ผู้ประสานงาน รพ."
+                };
+                // Insert UserType
+                UserType ut3 = new UserType()
+                {
+                    UserTypeId = "2",
+                    UserLevel = 2,
+                    Name = "ผู้ประสานงานกลุ่มแพทย์",
+                    Description = "ผู้ประสานงานกลุ่มแพทย์"
+                };
+                // Insert UserType
+                UserType ut4 = new UserType()
+                {
+
+                    UserTypeId = "3",
+                    UserLevel = 3,
+                    Name = "แพทย์",
+                    Description = "แพทย์"
+                };
+                await _context.UserType.AddAsync(ut1);
+                await _context.UserType.AddAsync(ut2);
+                await _context.UserType.AddAsync(ut3);
+                await _context.UserType.AddAsync(ut4);
+
+                await _context.SaveChangesAsync();
+
+
 
                 // Insert PrefixType
                 PrefixType prefixtype1 = new PrefixType()
                 {
-                    Name = "นาย"
+                    Name = "นาย",
+                    Description = "นาย"
                 };
                 PrefixType prefixtype2 = new PrefixType()
                 {
-                    Name = "นาง"
+                    Name = "นาง",
+                    Description = "นาย"
                 };
 
                 PrefixType prefixtype3 = new PrefixType()
                 {
-                    Name = "นางสาว"
+                    Name = "น.ส.",
+                    Description = "นาย"
                 };
                 PrefixType prefixtype4 = new PrefixType()
                 {
-                    Name = "นายแพทย์"
+                    Name = "นพ.",
+                    Description = "นายแพทย์"
                 };
                 PrefixType prefixtype5 = new PrefixType()
                 {
-                    Name = "แพทย์หญิง"
+                    Name = "พญ.",
+                    Description = "แพทย์หญิง"
+
                 };
+
                 await _context.PrefixType.AddAsync(prefixtype1);
                 await _context.PrefixType.AddAsync(prefixtype2);
                 await _context.PrefixType.AddAsync(prefixtype3);
                 await _context.PrefixType.AddAsync(prefixtype4);
                 await _context.PrefixType.AddAsync(prefixtype5);
 
-
                 await _context.SaveChangesAsync();
+
+
 
                 // Insert DiseaseType
                 DiseaseType diseaseType1 = new DiseaseType()
@@ -116,8 +165,8 @@ namespace vds.Services.Database
                 await _context.DiseaseType.AddAsync(diseaseType1);
                 await _context.DiseaseType.AddAsync(diseaseType2);
                 await _context.DiseaseType.AddAsync(diseaseType3);
-          
-               await _context.SaveChangesAsync();
+
+                await _context.SaveChangesAsync();
 
                 // Insert JobStatus
                 JobStatus jobStatus1 = new JobStatus()
@@ -128,35 +177,23 @@ namespace vds.Services.Database
                 JobStatus jobStatus2 = new JobStatus()
                 {
                     Status = 2,
-                    Description = "รอแพทย์"
+                    Description = "โพสต์"
                 };
                 JobStatus jobStatus3 = new JobStatus()
                 {
                     Status = 3,
-                    Description = "รอผ่าตัด"
+                    Description = "คิว"
                 };
                 JobStatus jobStatus4 = new JobStatus()
                 {
                     Status = 4,
-                    Description = "ผ่าตัดเรียบร้อย"
-                };
-                JobStatus jobStatus5 = new JobStatus()
-                {
-                    Status = 5,
-                    Description = "ปิด"
-                };
-                JobStatus jobStatus6 = new JobStatus()
-                {
-                    Status = 9,
-                    Description = "ยกเลิก"
+                    Description = "ดำเนินการแล้ว"
                 };
 
                 await _context.JobStatus.AddAsync(jobStatus1);
                 await _context.JobStatus.AddAsync(jobStatus2);
                 await _context.JobStatus.AddAsync(jobStatus3);
                 await _context.JobStatus.AddAsync(jobStatus4);
-                await _context.JobStatus.AddAsync(jobStatus5);
-                await _context.JobStatus.AddAsync(jobStatus6);
 
                 await _context.SaveChangesAsync();
 
@@ -986,351 +1023,25 @@ namespace vds.Services.Database
                 await _context.SaveChangesAsync();
 
 
-
-                //insert information type
-                InformationType annualReportInformation = new InformationType()
-                {
-                    Name = "Annual Reports",
-                    Description = ""
-                };
-                InformationType manualInformation = new InformationType()
-                {
-                    Name = "Manual and Handbooks",
-                    Description = ""
-                };
-                InformationType newsletterInformation = new InformationType()
-                {
-                    Name = "Newsletters",
-                    Description = ""
-                };
-                InformationType trainingInformation = new InformationType()
-                {
-                    Name = "Trainings and Seminars",
-                    Description = ""
-                };
-                InformationType whitePapperInformation = new InformationType()
-                {
-                    Name = "White Pappers",
-                    Description = ""
-                };
-                InformationType caseStudyInformation = new InformationType()
-                {
-                    Name = "Case Studies",
-                    Description = ""
-                };
-                InformationType blogInformation = new InformationType()
-                {
-                    Name = "Blogs",
-                    Description = ""
-                };
-                InformationType salesMaterialInformation = new InformationType()
-                {
-                    Name = "Brochures and Printed Sales Materials",
-                    Description = ""
-                };
-
-                await _context.InformationType.AddAsync(annualReportInformation);
-                await _context.InformationType.AddAsync(manualInformation);
-                await _context.InformationType.AddAsync(newsletterInformation);
-                await _context.InformationType.AddAsync(trainingInformation);
-                await _context.InformationType.AddAsync(whitePapperInformation);
-                await _context.InformationType.AddAsync(caseStudyInformation);
-                await _context.InformationType.AddAsync(blogInformation);
-                await _context.InformationType.AddAsync(salesMaterialInformation);
-
-                await _context.SaveChangesAsync();
-
-
-
-
-                //insert expense type
-                ExpenseType marketingExpense = new ExpenseType()
-                {
-                    Name = "Marketing",
-                    Description = ""
-                };
-                ExpenseType advertisingExpense = new ExpenseType()
-                {
-                    Name = "Advertising",
-                    Description = ""
-                };
-                ExpenseType promotionExpense = new ExpenseType()
-                {
-                    Name = "Promotion",
-                    Description = ""
-                };
-                ExpenseType trainingExpense = new ExpenseType()
-                {
-                    Name = "Training",
-                    Description = ""
-                };
-                ExpenseType seminarExpense = new ExpenseType()
-                {
-                    Name = "Seminar",
-                    Description = ""
-                };
-                ExpenseType projectExpense = new ExpenseType()
-                {
-                    Name = "Project",
-                    Description = ""
-                };
-                ExpenseType transportationExpense = new ExpenseType()
-                {
-                    Name = "Transportation",
-                    Description = ""
-                };
-                ExpenseType accomodationExpense = new ExpenseType()
-                {
-                    Name = "Accomodation",
-                    Description = ""
-                };
-                ExpenseType mealExpense = new ExpenseType()
-                {
-                    Name = "Meal",
-                    Description = ""
-                };
-                ExpenseType medicalExpense = new ExpenseType()
-                {
-                    Name = "Medical",
-                    Description = ""
-                };
-
-                await _context.ExpenseType.AddAsync(marketingExpense);
-                await _context.ExpenseType.AddAsync(advertisingExpense);
-                await _context.ExpenseType.AddAsync(promotionExpense);
-                await _context.ExpenseType.AddAsync(trainingExpense);
-                await _context.ExpenseType.AddAsync(seminarExpense);
-                await _context.ExpenseType.AddAsync(projectExpense);
-                await _context.ExpenseType.AddAsync(transportationExpense);
-                await _context.ExpenseType.AddAsync(accomodationExpense);
-                await _context.ExpenseType.AddAsync(mealExpense);
-                await _context.ExpenseType.AddAsync(medicalExpense);
-
-                await _context.SaveChangesAsync();
-
-
-
-
-                //insert ticket type
-                TicketType attendanceTicket = new TicketType()
-                {
-                    Name = "Attendance",
-                    Description = ""
-                };
-                TicketType payrollTicket = new TicketType()
-                {
-                    Name = "Payroll",
-                    Description = ""
-                };
-                TicketType leaveTicket = new TicketType()
-                {
-                    Name = "Leave",
-                    Description = ""
-                };
-                TicketType reimburseTicket = new TicketType()
-                {
-                    Name = "Reimburse",
-                    Description = ""
-                };
-                TicketType miscellaneousTicket = new TicketType()
-                {
-                    Name = "Miscellaneous",
-                    Description = ""
-                };
-
-                await _context.TicketType.AddAsync(attendanceTicket);
-                await _context.TicketType.AddAsync(payrollTicket);
-                await _context.TicketType.AddAsync(leaveTicket);
-                await _context.TicketType.AddAsync(reimburseTicket);
-                await _context.TicketType.AddAsync(miscellaneousTicket);
-
-
-                await _context.SaveChangesAsync();
-
-                //insert todo type
-                TodoType payrollTodo = new TodoType()
-                {
-                    Name = "Payroll",
-                    Description = ""
-                };
-                TodoType onboardingTodo = new TodoType()
-                {
-                    Name = "Onboarding",
-                    Description = ""
-                };
-                TodoType recruitmentTodo = new TodoType()
-                {
-                    Name = "Recruitment",
-                    Description = ""
-                };
-
-                await _context.TodoType.AddAsync(payrollTodo);
-                await _context.TodoType.AddAsync(onboardingTodo);
-                await _context.TodoType.AddAsync(recruitmentTodo);
-
-
-                await _context.SaveChangesAsync();
-
-                //insert department
-                Department itDepartment = new Department()
-                {
-                    Name = "ฝ่ายสารสนเทศ",
-                    Description = ""
-                };
-                Department hrDepartment = new Department()
-                {
-                    Name = "ฝ่ายทรัพยากรบุคคล",
-                    Description = ""
-                };
-                Department financeDepartment = new Department()
-                {
-                    Name = "ฝ่ายการเงิน",
-                    Description = ""
-                };
-                Department salesDepartment = new Department()
-                {
-                    Name = "ฝ่ายขาย",
-                    Description = ""
-                };
-                Department warehouseDepartment = new Department()
-                {
-                    Name = "ฝ่ายคลังสินค้า",
-                    Description = ""
-                };
-
-                await _context.Department.AddAsync(itDepartment);
-                await _context.Department.AddAsync(hrDepartment);
-                await _context.Department.AddAsync(financeDepartment);
-                await _context.Department.AddAsync(salesDepartment);
-                await _context.Department.AddAsync(warehouseDepartment);
-
-
-                await _context.SaveChangesAsync();
-
                 //insert designation
                 Designation designationVPIT = new Designation()
                 {
-                    Name = "VP IT / COO (ExComm)",
+                    Name = "หัวหน้าห้องยา",
                     Description = ""
                 };
                 Designation designationHeadIT = new Designation()
                 {
-                    Name = "Head of IT",
+                    Name = "พยาบาลวิชาชีพ",
                     Description = ""
                 };
                 Designation designationSeniorManagerIT = new Designation()
                 {
-                    Name = "IT Senior Manager",
+                    Name = "หัวหน้างานสารบรรณ",
                     Description = ""
                 };
                 Designation designationManagerIT = new Designation()
                 {
-                    Name = "IT Manager",
-                    Description = ""
-                };
-                Designation designationStaffIT = new Designation()
-                {
-                    Name = "IT Staff",
-                    Description = ""
-                };
-                Designation designationVPFinance = new Designation()
-                {
-                    Name = "VP Finance / CEO (ExComm)",
-                    Description = ""
-                };
-                Designation designationHeadFinance = new Designation()
-                {
-                    Name = "Head of Finance",
-                    Description = ""
-                };
-                Designation designationSeniorManagerFinance = new Designation()
-                {
-                    Name = "Finance Senior Manager",
-                    Description = ""
-                };
-                Designation designationManagerFinance = new Designation()
-                {
-                    Name = "Finance Manager",
-                    Description = ""
-                };
-                Designation designationStaffFinance = new Designation()
-                {
-                    Name = "Finance Staff",
-                    Description = ""
-                };
-                Designation designationVPHR = new Designation()
-                {
-                    Name = "VP HR (ExComm)",
-                    Description = ""
-                };
-                Designation designationHeadHR = new Designation()
-                {
-                    Name = "Head of HR",
-                    Description = ""
-                };
-                Designation designationSeniorManagerHR = new Designation()
-                {
-                    Name = "HR Senior Manager",
-                    Description = ""
-                };
-                Designation designationManagerHR = new Designation()
-                {
-                    Name = "HR Manager",
-                    Description = ""
-                };
-                Designation designationStaffHR = new Designation()
-                {
-                    Name = "HR Staff",
-                    Description = ""
-                };
-                Designation designationVPSales = new Designation()
-                {
-                    Name = "VP Sales / CMO (ExComm)",
-                    Description = ""
-                };
-                Designation designationHeadSales = new Designation()
-                {
-                    Name = "Head of Sales",
-                    Description = ""
-                };
-                Designation designationSeniorManagerSales = new Designation()
-                {
-                    Name = "Sales Senior Manager",
-                    Description = ""
-                };
-                Designation designationManagerSales = new Designation()
-                {
-                    Name = "Sales Manager",
-                    Description = ""
-                };
-                Designation designationStaffSales = new Designation()
-                {
-                    Name = "Sales Staff",
-                    Description = ""
-                };
-                Designation designationVPWarehouse = new Designation()
-                {
-                    Name = "VP Warehouse (ExComm)",
-                    Description = ""
-                };
-                Designation designationHeadWarehouse = new Designation()
-                {
-                    Name = "Head of Warehouse",
-                    Description = ""
-                };
-                Designation designationSeniorManagerWarehouse = new Designation()
-                {
-                    Name = "Warehouse Senior Manager",
-                    Description = ""
-                };
-                Designation designationManagerWarehouse = new Designation()
-                {
-                    Name = "Warehouse Manager",
-                    Description = ""
-                };
-                Designation designationStaffWarehouse = new Designation()
-                {
-                    Name = "Warehouse Staff",
+                    Name = "ผู้จัดการสารสนเทศ",
                     Description = ""
                 };
 
@@ -1338,162 +1049,8 @@ namespace vds.Services.Database
                 await _context.Designation.AddAsync(designationHeadIT);
                 await _context.Designation.AddAsync(designationSeniorManagerIT);
                 await _context.Designation.AddAsync(designationManagerIT);
-                await _context.Designation.AddAsync(designationStaffIT);
-
-                await _context.Designation.AddAsync(designationVPHR);
-                await _context.Designation.AddAsync(designationHeadHR);
-                await _context.Designation.AddAsync(designationSeniorManagerHR);
-                await _context.Designation.AddAsync(designationManagerHR);
-                await _context.Designation.AddAsync(designationStaffHR);
-
-                await _context.Designation.AddAsync(designationVPFinance);
-                await _context.Designation.AddAsync(designationHeadFinance);
-                await _context.Designation.AddAsync(designationSeniorManagerFinance);
-                await _context.Designation.AddAsync(designationManagerFinance);
-                await _context.Designation.AddAsync(designationStaffFinance);
-
-                await _context.Designation.AddAsync(designationVPSales);
-                await _context.Designation.AddAsync(designationHeadSales);
-                await _context.Designation.AddAsync(designationSeniorManagerSales);
-                await _context.Designation.AddAsync(designationManagerSales);
-                await _context.Designation.AddAsync(designationStaffSales);
-
-                await _context.Designation.AddAsync(designationVPWarehouse);
-                await _context.Designation.AddAsync(designationHeadWarehouse);
-                await _context.Designation.AddAsync(designationSeniorManagerWarehouse);
-                await _context.Designation.AddAsync(designationManagerWarehouse);
-                await _context.Designation.AddAsync(designationStaffWarehouse);
-
 
                 await _context.SaveChangesAsync();
-
-                //insert public holiday 2019
-                PublicHoliday publicHoliday2019 = new PublicHoliday();
-                publicHoliday2019.Name = "2019 Holiday";
-                publicHoliday2019.Description = "Federal and Regional";
-
-                _context.PublicHoliday.Add(publicHoliday2019);
-                await _context.SaveChangesAsync();
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "New Year's Day",
-                    PublicHolidayDate = new DateTime(2019, 1, 1),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Martin Luther King Jr. Day",
-                    PublicHolidayDate = new DateTime(2019, 1, 21),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "President's Day",
-                    PublicHolidayDate = new DateTime(2019, 2, 18),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Mother's Day",
-                    PublicHolidayDate = new DateTime(2019, 5, 12),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Memorial Day",
-                    PublicHolidayDate = new DateTime(2019, 5, 27),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Father's Day",
-                    PublicHolidayDate = new DateTime(2019, 6, 16),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Independence Day",
-                    PublicHolidayDate = new DateTime(2019, 7, 4),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Labor Day",
-                    PublicHolidayDate = new DateTime(2019, 9, 2),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Columbus Day",
-                    PublicHolidayDate = new DateTime(2019, 10, 14),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "US Indigenous People's Day",
-                    PublicHolidayDate = new DateTime(2019, 10, 14),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Veterans Day",
-                    PublicHolidayDate = new DateTime(2019, 11, 11),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Thanksgiving",
-                    PublicHolidayDate = new DateTime(2019, 11, 28),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Day after Thanksgiving",
-                    PublicHolidayDate = new DateTime(2019, 11, 29),
-                    PublicHolidayYear = 2019
-                });
-
-                _context.PublicHolidayLine.Add(new PublicHolidayLine
-                {
-                    PublicHoliday = publicHoliday2019,
-                    Description = "Chirstmas Day",
-                    PublicHolidayDate = new DateTime(2019, 12, 25),
-                    PublicHolidayYear = 2019
-                });
-
-                await _context.SaveChangesAsync();
-
-
-
-
-
-
 
             }
             catch (Exception)
